@@ -33,6 +33,8 @@ html, body {
   padding: 0;
   width: 100%;
   height: 100%;
+  position: fixed;
+  inset: 0;
   background: var(--bg);
   color: var(--tx);
   font: 13px 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -53,7 +55,7 @@ button {
 
 #app {
   width: 100%;
-  height: var(--h, 100dvh);
+  height: 100%;
   display: flex;
   flex-direction: column;
   padding-bottom: var(--safe-b, 0px);
@@ -220,11 +222,15 @@ canvas:active {
   border-top: 1px solid var(--bd);
   display: flex;
   flex-direction: column;
-  height: var(--ph, 62px);
+  height: var(--ph, auto);
   transition: height 0.22s cubic-bezier(0.16, 1, 0.3, 1);
   flex-shrink: 0;
   box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.5);
   z-index: 15;
+}
+
+#panel.is-min {
+  height: auto !important;
 }
 
 #panel.is-min #sheetHead,
@@ -289,11 +295,11 @@ canvas:active {
   border-color: var(--ac);
 }
 
-/* ABAS INFERIORES COM RECUO DE 50PX PARA O BOTÃO (i) DO GOOGLE SITES */
+/* ABAS INFERIORES */
 #tabs {
   display: flex;
   gap: 3px;
-  padding: 4px 8px calc(8px + env(safe-area-inset-bottom, 4px)) 50px;
+  padding: 4px 10px calc(8px + env(safe-area-inset-bottom, 4px)) 10px;
   background: var(--sf);
   flex-shrink: 0;
   order: 3;
@@ -985,9 +991,9 @@ select option {
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
         Fundo
       </button>
-      <button data-p="art" data-title="Formato & Projeto">
+      <button data-p="art" data-title="Layout & Projeto">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-        Arte
+        Layout
       </button>
       <button data-p="ex" data-title="Exportar & Salvar" class="tab-save">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
@@ -2138,6 +2144,96 @@ $('bgModeSeg').onclick=e=>{
 $('bgC1').oninput=e=>{if(S.bg.lock)return;S.bg.c1=e.target.value;$('bgGC1').value=e.target.value;rq()};
 $('bgGC1').oninput=e=>{if(S.bg.lock)return;S.bg.c1=e.target.value;$('bgC1').value=e.target.value;rq()};
 $('bgGC2').oninput=e=>{if(S.bg.lock)return;S.bg.c2=e.target.value;rq()};
+$('bgC1').onchange=$('bgGC1').onchange=$('bgGC2').onchange=commit;
+
+function syncBgRange(id, numId, lblId, prop, unit){
+  const r=$(id), n=$(numId), b=$(lblId);
+  const apply=v=>{
+    if(S.bg.lock)return;
+    const cl=Math.max(+r.min,Math.min(+r.max,Number(v)||0));
+    S.bg[prop]=cl;r.value=cl;n.value=cl;b.textContent=cl+unit;rq();
+  };
+  r.oninput=e=>apply(e.target.value);
+  n.oninput=e=>apply(e.target.value);
+  r.onchange=n.onchange=commit;
+}
+syncBgRange('bgAng','bgAngNum','vBgAng','ang','°');
+syncBgRange('bs','bsNum','vbs','sc','%');
+syncBgRange('bb','bbNum','vbb','bl','px');
+
+$('bgf').onchange=e=>{
+  if(S.bg.lock)return;
+  load(e.target.files[0],id=>{
+    Object.assign(S.bg,{im:id,sc:100,x:S.w/2,y:S.h/2});
+    commit();ui();
+    showToast('Imagem de fundo carregada');
+  });
+  e.target.value='';
+};
+$('bgClearImg').onclick=()=>{
+  if(S.bg.lock)return;
+  S.bg.im=null;commit();ui();
+  showToast('Imagem de fundo removida');
+};
+$('blk').onchange=e=>{S.bg.lock=+e.target.checked;commit();ui()};
+
+// Botões - e + das abas Fundo e Layout
+document.querySelectorAll('#p-bg .num-step, #p-art .num-step').forEach(btn=>{
+  btn.onclick=()=>{
+    const tId=btn.dataset.target, dir=+btn.dataset.dir;
+    const r=$(tId);if(!r||r.disabled)return;
+    const v=Math.max(+r.min,Math.min(+r.max,(+r.value||0)+dir*(+r.step||1)));
+    r.value=v;
+    r.dispatchEvent(new Event('input'));
+    r.dispatchEvent(new Event('change'));
+  };
+});
+
+// Formatos da arte na aba Layout
+$('sf').innerHTML=FMT.map(f=>`<button type="button" data-v="${f[0]}">${f[1]}</button>`).join('');
+$('sf').onclick=e=>{
+  const b=e.target.closest('button');if(!b)return;
+  const v=b.dataset.v;if(!v)return;
+  const[w,h]=v.split('x').map(Number),fx=w/S.w,fy=h/S.h;
+  S.layers.forEach(l=>{
+    if(l.x!=null)l.x=Math.round(l.x*fx);
+    if(l.y!=null)l.y=Math.round(l.y*fy);
+  });
+  S.bg.x=Math.round(S.bg.x*fx);S.bg.y=Math.round(S.bg.y*fy);
+  S.w=w;S.h=h;commit();ui();
+};
+
+$('ksafe').onchange=e=>{S.safe=+e.target.checked;rq()};
+$('ksnap').onchange=e=>{S.snap=+e.target.checked};
+$('sbRange').oninput=e=>applySafeBottom(e.target.value);
+$('sbNum').oninput=e=>applySafeBottom(e.target.value);
+
+$('ff').onchange=async e=>{
+  const f=e.target.files[0];if(!f)return;
+  try{
+    const n=f.name.replace(/\.\w+$/,''),ff=new FontFace(n,await f.arrayBuffer());
+    await ff.load();document.fonts.add(ff);
+    if(!FONTS.includes(n))FONTS.push(n);
+    if(!CUSTOM_FONTS.includes(n))CUSTOM_FONTS.push(n);
+    ed();rq();showToast('Fonte "'+n+'" adicionada!');
+  }catch(err){showToast('Erro ao carregar fonte.')}
+  e.target.value='';
+};
+$('psv').onclick=()=>{
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([proj()],{type:'application/json'}));
+  a.download='projeto-flyer.json';a.click();
+};
+$('pop').onchange=e=>{
+  const f=e.target.files[0];
+  if(f)f.text().then(openP).catch(()=>showToast('Arquivo de projeto inválido.'));
+  e.target.value='';
+};
+$('pnw').onclick=()=>{
+  IM={};PC={};fresh();H=[ser()];hi=0;ui();save();
+  showToast('Novo projeto iniciado');
+};
+
 // ---- exportar (JPG, PNG, WebP, PDF nativo e SVG)
 function buildMinimalPdfFromJpeg(jpegDataUrl, wPx, hPx) {
   const raw = atob(jpegDataUrl.split(',')[1]);
@@ -2384,7 +2480,9 @@ cv.onpointerup=cv.onpointercancel=e=>{
 
 // ---- início
 function vh(){document.documentElement.style.setProperty('--h',(window.visualViewport?visualViewport.height:innerHeight)+'px')}
-addEventListener('resize',()=>{vh();setLv(lv);rq()});vh();
+addEventListener('resize',()=>{vh();setLv(lv);rq()});
+if(window.visualViewport)window.visualViewport.addEventListener('resize',()=>{vh();setLv(lv);rq()});
+vh();
 fresh();H=[ser()];applySafeBottom(safeBottom);setLv(0);ui();
 try{const sv=localStorage.getItem('rfsf2');if(sv)openP(sv).catch(()=>{})}catch(e){}
 Promise.all(FONTS.map(f=>document.fonts.load(`40px "${f}"`))).then(rq).catch(()=>{});document.fonts.ready.then(rq);
