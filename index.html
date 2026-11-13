@@ -407,53 +407,65 @@ input[type=text]:focus, select:focus, textarea:focus {
   border-color: var(--ac);
 }
 
-/* CONTROLE DESLIZANTE COM RECUO LATERAL SEGURO + CAIXA NUMÉRICA (-) (+) */
-.num-ctrl {
+/* CONTROLE NUMÉRICO COMPACTO (-) [VALOR] (+) COM ACELERAÇÃO AO SEGURAR */
+.num-row {
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 2px 18px;
+  justify-content: space-between;
+  gap: 8px;
+  background: var(--in);
+  border: 1px solid var(--bd);
+  border-radius: 8px;
+  padding: 5px 8px;
 }
 
-.num-ctrl input[type=range] {
-  flex: 1;
-  min-width: 60px;
+.num-row .num-lbl {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--mu);
+  line-height: 1.2;
 }
 
-.g .num-ctrl {
-  padding: 2px 4px;
-}
-
-.g .num-stack {
-  display: flex;
+.g .num-row {
   flex-direction: column;
-  gap: 4px;
-  padding: 2px 8px;
+  align-items: stretch;
+  gap: 5px;
+  padding: 6px 8px;
+}
+
+.g .num-row .num-box {
+  width: 100%;
+  justify-content: space-between;
 }
 
 .num-box {
   display: inline-flex;
   align-items: center;
-  background: var(--in);
+  background: var(--sf);
   border: 1px solid var(--bd);
-  border-radius: 8px;
+  border-radius: 7px;
   padding: 2px;
   gap: 2px;
   flex-shrink: 0;
 }
 
 .num-step {
-  width: 26px;
+  width: 28px;
   height: 26px;
-  border-radius: 6px;
+  border-radius: 5px;
   background: var(--el);
   color: var(--ac-light);
   font-weight: 700;
-  font-size: 14px;
+  font-size: 15px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   user-select: none;
+  touch-action: manipulation;
+}
+
+.num-step:hover {
+  border: 1px solid rgba(6, 182, 212, 0.4);
 }
 
 .num-step:active {
@@ -461,54 +473,39 @@ input[type=text]:focus, select:focus, textarea:focus {
   color: #fff;
 }
 
+.num-val-wrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+}
+
 .num-inp {
-  width: 44px !important;
+  width: 46px !important;
   height: 26px;
-  text-align: center;
+  text-align: right;
   background: transparent !important;
   border: 0 !important;
   padding: 0 2px !important;
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 700;
   color: var(--tx);
   font-variant-numeric: tabular-nums;
   -moz-appearance: textfield;
+}
+
+.num-unit {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--ac-light);
+  margin-left: 1px;
+  user-select: none;
 }
 
 .num-inp::-webkit-outer-spin-button,
 .num-inp::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
-}
-
-/* SLIDER CUSTOMIZADO TURQUESA */
-input[type=range] {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 100%;
-  height: 24px;
-  background: transparent;
-  margin: 0;
-}
-
-input[type=range]::-webkit-slider-runnable-track {
-  height: 5px;
-  border-radius: 999px;
-  background: var(--in);
-  border: 1px solid var(--bd);
-}
-
-input[type=range]::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  background: #ffffff;
-  border: 2.5px solid var(--ac);
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.55);
-  margin-top: -6px;
-  cursor: pointer;
 }
 
 input[type=color] {
@@ -899,10 +896,14 @@ select option {
   }
   #stage {
     height: 100%;
+    min-height: 0;
     padding: 60px 28px 28px;
   }
   #panel, #panel.is-min {
     height: 100% !important;
+    max-height: 100dvh !important;
+    min-height: 0 !important;
+    overflow: hidden;
     border-radius: 0;
     border-top: 0;
     border-left: 1px solid var(--bd);
@@ -921,7 +922,10 @@ select option {
   }
   #panes {
     order: 1;
-    padding: 14px 16px;
+    flex: 1 1 0%;
+    min-height: 0;
+    overflow-y: auto;
+    padding: 14px 16px 28px;
   }
 }
 </style>
@@ -1013,17 +1017,21 @@ select option {
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
             + Imagem
           </button>
+          <button class="b" id="aS">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="8" height="8" rx="1"/><circle cx="17" cy="7" r="4"/><polygon points="12 13 19 21 5 21"/></svg>
+            + Forma
+          </button>
           <button class="b" id="aL">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
             + Logo
           </button>
-          <button class="b" id="aG">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
-            + Convidado
-          </button>
           <button class="b" id="aF">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 0 0 20z" fill="currentColor" fill-opacity="0.25"/></svg>
             + Degradê
+          </button>
+          <button class="b" id="aG">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+            + Convidado
           </button>
           <button class="b" id="aO">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
@@ -1091,15 +1099,15 @@ select option {
                   <input type="color" id="bgGC2" value="#083344">
                 </div>
               </div>
-              <div>
-                <div class="l"><span>Ângulo do Degradê</span><b id="vBgAng">135°</b></div>
-                <div class="num-ctrl">
-                  <input type="range" id="bgAng" min="0" max="360" value="135">
-                  <div class="num-box">
-                    <button type="button" class="num-step" data-target="bgAng" data-dir="-1">−</button>
-                    <input type="number" class="num-inp" id="bgAngNum" min="0" max="360" value="135">
-                    <button type="button" class="num-step" data-target="bgAng" data-dir="1">+</button>
+              <div class="num-row">
+                <span class="num-lbl">Ângulo do Degradê</span>
+                <div class="num-box">
+                  <button type="button" class="num-step" data-target="bgAngNum" data-dir="-1">−</button>
+                  <div class="num-val-wrap">
+                    <input type="number" class="num-inp" id="bgAngNum" min="0" max="360" step="1" value="135">
+                    <span class="num-unit">°</span>
                   </div>
+                  <button type="button" class="num-step" data-target="bgAngNum" data-dir="1">+</button>
                 </div>
               </div>
             </div>
@@ -1115,26 +1123,28 @@ select option {
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/></svg>
                 </button>
               </div>
-              <div id="bgImgCtrls" style="display:flex;flex-direction:column;gap:9px">
-                <div>
-                  <div class="l"><span>Escala da Imagem</span><b id="vbs">100%</b></div>
-                  <div class="num-ctrl">
-                    <input type="range" id="bs" min="10" max="300" value="100">
+              <div id="bgImgCtrls" style="display:flex;flex-direction:column;gap:8px">
+                <div class="g">
+                  <div class="num-row">
+                    <span class="num-lbl">Escala da Imagem</span>
                     <div class="num-box">
-                      <button type="button" class="num-step" data-target="bs" data-dir="-1">−</button>
-                      <input type="number" class="num-inp" id="bsNum" min="10" max="300" value="100">
-                      <button type="button" class="num-step" data-target="bs" data-dir="1">+</button>
+                      <button type="button" class="num-step" data-target="bsNum" data-dir="-1">−</button>
+                      <div class="num-val-wrap">
+                        <input type="number" class="num-inp" id="bsNum" min="10" max="300" step="1" value="100">
+                        <span class="num-unit">%</span>
+                      </div>
+                      <button type="button" class="num-step" data-target="bsNum" data-dir="1">+</button>
                     </div>
                   </div>
-                </div>
-                <div>
-                  <div class="l"><span>Desfoque da Imagem</span><b id="vbb">0px</b></div>
-                  <div class="num-ctrl">
-                    <input type="range" id="bb" min="0" max="40" value="0">
+                  <div class="num-row">
+                    <span class="num-lbl">Desfoque</span>
                     <div class="num-box">
-                      <button type="button" class="num-step" data-target="bb" data-dir="-1">−</button>
-                      <input type="number" class="num-inp" id="bbNum" min="0" max="40" value="0">
-                      <button type="button" class="num-step" data-target="bb" data-dir="1">+</button>
+                      <button type="button" class="num-step" data-target="bbNum" data-dir="-1">−</button>
+                      <div class="num-val-wrap">
+                        <input type="number" class="num-inp" id="bbNum" min="0" max="40" step="1" value="0">
+                        <span class="num-unit">px</span>
+                      </div>
+                      <button type="button" class="num-step" data-target="bbNum" data-dir="1">+</button>
                     </div>
                   </div>
                 </div>
@@ -1170,16 +1180,15 @@ select option {
         </div>
 
         <div class="c">
-          <div class="l">
-            <span>Margem Inferior (Google Sites / Android)</span>
-            <b id="vsb">0px</b>
-          </div>
-          <div class="num-ctrl">
-            <input type="range" id="sbRange" min="0" max="90" value="0">
+          <div class="num-row">
+            <span class="num-lbl">Margem Inferior (Google Sites / Android)</span>
             <div class="num-box">
-              <button type="button" class="num-step" data-target="sbRange" data-dir="-1">−</button>
-              <input type="number" class="num-inp" id="sbNum" min="0" max="90" value="0">
-              <button type="button" class="num-step" data-target="sbRange" data-dir="1">+</button>
+              <button type="button" class="num-step" data-target="sbNum" data-dir="-1">−</button>
+              <div class="num-val-wrap">
+                <input type="number" class="num-inp" id="sbNum" min="0" max="90" step="1" value="0">
+                <span class="num-unit">px</span>
+              </div>
+              <button type="button" class="num-step" data-target="sbNum" data-dir="1">+</button>
             </div>
           </div>
           <div class="hint">Ajusta a altura da barra inferior para não ficar coberta pelos botões do celular dentro do Google Sites.</div>
@@ -1295,11 +1304,18 @@ const FADE_DIRS=[
   ['br2tl','Diagonal Inf. Dir. → Sup. Esq. (↖)'],
   ['all','Tela Inteira (Sólido)']
 ];
+const SHAPES=[
+  ['rect','Retângulo'],
+  ['square','Quadrado'],
+  ['circle','Círculo'],
+  ['triangle','Triângulo']
+];
 
 const SVG={
   t:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>`,
   gt:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`,
   i:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>`,
+  sh:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="8" height="8" rx="1"/><circle cx="17" cy="7" r="4"/><polygon points="12 13 19 21 5 21"/></svg>`,
   lg:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>`,
   f:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 0 0 20z" fill="currentColor" fill-opacity="0.3"/></svg>`,
   eye:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`,
@@ -1328,6 +1344,7 @@ function renderFontOptions(selectedFont){
 const TXT=o=>({id:nid(),k:'t',text:'Novo texto',font:'Inter',size:80,color:'#ffffff',c2:'#06b6d4',grad:0,ang:90,sh:0,st:0,sc:'#000000',sw:6,ls:0,rot:0,al:'center',x:S.w/2,y:S.h/2,lock:0,hide:0,...o});
 const GT=o=>({id:nid(),k:'gt',role:'Pregador',text:'Nome do Convidado',rFont:'Montserrat',nFont:'Montserrat',rSize:24,size:42,sc:100,rColor:'#22d3ee',color:'#ffffff',sh:0,rot:0,al:'center',x:S.w/2,y:S.h*0.32,lock:0,hide:0,...o});
 const IMG=o=>({id:nid(),k:'i',name:'Imagem',im:null,sc:100,al:100,rot:0,bl:0,mk:'none',mi:50,bm:'source-over',x:S.w/2,y:S.h/2,lock:0,hide:0,...o});
+const SHP=o=>({id:nid(),k:'sh',name:'Forma',shape:'rect',w:480,h:280,sc:100,rx:0,color:'#06b6d4',c2:'#0284c7',grad:0,ang:135,st:0,scCol:'#ffffff',sw:6,al:100,rot:0,bl:0,mk:'none',mi:50,bm:'source-over',x:S.w/2,y:S.h/2,lock:0,hide:0,...o});
 const LOGO=o=>({id:nid(),k:'lg',name:'Logo',im:null,sc:100,al:100,rot:0,bl:0,mk:'none',mi:50,bm:'source-over',x:S.w/2,y:S.h/2,lock:0,hide:0,...o});
 const FADE=o=>({id:nid(),k:'f',name:'Degradê / Luz',kind:'linear',c:'#000000',h:60,o:90,sq:22,rot:-35,dir:'b2t',bm:'source-over',x:S.w/2,y:S.h/2,lock:0,hide:0,...o});
 
@@ -1352,9 +1369,7 @@ try {
 function applySafeBottom(val) {
   safeBottom = Math.max(0, Math.min(90, parseInt(val) || 0));
   document.documentElement.style.setProperty('--safe-b', safeBottom + 'px');
-  if ($('sbRange')) $('sbRange').value = safeBottom;
   if ($('sbNum')) $('sbNum').value = safeBottom;
-  if ($('vsb')) $('vsb').textContent = safeBottom + 'px';
   try { localStorage.setItem('rfsf_safeb', safeBottom); } catch(e) {}
   setLv(lv);
   rq();
@@ -1380,6 +1395,12 @@ function met(c,l){
   if(l.k=='f'){
     const r = Math.max(S.w, S.h) * ((l.h || 55) / 100);
     return {w: r * 2, h: r * 2, r};
+  }
+  if(l.k=='sh'){
+    const s = (l.sc || 100) / 100;
+    const bw = l.w || 400;
+    const bh = l.h || bw;
+    return {w: Math.max(20, bw * s), h: Math.max(20, bh * s)};
   }
   if(l.k=='t'){
     setF(c,l);
@@ -1451,6 +1472,59 @@ function proc(l){
   t.drawImage(m,0,0);t.filter='none';
   if(l.mk&&l.mk!='none')maskit(t,m.width,m.height,l.mk,l.mi/100);
   PC[l.id]={k:key,c};return c;
+}
+
+function drawShapePath(t, shape, cx0, cy0, w, h, rx){
+  t.beginPath();
+  if(shape==='circle'){
+    t.ellipse(cx0, cy0, w/2, h/2, 0, 0, Math.PI*2);
+  } else if(shape==='triangle'){
+    t.moveTo(cx0, cy0 - h/2);
+    t.lineTo(cx0 + w/2, cy0 + h/2);
+    t.lineTo(cx0 - w/2, cy0 + h/2);
+    t.closePath();
+  } else {
+    const r = Math.max(0, Math.min(rx || 0, Math.min(w, h)/2));
+    if(r > 0 && t.roundRect) t.roundRect(cx0 - w/2, cy0 - h/2, w, h, r);
+    else t.rect(cx0 - w/2, cy0 - h/2, w, h);
+  }
+}
+
+function procShape(l, m){
+  const pad = Math.ceil((l.bl || 0) * 2.4 + (l.st ? (l.sw || 0) : 0) + 8);
+  const cw = Math.max(4, Math.ceil(m.w + pad * 2));
+  const ch = Math.max(4, Math.ceil(m.h + pad * 2));
+  const key = [l.shape, Math.round(m.w), Math.round(m.h), l.rx||0, l.color, l.c2, l.grad, l.ang, l.st, l.scCol, l.sw, l.bl, l.mk, l.mi].join('|');
+  const pc = PC[l.id];
+  if(pc && pc.k === key) return {c: pc.c, cw, ch};
+  const c = document.createElement('canvas');
+  c.width = cw; c.height = ch;
+  const t = c.getContext('2d');
+  const cx0 = cw / 2, cy0 = ch / 2;
+  t.save();
+  if(l.bl && 'filter' in t) t.filter = `blur(${l.bl * 1.1}px)`;
+  drawShapePath(t, l.shape || 'rect', cx0, cy0, m.w, m.h, (l.rx || 0) * ((l.sc || 100) / 100));
+  if(l.grad){
+    const a = ((l.ang ?? 135) * Math.PI) / 180;
+    const r = Math.hypot(m.w, m.h) / 2;
+    const g = t.createLinearGradient(cx0 - Math.cos(a)*r, cy0 - Math.sin(a)*r, cx0 + Math.cos(a)*r, cy0 + Math.sin(a)*r);
+    g.addColorStop(0, l.color || '#06b6d4');
+    g.addColorStop(1, l.c2 || '#0284c7');
+    t.fillStyle = g;
+  } else {
+    t.fillStyle = l.color || '#06b6d4';
+  }
+  t.fill();
+  if(l.st && (l.sw || 0) > 0){
+    t.lineWidth = (l.sw || 6) * ((l.sc || 100) / 100);
+    t.strokeStyle = l.scCol || '#ffffff';
+    t.lineJoin = 'round';
+    t.stroke();
+  }
+  t.restore();
+  if(l.mk && l.mk !== 'none') maskit(t, cw, ch, l.mk, (l.mi ?? 50) / 100);
+  PC[l.id] = {k: key, c};
+  return {c, cw, ch};
 }
 
 function dl(c,l){
@@ -1536,7 +1610,14 @@ function dl(c,l){
   }
   clampLayerBounds(c, l);
   c.save();c.translate(l.x,l.y);c.rotate((l.rot||0)*Math.PI/180);const m=met(c,l);
-  if(l.k=='i'||l.k=='lg'){
+  if(l.k=='sh'){
+    const ps = procShape(l, m);
+    if(ps && ps.c){
+      c.globalAlpha = (l.al ?? 100) / 100;
+      c.globalCompositeOperation = l.bm || 'source-over';
+      c.drawImage(ps.c, -ps.cw / 2, -ps.ch / 2, ps.cw, ps.ch);
+    }
+  } else if(l.k=='i'||l.k=='lg'){
     const p=proc(l);
     if(p){c.globalAlpha=l.al/100;c.globalCompositeOperation=l.bm;c.drawImage(p,-m.w/2,-m.h/2,m.w,m.h)}
   } else if(l.k=='gt'){
@@ -1723,7 +1804,41 @@ function draw(c,ex){
     c.strokeStyle=col;c.lineWidth=2*ds;
     c.strokeRect(-mt.w/2-pd,-mt.h/2-pd,mt.w+2*pd,mt.h+2*pd);
     if(!l.lock){
-      const rx=0, ry=-mt.h/2-pd-26*ds;
+      // Alças em formato de pílula nas 4 bordas (Estilo Canva) para esticar largura e altura das Formas
+      if(l.k=='sh'){
+        const drawPill = (px, py, horiz) => {
+          const pw = (horiz ? 22 : 7.5) * ds;
+          const ph = (horiz ? 7.5 : 22) * ds;
+          const pr = 3.8 * ds;
+          c.save();
+          c.shadowColor='rgba(0,0,0,0.45)';c.shadowBlur=5*ds;
+          c.fillStyle='#ffffff';
+          c.beginPath();
+          if(c.roundRect) c.roundRect(px - pw/2, py - ph/2, pw, ph, pr);
+          else c.rect(px - pw/2, py - ph/2, pw, ph);
+          c.fill();
+          c.shadowColor='transparent';
+          c.lineWidth=1.8*ds;c.strokeStyle=col;
+          c.stroke();
+          c.restore();
+        };
+        drawPill(0, -mt.h/2-pd, true);
+        drawPill(0, mt.h/2+pd, true);
+        drawPill(-mt.w/2-pd, 0, false);
+        drawPill(mt.w/2+pd, 0, false);
+
+        // Bolinhas nos cantos superior esquerdo e inferior esquerdo (estilo Canva)
+        [[-mt.w/2-pd, -mt.h/2-pd], [-mt.w/2-pd, mt.h/2+pd]].forEach(([cxp, cyp]) => {
+          c.save();
+          c.shadowColor='rgba(0,0,0,0.4)';c.shadowBlur=5*ds;
+          c.beginPath();c.arc(cxp, cyp, 7.5*ds, 0, Math.PI*2);
+          c.fillStyle='#ffffff';c.fill();
+          c.shadowColor='transparent';c.lineWidth=1.8*ds;c.strokeStyle=col;c.stroke();
+          c.restore();
+        });
+      }
+
+      const rx=0, ry=-mt.h/2-pd-28*ds;
       c.beginPath();c.moveTo(0,-mt.h/2-pd);c.lineTo(rx,ry);c.stroke();
       c.shadowColor='rgba(0,0,0,0.45)';c.shadowBlur=6*ds;
       c.beginPath();c.arc(rx,ry,hRad,0,Math.PI*2);c.fillStyle='#ffffff';c.fill();
@@ -1788,7 +1903,8 @@ function load(f,cb){
 
 // ---- interface
 function mv(i,j){if(j<0||j>=S.layers.length)return;[S.layers[i],S.layers[j]]=[S.layers[j],S.layers[i]]}
-const nm=l=>l.k=='t'?(l.text.split('\n')[0]||'(vazio)').slice(0,24):l.k=='gt'?((l.role?l.role+': ':'')+(l.text.split('\n')[0]||'Convidado')).slice(0,26):l.name;
+const SHAPE_LBL={rect:'Retângulo',square:'Quadrado',circle:'Círculo',triangle:'Triângulo'};
+const nm=l=>l.k=='t'?(l.text.split('\n')[0]||'(vazio)').slice(0,24):l.k=='gt'?((l.role?l.role+': ':'')+(l.text.split('\n')[0]||'Convidado')).slice(0,26):l.k=='sh'?(l.name&&l.name!='Forma'?l.name:'Forma: '+(SHAPE_LBL[l.shape]||'Retângulo')):l.name;
 
 function lays(){
   $('lay').innerHTML=[...S.layers].reverse().map(l=>`
@@ -1881,7 +1997,7 @@ function tb(){
   const l=sel();
   $('bk').innerHTML=l&&l.lock?SVG.lock:SVG.unlock;
   $('bk').classList.toggle('locked-btn',!!(l&&l.lock));
-  const hasCol=l&&(l.k=='t'||l.k=='gt'||l.k=='f');
+  const hasCol=l&&(l.k=='t'||l.k=='gt'||l.k=='f'||l.k=='sh');
   if(hasCol)$('qc').value=l.k=='f'?l.c:l.color;
   $('qcWrap').style.opacity=hasCol?1:.35;
   $('qcWrap').style.pointerEvents=hasCol?'auto':'none';
@@ -1889,15 +2005,15 @@ function tb(){
 
 function renderNumCtrl(k, label, min, max, step, unit, val, compact=false){
   return `
-    <div>
-      <div class="l"><span>${label}</span><b>${val}${unit}</b></div>
-      <div class="${compact?'num-stack':'num-ctrl'}">
-        <input type="range" data-k="${k}" data-u="${unit}" min="${min}" max="${max}" step="${step}" value="${val}">
-        <div class="num-box">
-          <button type="button" class="num-step" data-k="${k}" data-dir="-1">−</button>
+    <div class="num-row">
+      <span class="num-lbl">${label}</span>
+      <div class="num-box">
+        <button type="button" class="num-step" data-k="${k}" data-dir="-1">−</button>
+        <div class="num-val-wrap">
           <input type="number" class="num-inp" data-k="${k}" data-u="${unit}" min="${min}" max="${max}" step="${step}" value="${val}">
-          <button type="button" class="num-step" data-k="${k}" data-dir="1">+</button>
+          ${unit?`<span class="num-unit">${unit}</span>`:''}
         </div>
+        <button type="button" class="num-step" data-k="${k}" data-dir="1">+</button>
       </div>
     </div>`;
 }
@@ -1972,6 +2088,30 @@ function ed(){
       rg('ls','Espaçamento entre Letras',-10,60,1,'px')+
       rg('rot','Rotação',-180,180,1,'°')+
       sl('al','Alinhamento',[['left','Esquerda'],['center','Centro'],['right','Direita']]);
+  } else if(l.k=='sh'){
+    if(!l.shape) l.shape='rect';
+    if(l.w===undefined) l.w=480;
+    if(l.h===undefined) l.h=280;
+    if(l.rx===undefined) l.rx=0;
+    if(!l.scCol) l.scCol='#ffffff';
+    if(l.sw===undefined) l.sw=6;
+    const canRound = l.shape==='rect' || l.shape==='square';
+    h=`<div>
+         <div class="l"><span>Tipo de Forma Geométrica</span></div>
+         <div class="seg" id="shapeTypeSeg">
+           ${SHAPES.map(([val,lbl])=>`<button type="button" data-v="${val}" class="${l.shape===val?'on':''}">${lbl}</button>`).join('')}
+         </div>
+       </div>`+
+      `<div class="g">${co('color','Cor Principal')}<div style="display:flex;align-items:flex-end">${ck('grad','Ativar Degradê')}</div></div>`+
+      (l.grad?`<div class="g">${co('c2','Cor 2 do Degradê')}${rg('ang','Ângulo',0,360,1,'°',true)}</div>`:'')+
+      `<div class="g">${rg('w','Largura',20,1600,1,'px',true)}${rg('h','Altura',20,1920,1,'px',true)}</div>`+
+      `<div class="g">${rg('sc','Escala Geral',10,300,1,'%',true)}${canRound ? rg('rx','Cantos',0,300,1,'px',true) : rg('al','Opacidade',0,100,1,'%',true)}</div>`+
+      `<div class="g">${canRound ? rg('al','Opacidade',0,100,1,'%',true) : ''}${rg('rot','Rotação',-180,180,1,'°',true)}</div>`+
+      `<div class="r">${ck('st','Borda / Contorno')}</div>`+
+      (l.st?`<div class="g">${co('scCol','Cor da Borda')}${rg('sw','Espessura',1,40,1,'px',true)}</div>`:'')+
+      rg('bl','Desfoque (Blur)',0,40,1,'px')+
+      `<div class="g">${sl('mk','Esfumaçar / Máscara',MASK)}${rg('mi','Suavidade',0,100,1,'%',true)}</div>`+
+      sl('bm','Modo de Mesclagem',BLEND);
   } else {
     const isLg = l.k === 'lg';
     h=`<div>
@@ -2019,8 +2159,8 @@ function ed(){
   const bcr = $('btnCenterRadial');
   if(bcr) bcr.onclick = () => {
     if(l.lock) return;
-    l.x = S.w / 2;
-    l.y = S.h / 2;
+    l.x = Math.round(S.w / 2);
+    l.y = Math.round(S.h / 2);
     commit();
     ui();
     showToast('Ponto de luz centralizado');
@@ -2036,48 +2176,100 @@ function ed(){
     commit();
     ui();
   };
+  const sts = $('shapeTypeSeg');
+  if(sts) sts.onclick = e => {
+    const b = e.target.closest('button');
+    if(!b || l.lock) return;
+    l.shape = b.dataset.v;
+    if(l.shape === 'square' || l.shape === 'circle'){
+      const side = Math.round(((l.w || 400) + (l.h || 400)) / 2);
+      l.w = side; l.h = side;
+    }
+    commit();
+    ui();
+  };
 }
 
-function syncNumPair(container, key, val, unit=''){
-  container.querySelectorAll(`[data-k="${key}"]`).forEach(el=>{
-    if(el.type==='range'||el.type==='number') el.value=val;
+function syncNumPair(container, key, val){
+  container.querySelectorAll(`input[type=number][data-k="${key}"]`).forEach(el=>{
+    el.value=val;
   });
-  const wrap = container.querySelector(`[data-k="${key}"]`)?.closest('div')?.parentElement;
-  if(wrap){
-    const b = wrap.querySelector('.l b');
-    if(b) b.textContent = val + unit;
-  }
 }
 
-$('ed').addEventListener('click',e=>{
-  const stepBtn = e.target.closest('.num-step');
-  if(!stepBtn) return;
-  const l=sel(), k=stepBtn.dataset.k;
+function stepEdValue(k, delta){
+  const l=sel();
   if(!l||!k||l.lock) return;
   const inp = $('ed').querySelector(`input[type=number][data-k="${k}"]`);
   if(!inp) return;
-  const min=+inp.min, max=+inp.max, stp=+inp.step||1, dir=+stepBtn.dataset.dir;
+  const min=+inp.min, max=+inp.max;
   const curVal = k==='posXPct' ? Math.round(((l.x??S.w/2)/S.w)*100)
                : k==='posYPct' ? Math.round(((l.y??S.h/2)/S.h)*100)
                : (Number(l[k])||0);
-  const nv = Math.max(min, Math.min(max, curVal + dir*stp));
+  const nv = Math.max(min, Math.min(max, curVal + delta));
   if(k==='posXPct') l.x = Math.round((nv / 100) * S.w);
   else if(k==='posYPct') l.y = Math.round((nv / 100) * S.h);
   else l[k]=nv;
-  syncNumPair($('ed'), k, nv, inp.dataset.u||'');
-  commit(); rq();
+  syncNumPair($('ed'), k, nv);
+  rq();
+}
+
+// Aceleração ao manter pressionado o botão (-) ou (+) em toda a aplicação (pula de 1 em 1 e depois de 10 em 10)
+let holdTimer = null, holdInterval = null, holdTicks = 0;
+function stopStepHold(doCommit=true){
+  if(holdTimer){ clearTimeout(holdTimer); holdTimer = null; }
+  if(holdInterval){ clearInterval(holdInterval); holdInterval = null; }
+  if(doCommit && holdTicks > 0) commit();
+  holdTicks = 0;
+}
+
+document.addEventListener('pointerdown', e => {
+  const stepBtn = e.target.closest('.num-step');
+  if(!stepBtn) return;
+  e.preventDefault();
+  stopStepHold(false);
+  const dir = +stepBtn.dataset.dir || 1;
+  const k = stepBtn.dataset.k;
+  const targetId = stepBtn.dataset.target;
+
+  const fire = (mult) => {
+    holdTicks++;
+    if(k){
+      const inp = $('ed').querySelector(`input[type=number][data-k="${k}"]`);
+      const stp = inp ? (+inp.step || 1) : 1;
+      stepEdValue(k, dir * stp * mult);
+    } else if(targetId){
+      const inp = $(targetId);
+      if(!inp || inp.disabled) return;
+      const stp = +inp.step || 1;
+      const nv = Math.max(+inp.min, Math.min(+inp.max, (+inp.value || 0) + dir * stp * mult));
+      inp.value = nv;
+      inp.dispatchEvent(new Event('input'));
+    }
+  };
+
+  fire(1);
+  holdTimer = setTimeout(() => {
+    let count = 0;
+    holdInterval = setInterval(() => {
+      count++;
+      // Após alguns passos segurando, salta de 10 em 10 para ajuste rápido
+      fire(count > 4 ? 10 : 2);
+    }, 65);
+  }, 320);
 });
+
+window.addEventListener('pointerup', () => stopStepHold(true));
+window.addEventListener('pointercancel', () => stopStepHold(true));
 
 $('ed').addEventListener('input',e=>{
   const l=sel(),t=e.target,k=t.dataset.k;if(!l||!k||l.lock)return;
   if(t.type==='checkbox') l[k]=+t.checked;
-  else if(t.type==='range'||t.type==='number'){
+  else if(t.type==='number'){
     const min=+t.min, max=+t.max;
     const val = Math.max(min, Math.min(max, Number(t.value)||0));
     if(k==='posXPct') l.x = Math.round((val / 100) * S.w);
     else if(k==='posYPct') l.y = Math.round((val / 100) * S.h);
     else l[k]=val;
-    syncNumPair($('ed'), k, val, t.dataset.u||'');
   } else {
     l[k]=t.value;
   }
@@ -2099,7 +2291,7 @@ $('ed').addEventListener('change',e=>{
 $('qc').oninput=e=>{
   const l=sel();if(!l||l.lock)return;
   if(l.k=='f')l.c=e.target.value;
-  else if(l.k=='t'||l.k=='gt')l.color=e.target.value;
+  else if(l.k=='t'||l.k=='gt'||l.k=='sh')l.color=e.target.value;
   rq();
 };
 $('qc').onchange=()=>{commit();ed()};
@@ -2118,14 +2310,14 @@ function ui(){
   $('bgC1').value=S.bg.c1||'#0f172a';
   $('bgGC1').value=S.bg.c1||'#0f172a';
   $('bgGC2').value=S.bg.c2||'#083344';
-  $('bgAng').value=S.bg.ang??135;$('bgAngNum').value=S.bg.ang??135;$('vBgAng').textContent=(S.bg.ang??135)+'°';
+  $('bgAngNum').value=S.bg.ang??135;
   document.querySelectorAll('#bgSolidSwatches .sw-btn').forEach(b=>b.classList.toggle('on',b.dataset.c===(S.bg.c1||'').toLowerCase()));
   const hasBgIm=!!IM[S.bg.im];
   $('bgClearImg').style.display=hasBgIm?'inline-flex':'none';
   $('bgImgCtrls').style.display=hasBgIm?'flex':'none';
   $('bgImgLbl').textContent=hasBgIm?'Trocar imagem de fundo':'Carregar imagem de fundo';
-  $('bs').value=S.bg.sc;$('bsNum').value=S.bg.sc;$('vbs').textContent=S.bg.sc+'%';
-  $('bb').value=S.bg.bl;$('bbNum').value=S.bg.bl;$('vbb').textContent=S.bg.bl+'px';
+  $('bsNum').value=S.bg.sc;
+  $('bbNum').value=S.bg.bl;
   $('blk').checked=!!S.bg.lock;$('bgFs').disabled=!!S.bg.lock;
   $('ksafe').checked=!!S.safe;$('ksnap').checked=!!S.snap;
   if($('safeMarginBox')) $('safeMarginBox').style.display=S.safe?'flex':'none';
@@ -2169,6 +2361,7 @@ $('fbar').onclick=e=>{
 const add=l=>{S.layers.push(l);S.sel=l.id;commit();ui();tab('ed')};
 $('aT').onclick=()=>add(TXT({}));
 $('aI').onclick=()=>$('fi').click();
+$('aS').onclick=()=>add(SHP({}));
 $('aL').onclick=()=>$('fl').click();
 $('aF').onclick=()=>add(FADE({name:'Degradê / Luz '+(S.layers.filter(x=>x.k=='f').length+1)}));
 $('fi').onchange=e=>{load(e.target.files[0],(id,c)=>add(IMG({im:id,name:'Imagem',sc:Math.round(Math.min(1,S.w*.6/c.width)*100)})));e.target.value=''};
@@ -2220,20 +2413,20 @@ $('bgGC1').oninput=e=>{if(S.bg.lock)return;S.bg.c1=e.target.value;$('bgC1').valu
 $('bgGC2').oninput=e=>{if(S.bg.lock)return;S.bg.c2=e.target.value;rq()};
 $('bgC1').onchange=$('bgGC1').onchange=$('bgGC2').onchange=commit;
 
-function syncBgRange(id, numId, lblId, prop, unit){
-  const r=$(id), n=$(numId), b=$(lblId);
+function syncBgNum(numId, prop){
+  const n=$(numId);
+  if(!n) return;
   const apply=v=>{
     if(S.bg.lock)return;
-    const cl=Math.max(+r.min,Math.min(+r.max,Number(v)||0));
-    S.bg[prop]=cl;r.value=cl;n.value=cl;b.textContent=cl+unit;rq();
+    const cl=Math.max(+n.min,Math.min(+n.max,Number(v)||0));
+    S.bg[prop]=cl;n.value=cl;rq();
   };
-  r.oninput=e=>apply(e.target.value);
   n.oninput=e=>apply(e.target.value);
-  r.onchange=n.onchange=commit;
+  n.onchange=commit;
 }
-syncBgRange('bgAng','bgAngNum','vBgAng','ang','°');
-syncBgRange('bs','bsNum','vbs','sc','%');
-syncBgRange('bb','bbNum','vbb','bl','px');
+syncBgNum('bgAngNum','ang');
+syncBgNum('bsNum','sc');
+syncBgNum('bbNum','bl');
 
 $('bgf').onchange=e=>{
   if(S.bg.lock)return;
@@ -2250,18 +2443,6 @@ $('bgClearImg').onclick=()=>{
   showToast('Imagem de fundo removida');
 };
 $('blk').onchange=e=>{S.bg.lock=+e.target.checked;commit();ui()};
-
-// Botões - e + das abas Fundo e Layout
-document.querySelectorAll('#p-bg .num-step, #p-art .num-step').forEach(btn=>{
-  btn.onclick=()=>{
-    const tId=btn.dataset.target, dir=+btn.dataset.dir;
-    const r=$(tId);if(!r||r.disabled)return;
-    const v=Math.max(+r.min,Math.min(+r.max,(+r.value||0)+dir*(+r.step||1)));
-    r.value=v;
-    r.dispatchEvent(new Event('input'));
-    r.dispatchEvent(new Event('change'));
-  };
-});
 
 // Formatos da arte na aba Layout
 $('sf').innerHTML=FMT.map(f=>`<button type="button" data-v="${f[0]}">${f[1]}</button>`).join('');
@@ -2284,7 +2465,6 @@ $('sSafeM').onclick=e=>{
   enforceAllBounds();commit();ui();
 };
 $('ksnap').onchange=e=>{S.snap=+e.target.checked};
-$('sbRange').oninput=e=>applySafeBottom(e.target.value);
 $('sbNum').oninput=e=>applySafeBottom(e.target.value);
 
 $('ff').onchange=async e=>{
@@ -2504,7 +2684,7 @@ cv.onpointerdown=e=>{
     const m=met(cx,l),pd=8*ds;
     const edH=tr(l,m.w/2+pd,-m.h/2-pd);
     const rs=tr(l,m.w/2+pd,m.h/2+pd);
-    const ro=tr(l,0,-m.h/2-pd-26*ds);
+    const ro=tr(l,0,-m.h/2-pd-28*ds);
     if(Math.hypot(p.x-edH.x,p.y-edH.y)<hitR){
       tab('ed',0);lays();ed();tb();
       const inp=$('edMainTxt');
@@ -2513,6 +2693,18 @@ cv.onpointerdown=e=>{
     }
     if(Math.hypot(p.x-rs.x,p.y-rs.y)<hitR)D={m:'rs',d:Math.hypot(p.x-l.x,p.y-l.y)||1,v:val(l)};
     else if(Math.hypot(p.x-ro.x,p.y-ro.y)<hitR)D={m:'ro',a:Math.atan2(p.y-l.y,p.x-l.x),r:l.rot||0};
+    else if(l.k=='sh'){
+      // Verifica clique nas 4 alças em formato de pílula (Topo, Base, Esquerda, Direita) e nos cantos esquerdos estilo Canva
+      const topH=tr(l,0,-m.h/2-pd), botH=tr(l,0,m.h/2+pd);
+      const leftH=tr(l,-m.w/2-pd,0), rightH=tr(l,m.w/2+pd,0);
+      const tlH=tr(l,-m.w/2-pd,-m.h/2-pd), blH=tr(l,-m.w/2-pd,m.h/2+pd);
+      const sc=(l.sc||100)/100;
+      if(Math.hypot(p.x-rightH.x,p.y-rightH.y)<hitR) D={m:'sh_e',side:'r',x:l.x,y:l.y,w:l.w||480,h:l.h||(l.w||480),sc};
+      else if(Math.hypot(p.x-leftH.x,p.y-leftH.y)<hitR) D={m:'sh_e',side:'l',x:l.x,y:l.y,w:l.w||480,h:l.h||(l.w||480),sc};
+      else if(Math.hypot(p.x-botH.x,p.y-botH.y)<hitR) D={m:'sh_e',side:'b',x:l.x,y:l.y,w:l.w||480,h:l.h||(l.w||480),sc};
+      else if(Math.hypot(p.x-topH.x,p.y-topH.y)<hitR) D={m:'sh_e',side:'t',x:l.x,y:l.y,w:l.w||480,h:l.h||(l.w||480),sc};
+      else if(Math.hypot(p.x-tlH.x,p.y-tlH.y)<hitR || Math.hypot(p.x-blH.x,p.y-blH.y)<hitR) D={m:'rs',d:Math.hypot(p.x-l.x,p.y-l.y)||1,v:val(l)};
+    }
   }
   if(!D){
     const h=hit(p);
@@ -2531,6 +2723,27 @@ cv.onpointermove=e=>{
   if(!PT.has(e.pointerId))return;const p=P(e);PT.set(e.pointerId,p);if(!D)return;const l=sel();D.ch=1;GX=GY=null;
   if(D.m=='pinch'){const[a,b]=[...PT.values()];if(!b||!l)return;setv(l,D.v*Math.hypot(a.x-b.x,a.y-b.y)/D.d);if(l.k!='f'||l.kind=='beam')l.rot=Math.round(D.r+(Math.atan2(b.y-a.y,b.x-a.x)-D.a)*180/Math.PI)}
   else if(D.m=='rs')setv(l,D.v*Math.hypot(p.x-(l.x??S.w/2),p.y-(l.y??S.h/2))/D.d);
+  else if(D.m=='sh_e'){
+    if(!l||l.lock)return;
+    const rad=((l.rot||0)*Math.PI)/180, cos=Math.cos(rad), sin=Math.sin(rad);
+    const dx=p.x-D.x, dy=p.y-D.y;
+    const lx=dx*cos+dy*sin, ly=-dx*sin+dy*cos;
+    const minPx=24;
+    if(l.shape==='square') l.shape='rect';
+    if(D.side==='r'){
+      const oldW=D.w*D.sc, newW=Math.max(minPx, oldW/2 + lx), delta=(newW-oldW)/2;
+      l.w=Math.round(newW/D.sc); l.x=D.x+delta*cos; l.y=D.y+delta*sin;
+    } else if(D.side==='l'){
+      const oldW=D.w*D.sc, newW=Math.max(minPx, oldW/2 - lx), delta=(newW-oldW)/2;
+      l.w=Math.round(newW/D.sc); l.x=D.x-delta*cos; l.y=D.y-delta*sin;
+    } else if(D.side==='b'){
+      const oldH=D.h*D.sc, newH=Math.max(minPx, oldH/2 + ly), delta=(newH-oldH)/2;
+      l.h=Math.round(newH/D.sc); l.x=D.x-delta*sin; l.y=D.y+delta*cos;
+    } else if(D.side==='t'){
+      const oldH=D.h*D.sc, newH=Math.max(minPx, oldH/2 - ly), delta=(newH-oldH)/2;
+      l.h=Math.round(newH/D.sc); l.x=D.x+delta*sin; l.y=D.y-delta*cos;
+    }
+  }
   else if(D.m=='ro'){const cx0=l.x??S.w/2, cy0=l.y??S.h/2;let r=D.r+(Math.atan2(p.y-cy0,p.x-cx0)-D.a)*180/Math.PI;r=((r+540)%360)-180;if(Math.abs(r%15)<4||Math.abs(r%15)>11)r=Math.round(r/15)*15;l.rot=Math.round(r)}
   else if(D.m=='mv'){
     if(!l||l.lock)return;
