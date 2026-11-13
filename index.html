@@ -1466,7 +1466,7 @@ function renderFontOptions(selectedFont){
 }
 const TXT=o=>({id:nid(),k:'t',text:'Novo texto',font:'Inter',size:80,color:'#ffffff',c2:'#06b6d4',grad:0,ang:90,sh:0,st:0,sc:'#000000',sw:6,ls:0,lh:115,rot:0,al:'center',x:S.w/2,y:S.h/2,lock:0,hide:0,...o});
 const GT=o=>({id:nid(),k:'gt',role:'Pregador',text:'Nome do Convidado',rFont:'Montserrat',nFont:'Montserrat',rSize:24,size:42,sc:100,rColor:'#22d3ee',color:'#ffffff',ls:0,lh:115,sh:0,rot:0,al:'center',x:S.w/2,y:S.h*0.32,lock:0,hide:0,...o});
-const FT=o=>({id:nid(),k:'ft',name:'Rodapé',role:'TEMPLO SEDE',text:'AV. MÁRIO HOMEM DE MELO, 7393, SILVIO LEITE',rFont:'Inter',nFont:'Poppins',rSize:36,size:24,sc:100,rColor:'#ffffff',color:'#ffffff',c2:'#06b6d4',grad:0,ang:90,sh:0,st:0,scCol:'#000000',sw:4,ls:0,lh:120,rot:0,al:'center',storyMode:'feed',x:S.w/2,y:1310,lock:0,hide:0,...o});
+const FT=o=>({id:nid(),k:'ft',name:'Rodapé',role:'NOME DO LOCAL',text:'ENDEREÇO DO LOCAL',rFont:'Inter',nFont:'Poppins',rSize:36,size:24,sc:100,rColor:'#ffffff',color:'#ffffff',c2:'#06b6d4',grad:0,ang:90,sh:0,st:0,scCol:'#000000',sw:4,ls:0,lh:120,rot:0,al:'center',storyMode:'feed',x:S.w/2,y:1310,lock:0,hide:0,...o});
 const IMG=o=>({id:nid(),k:'i',name:'Imagem',im:null,sc:100,al:100,rot:0,bl:0,mk:'none',mi:50,bm:'source-over',x:S.w/2,y:S.h/2,lock:0,hide:0,...o});
 const SHP=o=>({id:nid(),k:'sh',name:'Forma',shape:'rect',w:480,h:280,sc:100,rx:0,color:'#06b6d4',c2:'#0284c7',grad:0,ang:135,st:0,scCol:'#ffffff',sw:6,al:100,rot:0,bl:0,mk:'none',mi:50,bm:'source-over',x:S.w/2,y:S.h/2,lock:0,hide:0,...o});
 const LOGO=o=>({id:nid(),k:'lg',name:'Logo',im:null,sc:100,al:100,rot:0,bl:0,mk:'none',mi:50,bm:'source-over',x:S.w/2,y:S.h/2,lock:0,hide:0,...o});
@@ -1501,12 +1501,11 @@ function applySafeBottom(val) {
 
 function fresh(){
   S={w:1080,h:1440,sel:null,safe:0,safeM:100,snap:1,bg:{im:null,x:540,y:720,sc:100,bl:0,lock:0,mode:'solid',c1:'#0f172a',c2:'#083344',ang:135},layers:[]};
-  const ftLayer = FT({role:'TEMPLO SEDE',text:'AV. MÁRIO HOMEM DE MELO, 7393, SILVIO LEITE'});
+  const ftLayer = FT({role:'NOME DO LOCAL',text:'ENDEREÇO DO LOCAL'});
   S.layers.push(
     TXT({text:'CULTO',font:'Anton',size:300,color:'#ffffff',y:595}),
     TXT({text:'domingo',font:'Dancing Script',size:160,color:'#22d3ee',c2:'#06b6d4',grad:1,ang:90,sh:1,y:695}),
     TXT({text:'DOM | 26 DE JUL | 19H',font:'Bebas Neue',size:85,color:'#ffffff',y:965}),
-    TXT({text:'Gálatas 5.25',font:'Poppins',size:45,color:'#ffffff',y:1065}),
     ftLayer
   );
   positionFooterDefault(ftLayer);
@@ -2313,7 +2312,7 @@ function ed(){
     if(l.ls===undefined) l.ls=0;
     if(!l.storyMode) l.storyMode='feed';
     h=`<div class="g">
-         <div><div class="l"><span>Nome do Local / Estabelecimento</span></div><input type="text" data-k="role" value="${esc(l.role)}" placeholder="Ex: TEMPLO SEDE"></div>
+         <div><div class="l"><span>Nome do Local / Estabelecimento</span></div><input type="text" data-k="role" value="${esc(l.role)}" placeholder="Ex: NOME DO LOCAL"></div>
          ${sl('al','Alinhamento Conjunto',[['left','Esquerda'],['center','Centro'],['right','Direita']])}
        </div>`+
        `<div><div class="l"><span>Endereço (Quebra automática ou Enter)</span></div><textarea id="edMainTxt" data-k="text" rows="2">${esc(l.text)}</textarea></div>`+
