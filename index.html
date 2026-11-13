@@ -3,13 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<meta name="theme-color" content="#09090b">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>RF Studio Flyers</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Alex+Brush&family=Alfa+Slab+One&family=Allura&family=Anton&family=Archivo+Black&family=Barlow+Condensed:wght@600;700;800&family=Bebas+Neue&family=Bodoni+Moda:wght@600;800&family=Caveat:wght@400..700&family=Cinzel:wght@600;800&family=Cormorant+Garamond:wght@600;700&family=Courgette&family=Dancing+Script:wght@400..700&family=Fjalla+One&family=Great+Vibes&family=Inter:wght@300;400;500;600;700;800&family=Kaushan+Script&family=Lilita+One&family=Montserrat:wght@400..900&family=Oswald:wght@400..700&family=Pacifico&family=Permanent+Marker&family=Playfair+Display:wght@400..900&family=Plus+Jakarta+Sans:wght@500;700;800&family=Poppins:wght@300..900&family=Prata&family=Raleway:wght@500;700;800&family=Righteous&family=Sacramento&family=Saira+Condensed:wght@600;700;800&family=Satisfy&family=Six+Caps&family=Syne:wght@700;800&family=Teko:wght@400..700&family=Titan+One&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -27,7 +21,6 @@
   --dg: #ef4444;
   --dg-soft: rgba(239, 68, 68, 0.15);
   --safe-b: 0px;
-  --tabs-pl: 8px;
 }
 
 * {
@@ -296,11 +289,11 @@ canvas:active {
   border-color: var(--ac);
 }
 
-/* ABAS INFERIORES ADAPTÁVEIS (GITHUB PAGES & GOOGLE SITES) */
+/* ABAS INFERIORES COM RECUO DE 50PX PARA O BOTÃO (i) DO GOOGLE SITES */
 #tabs {
   display: flex;
   gap: 3px;
-  padding: 4px 8px calc(8px + env(safe-area-inset-bottom, 4px)) var(--tabs-pl, 8px);
+  padding: 4px 8px calc(8px + env(safe-area-inset-bottom, 4px)) 50px;
   background: var(--sf);
   flex-shrink: 0;
   order: 3;
@@ -756,6 +749,56 @@ option {
   border: 1px solid rgba(6, 182, 212, 0.3);
 }
 
+/* PRESETS DE CORES E DEGRADÊS DE FUNDO */
+.preset-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+}
+
+.preset-btn {
+  height: 36px;
+  border-radius: 8px;
+  border: 1.5px solid var(--bd);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 3px 4px;
+  font-size: 9.5px;
+  font-weight: 600;
+  color: #fff;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.9);
+  transition: transform 0.12s, border-color 0.15s;
+}
+
+.preset-btn:hover, .preset-btn:active, .preset-btn.on {
+  border-color: var(--ac-light);
+  transform: translateY(-1px);
+  box-shadow: 0 0 0 1px var(--ac);
+}
+
+.solid-swatches {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.solid-sw {
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
+  border: 1.5px solid rgba(255,255,255,0.18);
+  cursor: pointer;
+  transition: transform 0.12s, border-color 0.12s;
+}
+
+.solid-sw:hover, .solid-sw:active {
+  transform: scale(1.08);
+  border-color: var(--ac-light);
+}
+
 select optgroup {
   background: var(--sf);
   color: var(--ac-light);
@@ -1110,7 +1153,7 @@ select option {
 
         <div class="c">
           <div class="l">
-            <span>Margem Inferior (Ajuste de Tela)</span>
+            <span>Margem Inferior (Google Sites / Android)</span>
             <b id="vsb">0px</b>
           </div>
           <div class="num-ctrl">
@@ -1121,7 +1164,7 @@ select option {
               <button type="button" class="num-step" data-target="sbRange" data-dir="1">+</button>
             </div>
           </div>
-          <div class="hint">Ajusta a altura da barra inferior caso os botões do celular cubram a gaveta.</div>
+          <div class="hint">Ajusta a altura da barra inferior para não ficar coberta pelos botões do celular dentro do Google Sites.</div>
         </div>
 
         <div class="c">
@@ -1151,8 +1194,11 @@ select option {
         <div class="c">
           <div class="l">Tipo de arquivo</div>
           <div class="seg" id="sm">
-            <button data-v="image/jpeg" class="on">JPG Alta Qualidade (Leve)</button>
-            <button data-v="image/png">PNG Máxima Nitidez</button>
+            <button data-v="image/jpeg" class="on">JPG</button>
+            <button data-v="image/png">PNG</button>
+            <button data-v="image/webp">WebP</button>
+            <button data-v="application/pdf">PDF</button>
+            <button data-v="image/svg+xml">SVG</button>
           </div>
           <div class="l"><span>Resolução de Saída</span><b id="resPreview">1080 × 1440 px</b></div>
           <div class="seg" id="ss">
@@ -1164,6 +1210,7 @@ select option {
             Gerar arte
           </button>
         </div>
+        <div class="hint">JPG/PNG/WebP geram imagem direta; PDF gera documento pronto para impressão; SVG gera vetor dimensionável.</div>
       </div>
     </div>
   </section>
@@ -1251,10 +1298,18 @@ const wt=f=>/Anton|Bebas|Six Caps|Archivo Black|Alfa Slab|Titan One|Lilita One|R
 const hexA=(h,a)=>`rgba(${parseInt(h.slice(1,3),16)},${parseInt(h.slice(3,5),16)},${parseInt(h.slice(5,7),16)},${a})`;
 const sel=()=>S.layers.find(l=>l.id==S.sel),esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 
+function renderFontOptions(selectedFont){
+  let html = FONT_GROUPS.map(g=>`<optgroup label="${esc(g.label)}">${g.fonts.map(f=>`<option value="${esc(f)}" style="font-family:'${esc(f)}'" ${f==selectedFont?'selected':''}>${esc(f)}</option>`).join('')}</optgroup>`).join('');
+  if(CUSTOM_FONTS.length){
+    html = `<optgroup label="Fontes Importadas">${CUSTOM_FONTS.map(f=>`<option value="${esc(f)}" ${f==selectedFont?'selected':''}>${esc(f)}</option>`).join('')}</optgroup>` + html;
+  }
+  return html;
+}
+
 const TXT=o=>({id:nid(),k:'t',text:'Novo texto',font:'Inter',size:80,color:'#ffffff',c2:'#06b6d4',grad:0,ang:90,sh:0,st:0,sc:'#000000',sw:6,ls:0,rot:0,al:'center',x:S.w/2,y:S.h/2,lock:0,hide:0,...o});
 const GT=o=>({id:nid(),k:'gt',role:'Pregador',text:'Nome do Convidado',rFont:'Montserrat',nFont:'Montserrat',rSize:24,size:42,sc:100,rColor:'#22d3ee',color:'#ffffff',sh:0,rot:0,al:'center',x:S.w/2,y:S.h*0.32,lock:0,hide:0,...o});
 const IMG=o=>({id:nid(),k:'i',name:'Imagem',im:null,sc:100,al:100,rot:0,bl:0,mk:'none',mi:50,bm:'source-over',x:S.w/2,y:S.h/2,lock:0,hide:0,...o});
-const FADE=o=>({id:nid(),k:'f',name:'Degradê / Vinheta',kind:'linear',c:'#000000',h:60,o:90,dir:'b2t',bm:'source-over',x:S.w/2,y:S.h/2,lock:0,hide:0,...o});
+const FADE=o=>({id:nid(),k:'f',name:'Degradê / Luz',kind:'linear',c:'#000000',h:60,o:90,sq:22,rot:-35,dir:'b2t',bm:'source-over',x:S.w/2,y:S.h/2,lock:0,hide:0,...o});
 
 function showToast(msg){
   const t=$('toast');
@@ -1264,17 +1319,14 @@ function showToast(msg){
   toastTimer=setTimeout(()=>t.classList.remove('show'),2400);
 }
 
-// Detecção inteligente: GitHub Pages (Standalone) vs. Incorporado (Google Sites)
+// Adaptação automática para Google Sites no Android
 let safeBottom = 0;
 try {
-  const inIframe = window.self !== window.top;
-  document.documentElement.style.setProperty('--tabs-pl', inIframe ? '50px' : '8px');
   const savedSb = localStorage.getItem('rfsf_safeb');
   if (savedSb !== null) safeBottom = Math.max(0, Math.min(90, parseInt(savedSb) || 0));
-  else if (inIframe && window.innerWidth < 900) safeBottom = 48;
-  else safeBottom = 0;
+  else if (window.self !== window.top && window.innerWidth < 900) safeBottom = 48;
 } catch(e) {
-  document.documentElement.style.setProperty('--tabs-pl', '50px');
+  if (window.innerWidth < 900) safeBottom = 48;
 }
 
 function applySafeBottom(val) {
@@ -1382,6 +1434,27 @@ function dl(c,l){
       return;
     }
 
+    if (kind === 'beam') {
+      const cx0 = l.x ?? S.w / 2;
+      const cy0 = l.y ?? S.h / 2;
+      const rx = Math.max(30, Math.max(S.w, S.h) * (l.h / 100));
+      const sqRatio = Math.max(0.04, Math.min(1, (l.sq || 22) / 100));
+      c.translate(cx0, cy0);
+      c.rotate(((l.rot || 0) * Math.PI) / 180);
+      c.scale(1, sqRatio);
+      const g = c.createRadialGradient(0, 0, 0, 0, 0, rx);
+      g.addColorStop(0, hexA(l.c, alpha));
+      g.addColorStop(0.28, hexA(l.c, alpha * 0.78));
+      g.addColorStop(0.65, hexA(l.c, alpha * 0.25));
+      g.addColorStop(1, hexA(l.c, 0));
+      c.fillStyle = g;
+      c.beginPath();
+      c.arc(0, 0, rx, 0, Math.PI * 2);
+      c.fill();
+      c.restore();
+      return;
+    }
+
     if (dir === 'all') {
       c.fillStyle = hexA(l.c, alpha);
       c.fillRect(0, 0, S.w, S.h);
@@ -1457,6 +1530,8 @@ function migrateFade(l){
   if(l.dir === 'full') l.dir = 'all';
   if(!l.dir) l.dir = 'b2t';
   if(!l.bm) l.bm = 'source-over';
+  if(l.sq === undefined) l.sq = 22;
+  if(l.rot === undefined) l.rot = -35;
   if(l.x === undefined) l.x = S.w / 2;
   if(l.y === undefined) l.y = S.h / 2;
   l.x = Math.max(0, Math.min(S.w, l.x));
@@ -1512,16 +1587,19 @@ function draw(c,ex){
   if(GX!==null){const gx=Math.max(2*ds,Math.min(w-2*ds,GX));c.beginPath();c.moveTo(gx,0);c.lineTo(gx,h);c.stroke()}
   if(GY!==null){const gy=Math.max(2*ds,Math.min(h-2*ds,GY));c.beginPath();c.moveTo(0,gy);c.lineTo(w,gy);c.stroke()}
   c.setLineDash([]);const l=sel();
-  if(l&&l.k=='f'&&l.kind=='radial'&&!l.hide){
+  if(l&&l.k=='f'&&(l.kind=='radial'||l.kind=='beam')&&!l.hide){
     const lx=Math.max(0,Math.min(w,l.x??w/2)), ly=Math.max(0,Math.min(h,l.y??h/2));
     const rad=Math.max(20, Math.max(w, h) * ((l.h || 55) / 100));
+    const sqRatio = l.kind=='beam' ? Math.max(0.04, Math.min(1, (l.sq || 22) / 100)) : 1;
+    const rotRad = l.kind=='beam' ? ((l.rot || 0) * Math.PI) / 180 : 0;
     const col=l.lock?'#ef4444':'#06b6d4';
     c.save();
     c.strokeStyle=col;
     c.lineWidth=2.2*ds;
     c.setLineDash([10*ds,6*ds]);
     c.beginPath();
-    c.arc(lx, ly, rad, 0, Math.PI*2);
+    if(l.kind=='beam') c.ellipse(lx, ly, rad, Math.max(12*ds, rad*sqRatio), rotRad, 0, Math.PI*2);
+    else c.arc(lx, ly, rad, 0, Math.PI*2);
     c.stroke();
     c.setLineDash([]);
 
@@ -1568,6 +1646,19 @@ function draw(c,ex){
       c.moveTo(hx+1*ds, hy+s); c.lineTo(hx+s, hy+s); c.lineTo(hx+s, hy+1*ds);
       c.moveTo(hx-1*ds, hy-s); c.lineTo(hx-s, hy-s); c.lineTo(hx-s, hy-1*ds);
       c.stroke();
+
+      if(l.kind=='beam'){
+        const roDist = Math.max(46*ds, Math.min(rad*sqRatio + 36*ds, 160*ds));
+        const rx = Math.max(24*ds, Math.min(w-24*ds, lx + Math.sin(rotRad)*roDist));
+        const ry = Math.max(24*ds, Math.min(h-24*ds, ly - Math.cos(rotRad)*roDist));
+        c.strokeStyle=col;c.lineWidth=2*ds;
+        c.beginPath();c.moveTo(lx,ly);c.lineTo(rx,ry);c.stroke();
+        c.shadowColor='rgba(0,0,0,0.45)';c.shadowBlur=8*ds;
+        c.beginPath();c.arc(rx,ry,16*ds,0,Math.PI*2);c.fillStyle='#ffffff';c.fill();
+        c.shadowColor='transparent';c.strokeStyle=col;c.lineWidth=2.2*ds;c.stroke();
+        c.strokeStyle='#09090b';c.lineWidth=2*ds;
+        c.beginPath();c.arc(rx,ry,6*ds,-0.4,Math.PI*1.35);c.stroke();
+      }
     }
     c.restore();
   } else if(l&&l.k!='f'&&!l.hide){
@@ -1777,24 +1868,28 @@ function ed(){
   if(l.k=='f'){
     migrateFade(l);
     const isRad = l.kind === 'radial';
+    const isBeam = l.kind === 'beam';
+    const isPos = isRad || isBeam;
     const posXPct = Math.round(((l.x ?? S.w / 2) / S.w) * 100);
     const posYPct = Math.round(((l.y ?? S.h / 2) / S.h) * 100);
     h = `<input type="text" data-k="name" value="${esc(l.name)}" placeholder="Nome da camada de degradê / luz">` +
         `<div>
-          <div class="l"><span>Tipo de Degradê</span></div>
+          <div class="l"><span>Tipo de Degradê / Luz</span></div>
           <div class="seg" id="fadeKindSeg">
-            <button type="button" data-v="linear" class="${!isRad?'on':''}">Linear (Direcional)</button>
-            <button type="button" data-v="radial" class="${isRad?'on':''}">Radial (Ponto de Luz)</button>
+            <button type="button" data-v="linear" class="${!isPos?'on':''}">Linear</button>
+            <button type="button" data-v="radial" class="${isRad?'on':''}">Radial (Luz)</button>
+            <button type="button" data-v="beam" class="${isBeam?'on':''}">Feixe (Elipse)</button>
           </div>
         </div>` +
         `<div class="g">${co('c','Cor do Degradê / Luz')}${sl('bm','Mesclagem',BLEND)}</div>` +
-        (isRad
+        (isPos
           ? `<button type="button" class="b" id="btnCenterRadial" style="width:100%;color:var(--ac-light);border-color:rgba(6,182,212,0.35)">
                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/><line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="2" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/></svg>
                <span>Centralizar Ponto de Luz</span>
              </button>` +
             `<div class="g">${renderNumCtrl('posXPct','Posição X',0,100,1,'%',posXPct,true)}${renderNumCtrl('posYPct','Posição Y',0,100,1,'%',posYPct,true)}</div>` +
-            rg('h','Raio / Alcance',5,150,1,'%')
+            rg('h', isBeam ? 'Comprimento do Feixe' : 'Raio / Alcance', 5, 160, 1, '%') +
+            (isBeam ? `<div class="g">${rg('sq','Achatamento / Largura',4,100,1,'%',true)}${rg('rot','Ângulo do Feixe',-180,180,1,'°',true)}</div>` : '')
           : sl('dir','Direção do Degradê',FADE_DIRS) +
             rg('h','Alcance / Tamanho',0,100,1,'%')) +
         rg('o','Intensidade / Opacidade',0,100,1,'%');
@@ -1848,10 +1943,11 @@ function ed(){
     const b = e.target.closest('button');
     if(!b || l.lock) return;
     l.kind = b.dataset.v;
-    if(l.kind === 'radial'){
+    if(l.kind === 'radial' || l.kind === 'beam'){
       l.x = Math.max(0, Math.min(S.w, l.x ?? S.w / 2));
       l.y = Math.max(0, Math.min(S.h, l.y ?? S.h / 2));
-      if(l.h > 100) l.h = 55;
+      if(l.h > 100) l.h = 65;
+      if(l.kind === 'beam' && l.bm === 'source-over') l.bm = 'screen';
     }
     commit();
     ui();
@@ -2020,7 +2116,7 @@ $('aG').onclick=()=>{
 };
 $('aO').onclick=()=>{layG();commit();ui();showToast('Convidados auto-organizados')};
 
-// ---- fundo, calibração e arte
+// ---- fundo, calibração Google Sites e arte
 $('bgSolidSwatches').innerHTML=BG_SOLIDS.map(c=>`<button type="button" class="sw-btn" data-c="${c}" style="background:${c}" title="${c}"></button>`).join('');
 $('bgSolidSwatches').onclick=e=>{
   const b=e.target.closest('.sw-btn');if(!b||S.bg.lock)return;
@@ -2042,79 +2138,79 @@ $('bgModeSeg').onclick=e=>{
 $('bgC1').oninput=e=>{if(S.bg.lock)return;S.bg.c1=e.target.value;$('bgGC1').value=e.target.value;rq()};
 $('bgGC1').oninput=e=>{if(S.bg.lock)return;S.bg.c1=e.target.value;$('bgC1').value=e.target.value;rq()};
 $('bgGC2').oninput=e=>{if(S.bg.lock)return;S.bg.c2=e.target.value;rq()};
-$('bgC1').onchange=$('bgGC1').onchange=$('bgGC2').onchange=()=>{commit();ui()};
+// ---- exportar (JPG, PNG, WebP, PDF nativo e SVG)
+function buildMinimalPdfFromJpeg(jpegDataUrl, wPx, hPx) {
+  const raw = atob(jpegDataUrl.split(',')[1]);
+  const imgLen = raw.length;
+  const ptW = +(wPx * 0.75).toFixed(2);
+  const ptH = +(hPx * 0.75).toFixed(2);
+  const enc = str => {
+    const arr = new Uint8Array(str.length);
+    for (let i = 0; i < str.length; i++) arr[i] = str.charCodeAt(i) & 0xff;
+    return arr;
+  };
+  const chunks = [];
+  const offsets = [];
+  let pos = 0;
+  const pushStr = s => { const a = enc(s); chunks.push(a); pos += a.length; };
+  const pushBytes = b => { chunks.push(b); pos += b.length; };
+  const startObj = id => { offsets[id] = pos; pushStr(`${id} 0 obj\n`); };
 
-$('bgf').onchange=e=>{load(e.target.files[0],id=>{Object.assign(S.bg,{im:id,sc:100,x:S.w/2,y:S.h/2});commit();ui()});e.target.value=''};
-$('bgClearImg').onclick=()=>{if(S.bg.lock)return;S.bg.im=null;commit();ui();showToast('Imagem de fundo removida')};
-
-function updateBgCtrl(id, val){
-  if(S.bg.lock) return;
-  if(id==='bs'){
-    S.bg.sc=Math.max(10,Math.min(300,val));
-    $('bs').value=S.bg.sc;$('bsNum').value=S.bg.sc;$('vbs').textContent=S.bg.sc+'%';
-  } else if(id==='bb'){
-    S.bg.bl=Math.max(0,Math.min(40,val));
-    $('bb').value=S.bg.bl;$('bbNum').value=S.bg.bl;$('vbb').textContent=S.bg.bl+'px';
-  } else if(id==='bgAng'){
-    S.bg.ang=Math.max(0,Math.min(360,val));
-    $('bgAng').value=S.bg.ang;$('bgAngNum').value=S.bg.ang;$('vBgAng').textContent=S.bg.ang+'°';
+  pushStr('%PDF-1.4\n%\xFF\xFF\xFF\xFF\n');
+  startObj(1); pushStr('<< /Type /Catalog /Pages 2 0 R >>\nendobj\n');
+  startObj(2); pushStr('<< /Type /Pages /Kids [3 0 R] /Count 1 >>\nendobj\n');
+  startObj(3); pushStr(`<< /Type /Page /Parent 2 0 R /Resources << /XObject << /Im0 4 0 R >> >> /MediaBox [0 0 ${ptW} ${ptH}] /Contents 5 0 R >>\nendobj\n`);
+  startObj(4); pushStr(`<< /Type /XObject /Subtype /Image /Width ${wPx} /Height ${hPx} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${imgLen} >>\nstream\n`);
+  const imgBytes = new Uint8Array(imgLen);
+  for (let i = 0; i < imgLen; i++) imgBytes[i] = raw.charCodeAt(i);
+  pushBytes(imgBytes);
+  pushStr('\nendstream\nendobj\n');
+  const contentStream = `q\n${ptW} 0 0 ${ptH} 0 0 cm\n/Im0 Do\nQ\n`;
+  startObj(5); pushStr(`<< /Length ${contentStream.length} >>\nstream\n${contentStream}endstream\nendobj\n`);
+  const xrefPos = pos;
+  pushStr('xref\n0 6\n0000000000 65535 f \n');
+  for (let i = 1; i <= 5; i++) {
+    pushStr(String(offsets[i]).padStart(10, '0') + ' 00000 n \n');
   }
-  rq();
+  pushStr(`trailer\n<< /Size 6 /Root 1 0 R >>\nstartxref\n${xrefPos}\n%%EOF`);
+  return new Blob(chunks, { type: 'application/pdf' });
 }
 
-$('bs').oninput=e=>updateBgCtrl('bs',+e.target.value);
-$('bsNum').oninput=e=>updateBgCtrl('bs',+e.target.value);
-$('bb').oninput=e=>updateBgCtrl('bb',+e.target.value);
-$('bbNum').oninput=e=>updateBgCtrl('bb',+e.target.value);
-$('bgAng').oninput=e=>updateBgCtrl('bgAng',+e.target.value);
-$('bgAngNum').oninput=e=>updateBgCtrl('bgAng',+e.target.value);
-$('bs').onchange=$('bsNum').onchange=$('bb').onchange=$('bbNum').onchange=$('bgAng').onchange=$('bgAngNum').onchange=commit;
-
-$('sbRange').oninput=e=>applySafeBottom(+e.target.value);
-$('sbNum').oninput=e=>applySafeBottom(+e.target.value);
-
-document.querySelectorAll('#p-bg .num-step, #p-art .num-step').forEach(btn=>{
-  btn.onclick=()=>{
-    const t=btn.dataset.target, dir=+btn.dataset.dir;
-    if(t==='sbRange') applySafeBottom(safeBottom + dir * 4);
-    else if(t==='bs'){updateBgCtrl('bs', S.bg.sc + dir * 2); commit();}
-    else if(t==='bb'){updateBgCtrl('bb', S.bg.bl + dir * 1); commit();}
-    else if(t==='bgAng'){updateBgCtrl('bgAng', (S.bg.ang??135) + dir * 15); commit();}
-  };
-});
-
-$('blk').onchange=e=>{S.bg.lock=+e.target.checked;$('bgFs').disabled=!!S.bg.lock;commit()};
-$('ksafe').onchange=e=>{S.safe=+e.target.checked;rq()};
-$('ksnap').onchange=e=>{S.snap=+e.target.checked};
-$('sf').innerHTML=FMT.map(f=>`<button data-v="${f[0]}">${f[1]}</button>`).join('');
-$('sf').onclick=e=>{
-  const v=e.target.dataset.v;if(!v)return;
-  const[w,h]=v.split('x').map(Number),fx=w/S.w,fy=h/S.h;
-  S.layers.forEach(l=>{if(l.x!==undefined){l.x*=fx;l.y*=fy}});
-  S.bg.x*=fx;S.bg.y*=fy;S.w=w;S.h=h;commit();ui();
-};
-
-$('ff').onchange=async e=>{
-  const f=e.target.files[0];if(!f)return;
-  const n=f.name.replace(/\.\w+$/,''),ff=new FontFace(n,await f.arrayBuffer());
-  await ff.load();document.fonts.add(ff);
-  if(!FONTS.includes(n))FONTS.push(n);
-  if(!CUSTOM_FONTS.includes(n))CUSTOM_FONTS.push(n);
-  ed();rq();showToast('Fonte "'+n+'" adicionada!');
-};
-$('psv').onclick=()=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([proj()],{type:'application/json'}));a.download='projeto-flyer.json';a.click()};
-$('pop').onchange=e=>{const f=e.target.files[0];if(f)f.text().then(openP).catch(()=>showToast('Arquivo de projeto inválido.'))};
-$('pnw').onclick=()=>{IM={};PC={};fresh();H=[ser()];hi=0;ui();save();showToast('Novo projeto iniciado')};
-
-// ---- exportar
 const seg=(id,fn)=>$(id).onclick=e=>{const b=e.target.closest('button');if(!b)return;fn(b.dataset.v);$(id).querySelectorAll('button').forEach(x=>x.classList.toggle('on',x==b))};
 seg('sm',v=>expM=v);
 seg('ss',v=>{expS=+v;updateResBadge()});
 $('exp').onclick=()=>{
   const sc=expS,o=document.createElement('canvas');o.width=S.w*sc;o.height=S.h*sc;
   const c=o.getContext('2d');c.scale(sc,sc);draw(c,true);
+  const previewUrl = o.toDataURL('image/jpeg', 0.94);
+
+  if (expM === 'application/pdf') {
+    const pdfBlob = buildMinimalPdfFromJpeg(previewUrl, o.width, o.height);
+    const u = URL.createObjectURL(pdfBlob), n = `Flyer-${o.width}x${o.height}-${Date.now()}.pdf`;
+    $('mi').src = previewUrl; $('md').href = u; $('md').download = n; mo.style.display = 'flex';
+    $('ms').onclick = () => {
+      const f = new File([pdfBlob], n, { type: 'application/pdf' });
+      navigator.canShare && navigator.canShare({ files: [f] }) ? navigator.share({ files: [f] }).catch(() => {}) : showToast('Use o botão Baixar para salvar o PDF.');
+    };
+    return;
+  }
+
+  if (expM === 'image/svg+xml') {
+    const pngDataUrl = o.toDataURL('image/png');
+    const svgContent = `<?xml version="1.0" encoding="UTF-8"?>\n<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="${o.width}" height="${o.height}" viewBox="0 0 ${o.width} ${o.height}">\n  <title>RF Studio Flyer</title>\n  <image width="${o.width}" height="${o.height}" xlink:href="${pngDataUrl}" href="${pngDataUrl}"/>\n</svg>`;
+    const svgBlob = new Blob([svgContent], { type: 'image/svg+xml;charset=utf-8' });
+    const u = URL.createObjectURL(svgBlob), n = `Flyer-${o.width}x${o.height}-${Date.now()}.svg`;
+    $('mi').src = pngDataUrl; $('md').href = u; $('md').download = n; mo.style.display = 'flex';
+    $('ms').onclick = () => {
+      const f = new File([svgBlob], n, { type: 'image/svg+xml' });
+      navigator.canShare && navigator.canShare({ files: [f] }) ? navigator.share({ files: [f] }).catch(() => {}) : showToast('Use o botão Baixar para salvar o SVG.');
+    };
+    return;
+  }
+
+  const ext = expM === 'image/png' ? 'png' : expM === 'image/webp' ? 'webp' : 'jpg';
   o.toBlob(b=>{
-    const u=URL.createObjectURL(b),n=`Flyer-${o.width}x${o.height}-${Date.now()}.${expM=='image/png'?'png':'jpg'}`;
+    const u=URL.createObjectURL(b),n=`Flyer-${o.width}x${o.height}-${Date.now()}.${ext}`;
     $('mi').src=u;$('md').href=u;$('md').download=n;mo.style.display='flex';
     $('ms').onclick=()=>{
       const f=new File([b],n,{type:b.type});
@@ -2183,7 +2279,7 @@ function hit(p){
     const l=S.layers[i];
     if(l.hide)continue;
     if(l.k=='f'){
-      if(l.kind=='radial'){
+      if(l.kind=='radial'||l.kind=='beam'){
         const lx=l.x??S.w/2, ly=l.y??S.h/2;
         const rad=Math.max(20, Math.max(S.w, S.h) * ((l.h || 55) / 100));
         const reach = (cur && cur.id === l.id) ? Math.max(120, rad) : 120;
@@ -2198,16 +2294,30 @@ function hit(p){
 
 cv.onpointerdown=e=>{
   cv.setPointerCapture(e.pointerId);const p=P(e);PT.set(e.pointerId,p);const l=sel();
-  const canInteract = l && !l.lock && !l.hide && (l.k != 'f' || l.kind == 'radial');
+  const canInteract = l && !l.lock && !l.hide && (l.k != 'f' || l.kind == 'radial' || l.kind == 'beam');
   if(PT.size==2&&canInteract){const[a,b]=[...PT.values()];D={m:'pinch',d:Math.hypot(a.x-b.x,a.y-b.y)||1,a:Math.atan2(b.y-a.y,b.x-a.x),v:val(l),r:l.rot||0};return}
   if(PT.size>1)return;const ds=S.w/cv.getBoundingClientRect().width;D=null;
 
-  if(l&&l.k=='f'&&l.kind=='radial'&&!l.lock&&!l.hide){
+  if(l&&l.k=='f'&&(l.kind=='radial'||l.kind=='beam')&&!l.lock&&!l.hide){
     const lx=Math.max(0,Math.min(S.w,l.x??S.w/2)), ly=Math.max(0,Math.min(S.h,l.y??S.h/2));
     const rad=Math.max(20, Math.max(S.w, S.h) * ((l.h || 55) / 100));
     const hPos=getRadialHandle(l, rad, ds);
-    if(Math.hypot(p.x-hPos.x,p.y-hPos.y)<34*ds) D={m:'rs',d:Math.hypot(p.x-lx,p.y-ly)||1,v:val(l)};
-    else if(Math.hypot(p.x-lx,p.y-ly)<=Math.max(120, rad)) D={m:'mv',sx:p.x,sy:p.y,x:lx,y:ly};
+    let hitRo = false;
+    if(l.kind=='beam'){
+      const sqRatio = Math.max(0.04, Math.min(1, (l.sq || 22) / 100));
+      const rotRad = ((l.rot || 0) * Math.PI) / 180;
+      const roDist = Math.max(46*ds, Math.min(rad*sqRatio + 36*ds, 160*ds));
+      const rx = Math.max(24*ds, Math.min(S.w-24*ds, lx + Math.sin(rotRad)*roDist));
+      const ry = Math.max(24*ds, Math.min(S.h-24*ds, ly - Math.cos(rotRad)*roDist));
+      if(Math.hypot(p.x-rx, p.y-ry) < 34*ds){
+        D={m:'ro',a:Math.atan2(p.y-ly,p.x-lx),r:l.rot||0};
+        hitRo = true;
+      }
+    }
+    if(!hitRo){
+      if(Math.hypot(p.x-hPos.x,p.y-hPos.y)<34*ds) D={m:'rs',d:Math.hypot(p.x-lx,p.y-ly)||1,v:val(l)};
+      else if(Math.hypot(p.x-lx,p.y-ly)<=Math.max(120, rad)) D={m:'mv',sx:p.x,sy:p.y,x:lx,y:ly};
+    }
   } else if(l&&l.k!='f'&&!l.lock&&!l.hide){
     const m=met(cx,l),pd=10*ds;
     const edH=tr(l,m.w/2+pd,-m.h/2-pd);
@@ -2237,13 +2347,13 @@ cv.onpointerdown=e=>{
 
 cv.onpointermove=e=>{
   if(!PT.has(e.pointerId))return;const p=P(e);PT.set(e.pointerId,p);if(!D)return;const l=sel();D.ch=1;GX=GY=null;
-  if(D.m=='pinch'){const[a,b]=[...PT.values()];if(!b||!l)return;setv(l,D.v*Math.hypot(a.x-b.x,a.y-b.y)/D.d);if(l.k!='f')l.rot=Math.round(D.r+(Math.atan2(b.y-a.y,b.x-a.x)-D.a)*180/Math.PI)}
+  if(D.m=='pinch'){const[a,b]=[...PT.values()];if(!b||!l)return;setv(l,D.v*Math.hypot(a.x-b.x,a.y-b.y)/D.d);if(l.k!='f'||l.kind=='beam')l.rot=Math.round(D.r+(Math.atan2(b.y-a.y,b.x-a.x)-D.a)*180/Math.PI)}
   else if(D.m=='rs')setv(l,D.v*Math.hypot(p.x-(l.x??S.w/2),p.y-(l.y??S.h/2))/D.d);
-  else if(D.m=='ro'){let r=D.r+(Math.atan2(p.y-l.y,p.x-l.x)-D.a)*180/Math.PI;r=((r+540)%360)-180;if(Math.abs(r%15)<4||Math.abs(r%15)>11)r=Math.round(r/15)*15;l.rot=Math.round(r)}
+  else if(D.m=='ro'){const cx0=l.x??S.w/2, cy0=l.y??S.h/2;let r=D.r+(Math.atan2(p.y-cy0,p.x-cx0)-D.a)*180/Math.PI;r=((r+540)%360)-180;if(Math.abs(r%15)<4||Math.abs(r%15)>11)r=Math.round(r/15)*15;l.rot=Math.round(r)}
   else if(D.m=='mv'){
     if(!l||l.lock)return;
     let x=D.x+p.x-D.sx, y=D.y+p.y-D.sy;
-    if(l.k=='f'&&l.kind=='radial'){
+    if(l.k=='f'&&(l.kind=='radial'||l.kind=='beam')){
       x=Math.max(0,Math.min(S.w,x));
       y=Math.max(0,Math.min(S.h,y));
       if(S.snap){
