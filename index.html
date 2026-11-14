@@ -1856,6 +1856,7 @@ select option {
 <div id="mo">
   <div class="mo-card">
     <img id="mi" alt="Arte Exportada">
+    <div id="mlist" style="display:none;width:100%;gap:8px;overflow-x:auto;padding:2px 0"></div>
     <div class="r" style="width:100%">
       <button class="b" style="flex:1" onclick="mo.style.display='none'">Fechar</button>
       <button class="b" style="flex:1" id="ms">Compartilhar</button>
@@ -4154,7 +4155,7 @@ function renderSp(){
   L.style.display=expP==='pick'?'flex':'none';
   L.innerHTML=Array.from({length:n},(_,i)=>`<button type="button" class="b ${expSel.has(i)?'on':''}" data-i="${i}" style="min-width:40px">${i+1}</button>`).join('');
   const ps=expPages(),k=ps.length;
-  $('expPgInfo').textContent=k>1?(expM==='application/pdf'?`PDF único com ${k} páginas`:`${k} páginas em um arquivo ZIP`):(expP==='act'?`Página ${S.pg.a+1} (ativa)`:`Página ${ps[0]+1}`);
+  $('expPgInfo').textContent=k>1?(expM==='application/pdf'?`PDF único com ${k} páginas`:`${k} imagens (baixadas uma a uma)`):(expP==='act'?`Página ${S.pg.a+1} (ativa)`:`Página ${ps[0]+1}`);
 }
 seg('expPg',v=>{expP=v;renderSp()});
 $('expPgList').onclick=e=>{const b=e.target.closest('button');if(!b)return;const i=+b.dataset.i;expSel.has(i)?expSel.delete(i):expSel.add(i);renderSp()};
@@ -4228,7 +4229,17 @@ async function exportMulti(idxs){
       }
       files.push({name:`Flyer-pagina-${String(i+1).padStart(2,'0')}.${ext}`,data});
     }
-    blob=buildZip(files);name=`Flyer-${items.length}paginas-${stamp}.zip`;
+    const fl=files.map(f=>new File([f.data],f.name,{type:expM})),us=fl.map(f=>URL.createObjectURL(f));
+    $('mi').src=prev;$('md').href=us[0];$('md').download=fl[0].name;mo.style.display='flex';
+    const L=$('mlist');L.style.display='flex';
+    L.innerHTML=fl.map((f,k)=>`<a href="${us[k]}" download="${f.name}" title="Baixar ${f.name}" style="flex:0 0 auto;text-align:center;font-size:10px;color:var(--mu);text-decoration:none"><img src="${us[k]}" style="height:54px;border-radius:4px;display:block"><span>Pág ${items[k].i+1}</span></a>`).join('');
+    $('md').onclick=e=>{
+      e.preventDefault();
+      fl.forEach((f,k)=>setTimeout(()=>{const a=document.createElement('a');a.href=us[k];a.download=f.name;document.body.appendChild(a);a.click();a.remove()},k*450));
+      showToast('Baixando '+fl.length+' imagens...');
+    };
+    $('ms').onclick=()=>{navigator.canShare&&navigator.canShare({files:fl})?navigator.share({files:fl}).catch(()=>{}):showToast('Use o botão Baixar para salvar as imagens.')};
+    return;
   }
   const u=URL.createObjectURL(blob);
   $('mi').src=prev;$('md').href=u;$('md').download=name;mo.style.display='flex';
@@ -4239,6 +4250,7 @@ async function exportMulti(idxs){
 }
 $('exp').onclick=()=>{
   const idxs=expPages();
+  $('md').onclick=null;$('mlist').style.display='none';
   if(!idxs.length){showToast('Selecione ao menos uma página');return}
   if(idxs.length>1){exportMulti(idxs);return}
   const sc=expS,o=pageCanvas(idxs[0],sc);
