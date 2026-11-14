@@ -1117,6 +1117,103 @@ select option {
   padding: 4px;
 }
 
+/* EDITOR DE TEXTO FLUTUANTE DIRETO NA ARTE (INLINE OVERLAY) */
+#inlineTextEd {
+  position: absolute;
+  display: none;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 210px;
+  max-width: min(92vw, 360px);
+  background: rgba(18, 18, 21, 0.94);
+  backdrop-filter: blur(12px);
+  border: 1.5px solid var(--ac-light);
+  border-radius: 12px;
+  padding: 8px;
+  z-index: 35;
+  box-shadow: 0 14px 38px rgba(0, 0, 0, 0.78), 0 0 0 1px rgba(34, 211, 238, 0.22);
+  transform: translate(-50%, -50%);
+  animation: inlinePop 0.14s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes inlinePop {
+  from { opacity: 0; transform: translate(-50%, -46%) scale(0.95); }
+  to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+
+.inline-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.inline-tag {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--ac-light);
+}
+
+.inline-done {
+  padding: 3px 9px;
+  height: 22px;
+  border-radius: 6px;
+  background: var(--ac);
+  color: #09090b;
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+#inlineRoleInp {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--bd);
+  border-radius: 7px;
+  padding: 5px 8px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ac-light);
+  text-align: center;
+}
+
+#inlineMainTxt {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--bd);
+  border-radius: 8px;
+  padding: 7px 9px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--tx);
+  resize: none;
+  line-height: 1.25;
+  overflow: hidden;
+  min-height: 42px;
+}
+
+#inlineRoleInp:focus, #inlineMainTxt:focus {
+  border-color: var(--ac-light);
+  outline: none;
+}
+
+.align-seg button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 32px;
+}
+
+.align-seg svg {
+  width: 16px;
+  height: 16px;
+  stroke-width: 2.1;
+}
+
 .hint {
   font-size: 11px;
   color: var(--mu);
@@ -1300,6 +1397,23 @@ select option {
           Auto-org.
         </button>
       </div>
+    </div>
+
+    <!-- EDITOR DE TEXTO FLUTUANTE DIRETO NO LOCAL DO TEXTO NA ARTE -->
+    <div id="inlineTextEd">
+      <div class="inline-bar">
+        <span class="inline-tag" id="inlineTag">Editar Texto</span>
+        <div class="r" style="gap:4px">
+          <span class="case-bar">
+            <button type="button" class="case-btn" data-icase="upper" title="TUDO MAIÚSCULO">AA</button>
+            <button type="button" class="case-btn" data-icase="lower" title="tudo minúsculo">aa</button>
+            <button type="button" class="case-btn" data-icase="title" title="Primeiras Maiúsculas">Aa</button>
+          </span>
+          <button type="button" class="inline-done" id="inlineDoneBtn">OK</button>
+        </div>
+      </div>
+      <input type="text" id="inlineRoleInp" placeholder="Cargo / Local" style="display:none">
+      <textarea id="inlineMainTxt" rows="2" placeholder="Digite o texto..."></textarea>
     </div>
 
     <!-- CONTROLE FLUTUANTE DE ZOOM DA ARTE -->
@@ -1679,7 +1793,11 @@ const SVG={
   up:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>`,
   dn:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>`,
   del:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>`,
-  grip:`<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="5" r="1.8"/><circle cx="15" cy="5" r="1.8"/><circle cx="9" cy="12" r="1.8"/><circle cx="15" cy="12" r="1.8"/><circle cx="9" cy="19" r="1.8"/><circle cx="15" cy="19" r="1.8"/></svg>`
+  grip:`<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="5" r="1.8"/><circle cx="15" cy="5" r="1.8"/><circle cx="9" cy="12" r="1.8"/><circle cx="15" cy="12" r="1.8"/><circle cx="9" cy="19" r="1.8"/><circle cx="15" cy="19" r="1.8"/></svg>`,
+  alL:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><line x1="17" y1="10" x2="3" y2="10"/><line x1="21" y1="6" x2="3" y2="6"/><line x1="21" y1="14" x2="3" y2="14"/><line x1="17" y1="18" x2="3" y2="18"/></svg>`,
+  alC:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="10" x2="6" y2="10"/><line x1="21" y1="6" x2="3" y2="6"/><line x1="21" y1="14" x2="3" y2="14"/><line x1="18" y1="18" x2="6" y2="18"/></svg>`,
+  alR:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><line x1="21" y1="10" x2="7" y2="10"/><line x1="21" y1="6" x2="3" y2="6"/><line x1="21" y1="14" x2="3" y2="14"/><line x1="21" y1="18" x2="7" y2="18"/></svg>`,
+  edit:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>`
 };
 
 let S,IM={},PC={},H=[],hi=0,uid=0,lv=0,expM='image/jpeg',expS=1,q=0,st,toastTimer;
@@ -1893,37 +2011,180 @@ function updateViewTransform(){
   }
   cv.style.transform = `translate3d(${ZX.toFixed(1)}px, ${ZY.toFixed(1)}px, 0) scale(${Z.toFixed(4)})`;
   if($('zReset')) $('zReset').textContent = Math.round(Z * 100) + '%';
+  positionInlineEditor();
   rq();
 }
 
 function resetZoomView(withToast=false){
-  Z = 1; ZX = 0; ZY = 0;
+  Z = 1;
+  ZX = 0;
+  ZY = 0;
   updateViewTransform();
-  if(withToast) showToast('Visualização restaurada (100%)');
+  if(withToast) showToast('Zoom restaurado (100%)');
 }
 
-function stepZoomView(delta, focalClientX, focalClientY){
+function stepZoomView(delta, focalX=null, focalY=null){
   const oldZ = Z;
   const newZ = Math.max(0.5, Math.min(4, Math.round((Z + delta) * 20) / 20));
   if(newZ === oldZ) return;
-  if(focalClientX !== undefined && focalClientY !== undefined){
-    const stg = $('stage').getBoundingClientRect();
-    const cx0 = stg.left + stg.width / 2 + ZX;
-    const cy0 = stg.top + stg.height / 2 + ZY;
+  if(focalX !== null && focalY !== null){
+    const stg = $('stage');
+    const sr = stg.getBoundingClientRect();
+    const cx0 = sr.left + sr.width / 2 + ZX;
+    const cy0 = sr.top + sr.height / 2 + ZY;
     const ratio = newZ / oldZ;
-    ZX += (focalClientX - cx0) * (1 - ratio);
-    ZY += (focalClientY - cy0) * (1 - ratio);
-  } else if(newZ === 1){
-    ZX = 0; ZY = 0;
+    ZX += (focalX - cx0) * (1 - ratio);
+    ZY += (focalY - cy0) * (1 - ratio);
   }
   Z = newZ;
+  if(Z === 1){ ZX = 0; ZY = 0; }
   updateViewTransform();
 }
 
 function blurTextFocus(){
+  closeInlineEditor();
   const a=document.activeElement;
   if(a&&(a.tagName==='INPUT'||a.tagName==='TEXTAREA'||a.tagName==='SELECT'))a.blur();
 }
+
+// ---- EDITOR DE TEXTO FLUTUANTE DIRETO NO CANVAS (INLINE OVERLAY) ----
+let inlineLayerId = null, inlineActiveField = 'text';
+
+function positionInlineEditor(){
+  const box = $('inlineTextEd');
+  if(!box || box.style.display === 'none' || !inlineLayerId) return;
+  const l = S.layers.find(x => x.id === inlineLayerId);
+  if(!l || l.hide || l.lock){ closeInlineEditor(false); return; }
+  const sr = $('stage').getBoundingClientRect();
+  const cr = cv.getBoundingClientRect();
+  if(!cr.width || !cr.height) return;
+  const lx = l.x ?? S.w / 2;
+  const ly = l.y ?? S.h / 2;
+  let px = (cr.left - sr.left) + (lx / S.w) * cr.width;
+  let py = (cr.top - sr.top) + (ly / S.h) * cr.height;
+  const padX = Math.min(130, sr.width * 0.35);
+  const padY = 64;
+  px = Math.max(padX, Math.min(sr.width - padX, px));
+  py = Math.max(padY, Math.min(sr.height - padY, py));
+  box.style.left = px + 'px';
+  box.style.top = py + 'px';
+}
+
+function autoResizeInlineTextarea(){
+  const ta = $('inlineMainTxt');
+  if(!ta) return;
+  ta.style.height = 'auto';
+  ta.style.height = Math.max(44, Math.min(180, ta.scrollHeight + 2)) + 'px';
+}
+
+function openInlineEditor(l, focusRole=false){
+  if(!l || l.lock || !['t','gt','ft'].includes(l.k)) return;
+  S.sel = l.id;
+  if(!MULTI) SELS = [l.id];
+  inlineLayerId = l.id;
+  const box = $('inlineTextEd');
+  const roleInp = $('inlineRoleInp');
+  const mainTa = $('inlineMainTxt');
+  $('inlineTag').textContent = l.k === 'gt' ? 'Editar Convidado' : l.k === 'ft' ? 'Editar Rodapé' : 'Editar Texto';
+
+  if(l.k === 'gt' || l.k === 'ft'){
+    roleInp.style.display = 'block';
+    roleInp.placeholder = l.k === 'gt' ? 'Cargo (ex: Pregador)' : 'Nome do Local';
+    roleInp.value = l.role || '';
+    roleInp.style.fontFamily = `"${l.rFont || 'Montserrat'}", sans-serif`;
+  } else {
+    roleInp.style.display = 'none';
+  }
+
+  mainTa.placeholder = l.k === 'gt' ? 'Nome do Convidado' : l.k === 'ft' ? 'Endereço do Local' : 'Digite o texto...';
+  mainTa.value = l.text || '';
+  mainTa.style.fontFamily = `"${l.k==='t'?l.font:(l.nFont||'Montserrat')}", sans-serif`;
+  mainTa.style.textAlign = l.al || 'center';
+  roleInp.style.textAlign = l.al || 'center';
+
+  box.style.display = 'flex';
+  autoResizeInlineTextarea();
+  positionInlineEditor();
+  lays(); ed(); tb(); rq();
+
+  setTimeout(() => {
+    const target = (focusRole && (l.k === 'gt' || l.k === 'ft')) ? roleInp : mainTa;
+    inlineActiveField = (target === roleInp) ? 'role' : 'text';
+    target.focus();
+    if(target.select) target.select();
+  }, 30);
+}
+
+function closeInlineEditor(doCommit=true){
+  const box = $('inlineTextEd');
+  if(!box || box.style.display === 'none') return;
+  box.style.display = 'none';
+  const l = S.layers.find(x => x.id === inlineLayerId);
+  inlineLayerId = null;
+  if($('inlineMainTxt')) $('inlineMainTxt').blur();
+  if($('inlineRoleInp')) $('inlineRoleInp').blur();
+  if(l){
+    if(l.k === 'ft') positionFooterDefault(l);
+    clampLayerBounds(cx, l);
+  }
+  if(doCommit){
+    commit();
+    lays();
+    ed();
+    rq();
+  }
+}
+
+$('inlineRoleInp').onfocus = () => { inlineActiveField = 'role'; };
+$('inlineMainTxt').onfocus = () => { inlineActiveField = 'text'; };
+
+$('inlineRoleInp').oninput = e => {
+  const l = S.layers.find(x => x.id === inlineLayerId);
+  if(!l || l.lock) return;
+  l.role = e.target.value;
+  if(l.k === 'ft') positionFooterDefault(l);
+  clampLayerBounds(cx, l);
+  const hdr = $('edHdrName');
+  if(hdr) hdr.textContent = nm(l);
+  lays(); rq();
+};
+
+$('inlineMainTxt').oninput = e => {
+  const l = S.layers.find(x => x.id === inlineLayerId);
+  if(!l || l.lock) return;
+  l.text = e.target.value;
+  autoResizeInlineTextarea();
+  if(l.k === 'ft') positionFooterDefault(l);
+  clampLayerBounds(cx, l);
+  const hdr = $('edHdrName');
+  if(hdr) hdr.textContent = nm(l);
+  lays(); rq();
+};
+
+$('inlineDoneBtn').onclick = e => {
+  e.stopPropagation();
+  closeInlineEditor(true);
+};
+
+$('inlineTextEd').addEventListener('pointerdown', e => e.stopPropagation());
+$('inlineTextEd').querySelectorAll('[data-icase]').forEach(btn => {
+  btn.onclick = e => {
+    e.stopPropagation();
+    const l = S.layers.find(x => x.id === inlineLayerId);
+    if(!l || l.lock) return;
+    const mode = btn.dataset.icase;
+    const fk = (inlineActiveField === 'role' && (l.k === 'gt' || l.k === 'ft')) ? 'role' : 'text';
+    const cur = String(l[fk] || '');
+    l[fk] = mode === 'upper' ? cur.toUpperCase() : mode === 'lower' ? cur.toLowerCase() : toTitleCasePt(cur);
+    if(fk === 'role') $('inlineRoleInp').value = l.role;
+    else $('inlineMainTxt').value = l.text;
+    if(l.k === 'ft') positionFooterDefault(l);
+    clampLayerBounds(cx, l);
+    const hdr = $('edHdrName');
+    if(hdr) hdr.textContent = nm(l);
+    lays(); rq();
+  };
+});
 
 const TXT=o=>({id:nid(),k:'t',text:'Novo texto',font:'Inter',size:80,color:'#ffffff',c2:'#06b6d4',grad:0,ang:90,sh:0,st:0,sc:'#000000',sw:6,ls:0,lh:115,rot:0,al:'center',x:S.w/2,y:S.h/2,lock:0,hide:0,...o});
 const GT=o=>({id:nid(),k:'gt',role:'Pregador',text:'Nome do Convidado',rFont:'Montserrat',nFont:'Montserrat',rSize:24,size:42,sc:100,rColor:'#22d3ee',color:'#ffffff',ls:0,lh:115,sh:0,rot:0,al:'center',x:S.w/2,y:S.h*0.32,lock:0,hide:0,...o});
@@ -2849,6 +3110,18 @@ function renderFontSelect(k, label, currentFont){
   return `<div><div class="l"><span>${label}</span></div><select data-k="${k}">${groupsHtml}${customHtml}</select></div>`;
 }
 
+function renderAlignCtrl(label, curVal){
+  const v = curVal || 'center';
+  return `<div>
+    <div class="l"><span>${label}</span></div>
+    <div class="seg align-seg" data-align-seg="al">
+      <button type="button" data-v="left" class="${v==='left'?'on':''}" title="Alinhar à Esquerda">${SVG.alL}</button>
+      <button type="button" data-v="center" class="${v==='center'?'on':''}" title="Centralizar">${SVG.alC}</button>
+      <button type="button" data-v="right" class="${v==='right'?'on':''}" title="Alinhar à Direita">${SVG.alR}</button>
+    </div>
+  </div>`;
+}
+
 function ed(){
   const selLayers = getSelectedLayers();
   const E=$('ed');
@@ -2916,12 +3189,11 @@ function ed(){
   } else if(l.k=='gt'){
     if(l.lh===undefined) l.lh=115;
     if(l.ls===undefined) l.ls=0;
-    h=`<div class="g">
-         <div><div class="l"><span>Cargo</span>${renderCaseBtns('role')}</div><input type="text" data-k="role" value="${esc(l.role)}" placeholder="Ex: Pregador, Cantora..."></div>
-         ${sl('al','Alinhamento',[['left','Esquerda'],['center','Centro'],['right','Direita']])}
+    h=`<div class="r" style="justify-content:space-between;background:var(--in);padding:6px 9px;border-radius:8px;border:1px solid var(--bd)">
+         <button type="button" class="b" id="btnInlineOpen" style="color:var(--ac-light);border-color:rgba(6,182,212,0.35)">${SVG.edit}<span>Editar texto na arte</span></button>
+         <div class="r" style="gap:4px"><span style="font-size:10px;color:var(--mu)">Caixa:</span>${renderCaseBtns('text')}</div>
        </div>`+
-       `<div><div class="l"><span>Nome do Convidado</span>${renderCaseBtns('text')}</div><textarea id="edMainTxt" data-k="text" rows="2">${esc(l.text)}</textarea></div>`+
-       rg('sc','Escala Geral (Cargo + Nome)',30,260,1,'%')+
+       `<div class="g">${renderAlignCtrl('Alinhamento',l.al)}${rg('sc','Escala Geral',30,260,1,'%',true)}</div>`+
        `<div class="g">${renderFontSelect('rFont','Fonte do Cargo',l.rFont)}${renderFontSelect('nFont','Fonte do Nome',l.nFont)}</div>`+
        `<div class="g">${rg('rSize','Tam. Cargo',12,120,1,'px',true)}${rg('size','Tam. Nome',18,180,1,'px',true)}</div>`+
        `<div class="g">${co('rColor','Cor do Cargo')}${co('color','Cor do Nome')}</div>`+
@@ -2932,11 +3204,11 @@ function ed(){
     if(l.lh===undefined) l.lh=120;
     if(l.ls===undefined) l.ls=0;
     if(!l.storyMode) l.storyMode='feed';
-    h=`<div class="g">
-         <div><div class="l"><span>Local</span>${renderCaseBtns('role')}</div><input type="text" data-k="role" value="${esc(l.role)}" placeholder="Ex: NOME DO LOCAL"></div>
-         ${sl('al','Alinhamento Conjunto',[['left','Esquerda'],['center','Centro'],['right','Direita']])}
+    h=`<div class="r" style="justify-content:space-between;background:var(--in);padding:6px 9px;border-radius:8px;border:1px solid var(--bd)">
+         <button type="button" class="b" id="btnInlineOpen" style="color:var(--ac-light);border-color:rgba(6,182,212,0.35)">${SVG.edit}<span>Editar local/endereço na arte</span></button>
+         <div class="r" style="gap:4px"><span style="font-size:10px;color:var(--mu)">Caixa:</span>${renderCaseBtns('text')}</div>
        </div>`+
-       `<div><div class="l"><span>Endereço (Quebra auto ou Enter)</span>${renderCaseBtns('text')}</div><textarea id="edMainTxt" data-k="text" rows="2">${esc(l.text)}</textarea></div>`+
+       `<div class="g">${renderAlignCtrl('Alinhamento Conjunto',l.al)}${rg('sc','Escala Geral',30,260,1,'%',true)}</div>`+
        `<div>
           <div class="l"><span>Posição Vertical no Story (9:16)</span></div>
           <div class="seg" id="ftStorySeg">
@@ -2944,7 +3216,6 @@ function ed(){
             <button type="button" data-v="story" class="${l.storyMode==='story'?'on':''}">Descer p/ Base Story</button>
           </div>
         </div>`+
-       rg('sc','Escala Geral (Local + Endereço)',30,260,1,'%')+
        `<div class="g">${renderFontSelect('rFont','Fonte do Local',l.rFont||'Inter')}${renderFontSelect('nFont','Fonte do Endereço',l.nFont||'Poppins')}</div>`+
        `<div class="g">${rg('rSize','Tam. Local',12,120,1,'px',true)}${rg('size','Tam. Endereço',10,100,1,'px',true)}</div>`+
        `<div class="g">${co('rColor','Cor do Local')}${co('color','Cor do Endereço')}</div>`+
@@ -2955,16 +3226,18 @@ function ed(){
        rg('rot','Rotação',-180,180,1,'°');
   } else if(l.k=='t'){
     if(l.lh===undefined) l.lh=115;
-    h=`<div><div class="l"><span>Conteúdo do Texto</span>${renderCaseBtns('text')}</div><textarea id="edMainTxt" data-k="text" rows="2">${esc(l.text)}</textarea></div>`+
+    h=`<div class="r" style="justify-content:space-between;background:var(--in);padding:6px 9px;border-radius:8px;border:1px solid var(--bd)">
+         <button type="button" class="b" id="btnInlineOpen" style="color:var(--ac-light);border-color:rgba(6,182,212,0.35)">${SVG.edit}<span>Editar texto na arte</span></button>
+         <div class="r" style="gap:4px"><span style="font-size:10px;color:var(--mu)">Caixa:</span>${renderCaseBtns('text')}</div>
+       </div>`+
       renderFontSelect('font','Tipografia (Por Categoria)',l.font)+
-      rg('size','Tamanho da Fonte',20,600,1,'px')+
+      `<div class="g">${rg('size','Tamanho',20,600,1,'px',true)}${renderAlignCtrl('Alinhamento',l.al)}</div>`+
       `<div class="g">${co('color','Cor Principal')}<div style="display:flex;align-items:flex-end">${ck('grad','Ativar Degradê')}</div></div>`+
       (l.grad?`<div class="g">${co('c2','Cor 2 do Degradê')}${rg('ang','Ângulo',0,360,1,'°',true)}</div>`:'')+
       `<div class="r">${ck('sh','Sombra')}${ck('st','Contorno')}</div>`+
       (l.st?`<div class="g">${co('sc','Cor do Contorno')}${rg('sw','Espessura',1,40,1,'px',true)}</div>`:'')+
       `<div class="g">${rg('ls','Espaço Letras',-10,60,1,'px',true)}${rg('lh','Espaço Linhas',80,220,1,'%',true)}</div>`+
-      rg('rot','Rotação',-180,180,1,'°')+
-      sl('al','Alinhamento',[['left','Esquerda'],['center','Centro'],['right','Direita']]);
+      rg('rot','Rotação',-180,180,1,'°');
   } else if(l.k=='sh'){
     if(!l.shape) l.shape='rect';
     if(l.w===undefined) l.w=480;
@@ -3009,9 +3282,9 @@ function ed(){
   E.innerHTML=`
     <div class="c">
       <div class="r" style="justify-content:space-between;border-bottom:1px solid var(--bd);padding-bottom:6px">
-        <span style="display:inline-flex;align-items:center;gap:6px;font-weight:600;color:var(--ac-light)">
+        <span style="display:inline-flex;align-items:center;gap:6px;font-weight:600;color:var(--ac-light);overflow:hidden">
           <span class="it-ico">${SVG[l.k]||SVG.t}</span>
-          <span>${esc(nm(l))}</span>
+          <span id="edHdrName" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(nm(l))}</span>
         </span>
         <div class="r" style="gap:4px">
           <button type="button" class="b ${l.lock?'locked-btn':''}" id="edLockBtn">${l.lock?SVG.lock+' <span>Travado</span>':SVG.unlock+' <span>Livre</span>'}</button>
@@ -3028,16 +3301,39 @@ function ed(){
     const idx=S.layers.indexOf(l);
     if(idx>-1){S.layers.splice(idx,1);SELS=SELS.filter(id=>id!==l.id);S.sel=SELS[SELS.length-1]||null;commit();ui();showToast('Camada excluída')}
   };
+  const bio=$('btnInlineOpen');
+  if(bio) bio.onclick=()=>{if(!l.lock) openInlineEditor(l)};
+  // Botões de Alinhamento com 3 ícones (Esquerda, Centro, Direita)
+  E.querySelectorAll('[data-align-seg]').forEach(segEl => {
+    segEl.onclick = e => {
+      const b = e.target.closest('button');
+      if(!b || l.lock) return;
+      l.al = b.dataset.v;
+      if(l.k === 'ft') positionFooterDefault(l);
+      clampLayerBounds(cx, l);
+      segEl.querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b));
+      commit();
+      rq();
+    };
+  });
   // Eventos dos botões AA / aa / Aa (Maiúsculo / Minúsculo / Capitalizado) e Seletor de Cores Estilo Photoshop na aba Editar
   E.querySelectorAll('.case-btn').forEach(btn => {
     btn.onclick = () => {
       if(l.lock) return;
       const ck = btn.dataset.ck;
       const mode = btn.dataset.case;
-      const cur = String(l[ck] || '');
-      l[ck] = mode === 'upper' ? cur.toUpperCase() : mode === 'lower' ? cur.toLowerCase() : toTitleCasePt(cur);
+      const applyCase = str => mode === 'upper' ? String(str||'').toUpperCase() : mode === 'lower' ? String(str||'').toLowerCase() : toTitleCasePt(str);
+      l[ck] = applyCase(l[ck]);
+      if((l.k === 'gt' || l.k === 'ft') && ck === 'text' && l.role) l.role = applyCase(l.role);
       const field = E.querySelector(`[data-k="${ck}"]`);
       if(field) field.value = l[ck];
+      const hdr = $('edHdrName');
+      if(hdr) hdr.textContent = nm(l);
+      if(inlineLayerId === l.id){
+        $('inlineMainTxt').value = l.text || '';
+        if(l.k === 'gt' || l.k === 'ft') $('inlineRoleInp').value = l.role || '';
+      }
+      if(l.k === 'ft') positionFooterDefault(l);
       clampLayerBounds(cx, l);
       commit();
       lays();
@@ -3749,6 +4045,8 @@ const endStagePinch=e=>{
 stgEl.addEventListener('pointerup',endStagePinch);
 stgEl.addEventListener('pointercancel',endStagePinch);
 
+let lastTapTime = 0, lastTapId = null;
+
 cv.onpointerdown=e=>{
   cv.setPointerCapture(e.pointerId);const p=P(e);PT.set(e.pointerId,p);
   if(PT.size>1 || SPT.size>1){D=null;return;}
@@ -3865,9 +4163,11 @@ cv.onpointerdown=e=>{
 
     if(!l.lock){
       if(Math.hypot(p.x-edH.x,p.y-edH.y)<hitR){
-        tab('ed',0);lays();ed();tb();
-        const inp=$('edMainTxt');
-        if(inp)setTimeout(()=>{inp.focus();inp.select&&inp.select()},60);
+        if(['t','gt','ft'].includes(l.k)){
+          openInlineEditor(l);
+        } else {
+          tab('ed',0);lays();ed();tb();
+        }
         return;
       }
       if(Math.hypot(p.x-dlH.x,p.y-dlH.y)<hitR){
@@ -3919,8 +4219,16 @@ cv.onpointerdown=e=>{
             D={m:'grp_mv',sx:p.x,sy:p.y,gx:gb?gb.x:S.w/2,gy:gb?gb.y:S.h/2,items:activeGroup.map(item=>({l:item,x:item.x??S.w/2,y:item.y??S.h/2}))};
           }
         } else {
+          const now = Date.now();
+          const isDoubleTap = (lastTapId === h.id && (now - lastTapTime) < 340);
+          lastTapId = h.id;
+          lastTapTime = now;
           S.sel=h.id; SELS=[h.id];
           lays();ed();tb();
+          if(isDoubleTap && !h.lock && ['t','gt','ft'].includes(h.k)){
+            openInlineEditor(h);
+            return;
+          }
           if(!h.lock) D={m:'mv',sx:p.x,sy:p.y,x:h.x??S.w/2,y:h.y??S.h/2};
         }
       }
