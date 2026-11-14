@@ -59,6 +59,151 @@ button, input, select, textarea {
   overflow: hidden;
 }
 
+/* BARRA DE GUIAS DE PROJETOS (ESTILO CHROME) */
+#wbar {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 36px;
+  padding: 4px 8px 0;
+  background: #050507;
+  border-bottom: 1px solid var(--bd);
+  overflow-x: auto;
+  scrollbar-width: none;
+  flex-shrink: 0;
+  z-index: 20;
+}
+
+#wbar::-webkit-scrollbar {
+  display: none;
+}
+
+.wtab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 31px;
+  padding: 0 10px;
+  border-radius: 8px 8px 0 0;
+  background: var(--in);
+  border: 1px solid transparent;
+  border-bottom: 0;
+  color: var(--mu);
+  font-size: 11px;
+  font-weight: 600;
+  max-width: 165px;
+  flex-shrink: 0;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.wtab:hover {
+  background: var(--sf);
+  color: var(--tx);
+}
+
+.wtab.on {
+  background: var(--sf);
+  color: var(--ac-light);
+  border-color: var(--bd);
+  position: relative;
+}
+
+.wtab.on::after {
+  content: "";
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  top: 0;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--ac-light);
+}
+
+.wtab-t {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.wtab-ed {
+  width: 17px;
+  height: 17px;
+  border-radius: 5px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--mu);
+  opacity: 0.75;
+}
+
+.wtab-ed svg {
+  width: 11px;
+  height: 11px;
+  stroke-width: 2.2;
+}
+
+.wtab-ed:hover, .wtab-ed:active {
+  background: var(--ac-soft);
+  color: var(--ac-light);
+  opacity: 1;
+}
+
+.wtab-inp {
+  width: 110px !important;
+  height: 21px !important;
+  padding: 0 5px !important;
+  border-radius: 5px !important;
+  background: var(--bg) !important;
+  border: 1px solid var(--ac-light) !important;
+  color: var(--tx) !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+}
+
+.wtab-x {
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  line-height: 1;
+  color: var(--mu);
+  margin-right: -3px;
+}
+
+.wtab-x:hover, .wtab-x:active {
+  background: var(--dg-soft);
+  color: var(--dg);
+}
+
+#wAdd {
+  width: 27px;
+  height: 27px;
+  border-radius: 7px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--mu);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  cursor: pointer;
+  flex-shrink: 0;
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 2px;
+  transition: all 0.15s;
+}
+
+#wAdd:hover, #wAdd:active {
+  background: var(--ac-soft);
+  color: var(--ac-light);
+  border-color: var(--ac);
+}
+
 /* ÁREA DO CANVAS */
 #stage {
   flex: 1 1 0%;
@@ -688,18 +833,6 @@ button, input, select, textarea {
 #tabs button.on svg {
   color: var(--ac-light);
   transform: translateY(-1px);
-}
-
-#tabs button.tab-save {
-  color: var(--ac-light);
-  background: rgba(6, 182, 212, 0.08);
-  border: 1px solid rgba(6, 182, 212, 0.25);
-}
-
-#tabs button.tab-save.on {
-  background: var(--ac-soft);
-  border-color: var(--ac);
-  color: #fff;
 }
 
 #panes {
@@ -1488,9 +1621,12 @@ select option {
   #app {
     display: grid;
     grid-template-columns: 1fr 400px;
-    grid-template-rows: 1fr;
+    grid-template-rows: 36px 1fr;
     height: 100dvh;
     padding-bottom: 0;
+  }
+  #wbar {
+    grid-column: 1 / -1;
   }
   #stage {
     height: 100%;
@@ -1530,6 +1666,9 @@ select option {
 </head>
 <body>
 <div id="app">
+  <!-- BARRA DE GUIAS DE PROJETOS (ESTILO NAVEGADOR) -->
+  <div id="wbar"></div>
+
   <div id="stage">
     <!-- BARRA FLUTUANTE SUPERIOR FIXA (DESFAZER, REFAZER, MÚLTIPLA SELEÇÃO, DUPLICAR, SUBIR E DESCER) -->
     <div id="fbar">
@@ -1549,11 +1688,14 @@ select option {
       <button class="b" data-a="dup" title="Duplicar Selecionado(s)">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
       </button>
-      <button class="b" data-a="up" title="Trazer para Frente">
+      <button class="b" data-a="up" title="Trazer para Frente (Ctrl+])">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
       </button>
-      <button class="b" data-a="dn" title="Enviar para Trás">
+      <button class="b" data-a="dn" title="Enviar para Trás (Ctrl+[)">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+      </button>
+      <button class="b" data-a="kb" title="Atalhos de Teclado (?)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M6 8h.01M10 8h.01M14 8h.01M18 8h.01M8 12h.01M12 12h.01M16 12h.01M7 16h10"/></svg>
       </button>
     </div>
 
@@ -1666,7 +1808,7 @@ select option {
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
         Layout
       </button>
-      <button data-p="ex" data-title="Exportar & Salvar" class="tab-save">
+      <button data-p="ex" data-title="Exportar & Salvar">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
         Salvar
       </button>
@@ -1678,7 +1820,7 @@ select option {
         <input type="file" id="fi" accept="image/*" hidden>
         <input type="file" id="fl" accept="image/*" hidden>
         <div id="lay" style="display:flex;flex-direction:column;gap:6px"></div>
-        <div class="hint">Segure nos 6 pontinhos (⋮⋮) para reordenar camadas. Use o botão "+ Adicionar" no canto inferior esquerdo para inserir novos itens.</div>
+        <div class="hint">Segure nos 6 pontinhos (⋮⋮) para reordenar camadas. Use o botão "+ Adicionar" no canto superior direito para inserir novos itens.</div>
       </div>
 
       <!-- ABA EDITAR -->
@@ -1832,9 +1974,9 @@ select option {
             <span>Enviar fonte (.ttf / .otf / .woff)</span>
             <input type="file" id="ff" accept=".ttf,.otf,.woff,.woff2" hidden>
           </label>
-          <div class="l"><span>Nome do projeto</span></div>
-          <input type="text" id="projName" class="txt-inp" maxlength="60" placeholder="Em branco = nome padrão (Flyer)" autocomplete="off">
-          <div class="hint" style="text-align:left">Usado no nome dos arquivos exportados e do projeto salvo. Deixe em branco para usar o nome padrão.</div>
+          <div class="l"><span>Nome personalizado ao salvar (opcional)</span></div>
+          <input type="text" id="projName" class="txt-inp" maxlength="60" placeholder="Em branco = usa o nome da guia (Projeto 1)" autocomplete="off">
+          <div class="hint" style="text-align:left">Em branco, salva/exporta automaticamente com o nome da guia lá de cima. Digite aqui apenas se quiser salvar uma variação (ex: Projeto 1.nova versão).</div>
           <div class="r">
             <button class="b" id="psv" style="flex:1">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
@@ -1941,6 +2083,33 @@ select option {
   </div>
 </div>
 
+<!-- MODAL DE ATALHOS DE TECLADO -->
+<div id="kbMo" style="position:fixed;inset:0;background:rgba(9,9,11,0.78);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;padding:16px;z-index:85">
+  <div class="ps-card" style="max-width:440px;max-height:86dvh;overflow-y:auto">
+    <div class="ps-head">
+      <span>Atalhos de Teclado (Photoshop / Canva)</span>
+      <button type="button" class="b" id="kbCloseBtn" style="min-width:28px;height:28px;padding:0">✕</button>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;font-size:11px">
+      <div class="num-row"><span>Duplicar ao arrastar</span><b style="color:var(--ac-light)">Alt + Arrastar</b></div>
+      <div class="num-row"><span>Duplicar camada</span><b style="color:var(--ac-light)">Ctrl + D / Ctrl + J</b></div>
+      <div class="num-row"><span>Excluir selecionada</span><b style="color:var(--ac-light)">Del / Backspace</b></div>
+      <div class="num-row"><span>Agrupar / Desagrupar</span><b style="color:var(--ac-light)">Ctrl + G</b></div>
+      <div class="num-row"><span>Desfazer / Refazer</span><b style="color:var(--ac-light)">Ctrl + Z / Ctrl + Y</b></div>
+      <div class="num-row"><span>Copiar / Colar</span><b style="color:var(--ac-light)">Ctrl + C / Ctrl + V</b></div>
+      <div class="num-row"><span>Somar seleção</span><b style="color:var(--ac-light)">Shift / Ctrl + Clique</b></div>
+      <div class="num-row"><span>Intervalo (Camadas)</span><b style="color:var(--ac-light)">Shift + Clique</b></div>
+      <div class="num-row"><span>Mover 1px / 10px</span><b style="color:var(--ac-light)">Setas / Shift+Setas</b></div>
+      <div class="num-row"><span>Subir / Descer nível</span><b style="color:var(--ac-light)">Ctrl + ] / Ctrl + [</b></div>
+      <div class="num-row"><span>Travar / Destravar</span><b style="color:var(--ac-light)">Ctrl + L</b></div>
+      <div class="num-row"><span>Mover palco (Pan)</span><b style="color:var(--ac-light)">Espaço + Arrastar</b></div>
+      <div class="num-row"><span>Zoom + / − / 100%</span><b style="color:var(--ac-light)">Ctrl + / − / 0</b></div>
+      <div class="num-row"><span>Novo Texto rápido</span><b style="color:var(--ac-light)">Tecla T</b></div>
+    </div>
+    <div class="hint">Você também pode usar Ctrl+C em uma guia de projeto e Ctrl+V em outra guia!</div>
+  </div>
+</div>
+
 <div id="toast"></div>
 
 <script>
@@ -2025,8 +2194,10 @@ const SVG={
 };
 
 let S,IM={},PC={},H=[],hi=0,uid=0,lv=0,expM='image/jpeg',expS=1,q=0,st,toastTimer;
-// Estado de Múltipla Seleção
-let MULTI=false, SELS=[];
+// Estado de Múltiplos Projetos em Guias (estilo Chrome)
+let WKS=[], wkA=0;
+// Estado de Múltipla Seleção e Foco Individual em Item Agrupado
+let MULTI=false, SELS=[], EDIT_SINGLE=false, LAST_LAY_ID=null, CLIPBOARD=[], SPACE_DOWN=false;
 // Estado de Zoom e Pan do palco (#stage)
 let Z=1, ZX=0, ZY=0;
 const nid=()=>'l'+Date.now().toString(36)+uid++;
@@ -2058,14 +2229,16 @@ function grpOf(id){
 const CLR_KINDS = ['t','gt','ft','sh'];
 function tbClr(){
   const b = $('btnClr'); if(!b || !S || !S.layers) return;
-  const ls = getSelectedLayers().filter(x => CLR_KINDS.includes(x.k));
+  const f = (EDIT_SINGLE && sel() && CLR_KINDS.includes(sel().k)) ? sel() : null;
+  const ls = f ? [f] : getSelectedLayers().filter(x => CLR_KINDS.includes(x.k));
   b.style.display = ls.length ? '' : 'none';
   if(!ls.length) return;
-  const f = ls[0];
-  b.firstChild.style.background = (f.grad && f.c2) ? `linear-gradient(${(f.ang ?? 90) + 90}deg, ${f.color || '#fff'}, ${f.c2})` : (f.color || '#ffffff');
+  const first = ls[0];
+  b.firstChild.style.background = (first.grad && first.c2) ? `linear-gradient(${(first.ang ?? 90) + 90}deg, ${first.color || '#fff'}, ${first.c2})` : (first.color || '#ffffff');
 }
 function openToolbarColor(){
-  const all = getSelectedLayers().filter(x => CLR_KINDS.includes(x.k));
+  const singleTarget = (EDIT_SINGLE && sel() && CLR_KINDS.includes(sel().k)) ? [sel()] : null;
+  const all = singleTarget || getSelectedLayers().filter(x => CLR_KINDS.includes(x.k));
   const ls = all.filter(x => !x.lock);
   if(!ls.length){ showToast(all.length ? 'Elemento bloqueado' : 'Selecione um texto ou forma'); return; }
   const f = ls[0];
@@ -2126,6 +2299,8 @@ function getGroupBounds(c, layers){
 function clearSelection(){
   S.sel = null;
   SELS = [];
+  MULTI = false;
+  EDIT_SINGLE = false;
   lays(); ed(); tb(); rq();
 }
 
@@ -3163,14 +3338,12 @@ function drawTrashGlyph(c, x, y, ds, strokeCol){
   c.lineJoin = 'round';
   const w = 6.8*ds, h = 6.8*ds;
   c.beginPath();
-  // Tampa
   c.moveTo(x - 4.4*ds, y - 3*ds);
   c.lineTo(x + 4.4*ds, y - 3*ds);
   c.moveTo(x - 1.6*ds, y - 3*ds);
   c.lineTo(x - 1.6*ds, y - 4.4*ds);
   c.lineTo(x + 1.6*ds, y - 4.4*ds);
   c.lineTo(x + 1.6*ds, y - 3*ds);
-  // Corpo do cesto
   c.moveTo(x - w/2, y - 3*ds);
   c.lineTo(x - w/2 + 0.6*ds, y + h/2 + 1*ds);
   c.lineTo(x + w/2 - 0.6*ds, y + h/2 + 1*ds);
@@ -3194,9 +3367,12 @@ function drawEditGlyph(c, x, y, ds, strokeCol){
 }
 
 // ---- utilitários: nome do projeto, ajustes do fundo, guias magnéticas, rotação de grupo
-function pjBase(def){
-  const n = String(S.name || '').replace(/[\\\/:*?"<>|\u0000-\u001f]+/g, '').trim().slice(0, 80);
-  return n || def;
+function pjBase(){
+  const clean = str => String(str || '').replace(/[\\\/:*?"<>|\u0000-\u001f]+/g, '').trim().slice(0, 80);
+  const customFile = clean(S.fileName);
+  if(customFile) return customFile;
+  const tabName = clean(wkTitle(wkA));
+  return tabName || `Projeto ${wkA + 1}`;
 }
 function bgAdj(b){ const o = {}; ADJ_KEYS.forEach(k => { if(b[k]) o[k] = b[k]; }); return o; }
 function bgAngPaint(){
@@ -3324,7 +3500,7 @@ function draw(c,ex){
   const selLayers = getSelectedLayers();
   const hRad = 12.5 * ds;
 
-  // MÚLTIPLA SELEÇÃO COM 2 OU MAIS OBJETOS: Desenha contorno individual + Caixa de Grupo com Cadeado, Lixeira e Escala conjunta
+  // MÚLTIPLA SELEÇÃO COM 2 OU MAIS OBJETOS
   if(selLayers.length > 1){
     const gb = getGroupBounds(c, selLayers);
     if(gb){
@@ -3344,12 +3520,9 @@ function draw(c,ex){
       c.lineWidth = 2.2*ds;
       c.strokeRect(gb.minX - pd, gb.minY - pd, gb.w + pd*2, gb.h + pd*2);
 
-      // Canto Superior Esquerdo do Grupo: Cadeado
       drawLockGlyph(c, gb.minX - pd, gb.minY - pd, ds, anyLock, col);
       if(!anyLock){
-        // Canto Inferior Esquerdo do Grupo: Lixeira
         drawTrashGlyph(c, gb.minX - pd, gb.maxY + pd, ds, '#ef4444');
-        // Canto Inferior Direito do Grupo: Escala proporcional conjunta
         drawScaleGlyph(c, gb.maxX + pd, gb.maxY + pd, ds, col);
       }
       if(!anyLock){
@@ -3360,7 +3533,6 @@ function draw(c,ex){
         c.strokeStyle = '#09090b'; c.lineWidth = 1.8*ds;
         c.beginPath(); c.arc(rp.x, rp.y, 4.8*ds, -0.4, Math.PI*1.35); c.stroke();
       }
-      // Canto Superior Direito do Grupo: Agrupar / Desagrupar
       drawGroupGlyph(c, gb.maxX + pd, gb.minY - pd, ds, col, isGrouped(selLayers));
       c.restore();
     }
@@ -3385,7 +3557,6 @@ function draw(c,ex){
     c.stroke();
     c.setLineDash([]);
 
-    // Centro da luz
     drawHandleCircle(c, lx, ly, hRad, ds, col, '#ffffff');
     c.strokeStyle='#09090b';
     c.lineWidth=1.8*ds;
@@ -3395,7 +3566,6 @@ function draw(c,ex){
     c.moveTo(lx, ly+4.5*ds); c.lineTo(lx+6.5*ds, ly);
     c.stroke();
 
-    // Controles satélite da luz radial/feixe (Cadeado no sup. esquerdo, Lápis no sup. direito, Lixeira no inf. esquerdo)
     const off = 36 * ds;
     const lkX = Math.max(18*ds, Math.min(w-18*ds, lx - off));
     const lkY = Math.max(18*ds, Math.min(h-18*ds, ly - off));
@@ -3431,12 +3601,10 @@ function draw(c,ex){
     c.strokeStyle=col;c.lineWidth=2*ds;
     c.strokeRect(-mt.w/2-pd,-mt.h/2-pd,mt.w+2*pd,mt.h+2*pd);
 
-    // Canto Superior Esquerdo: CADEADO (Sempre visível, mesmo quando travado, para poder destravar direto na arte!)
     const lkX = -mt.w/2 - pd, lkY = -mt.h/2 - pd;
     drawLockGlyph(c, lkX, lkY, ds, !!l.lock, col);
 
     if(!l.lock){
-      // Alças em formato de pílula nas 4 bordas (Estilo Canva) para esticar largura e altura das Formas
       if(l.k=='sh'){
         const drawPill = (px, py, horiz) => {
           const pw = (horiz ? 22 : 7.5) * ds;
@@ -3460,22 +3628,18 @@ function draw(c,ex){
         drawPill(mt.w/2+pd, 0, false);
       }
 
-      // Topo: ROTAÇÃO
       const rx=0, ry=-mt.h/2-pd-28*ds;
       c.beginPath();c.moveTo(0,-mt.h/2-pd);c.lineTo(rx,ry);c.stroke();
       drawHandleCircle(c, rx, ry, hRad, ds, col, '#ffffff');
       c.strokeStyle='#09090b';c.lineWidth=1.8*ds;
       c.beginPath();c.arc(rx,ry,4.8*ds,-0.4,Math.PI*1.35);c.stroke();
 
-      // Canto Superior Direito: LÁPIS DE EDIÇÃO
       const ex=mt.w/2+pd, ey=-mt.h/2-pd;
       drawEditGlyph(c, ex, ey, ds, col);
 
-      // Canto Inferior Esquerdo: LIXEIRA DE EXCLUSÃO
       const dx=-mt.w/2-pd, dy=mt.h/2+pd;
       drawTrashGlyph(c, dx, dy, ds, '#ef4444');
 
-      // Canto Inferior Direito: REDIMENSIONAR / ESCALA
       const sx=mt.w/2+pd, sy=mt.h/2+pd;
       drawScaleGlyph(c, sx, sy, ds, col);
     }
@@ -3490,17 +3654,241 @@ const rq=()=>{if(q)return;q=requestAnimationFrame(()=>{q=0;render()})};
 const ser=()=>JSON.stringify(S,(k,v)=>k=='sel'?undefined:v);
 const du=c=>c._u||(c._u=c.toDataURL(c._png?'image/png':'image/jpeg',.9));
 function proj(){const s=ser();return JSON.stringify({s,im:Object.fromEntries(Object.entries(IM).filter(([k])=>s.includes(k)).map(([k,c])=>[k,du(c)]))})}
-function save(){clearTimeout(st);st=setTimeout(()=>{try{localStorage.setItem('rfsf2',proj())}catch(e){}},1200)}
-function commit(){const s=ser();if(H[hi]===s)return;H=H.slice(0,hi+1);H.push(s);if(H.length>60)H.shift();hi=H.length-1;save()}
-function rest(s){PGF=1;const k=S.sel;S=JSON.parse(s);migrateBg();S.layers.forEach(migrateFade);S.sel=S.layers.some(l=>l.id==k)?k:null;ui();save()}
+
+function stashCurrentWk(){
+  if(!S) return;
+  WKS[wkA] = {
+    s: JSON.parse(JSON.stringify(S)),
+    h: [...H],
+    hi,
+    sels: [...SELS],
+    multi: MULTI,
+    z: Z, zx: ZX, zy: ZY
+  };
+}
+
+function wkTitle(i){
+  const stObj = (i === wkA && S) ? S : (WKS[i] && WKS[i].s);
+  const custom = stObj && stObj.tabName && String(stObj.tabName).trim();
+  return custom || `Projeto ${i + 1}`;
+}
+
+let editWkIdx = null;
+function startRenameWk(i){
+  editWkIdx = i;
+  renderWbar();
+  const inp = $('wbar').querySelector('.wtab-inp');
+  if(inp){
+    inp.focus();
+    inp.select();
+  }
+}
+
+function finishRenameWk(i, val){
+  if(editWkIdx === null) return;
+  editWkIdx = null;
+  const clean = String(val || '').trim().slice(0, 40);
+  const fallback = `Projeto ${i + 1}`;
+  if(i === wkA && S){
+    S.tabName = clean || fallback;
+  } else if(WKS[i] && WKS[i].s){
+    WKS[i].s.tabName = clean || fallback;
+  }
+  stashCurrentWk();
+  renderWbar();
+  if($('projName')) $('projName').placeholder = `Em branco = usa o nome da guia (${wkTitle(wkA)})`;
+  commit();
+}
+
+function renderWbar(){
+  const wb = $('wbar');
+  if(!wb) return;
+  const n = Math.max(1, WKS.length);
+  let html = '';
+  for(let i = 0; i < n; i++){
+    const isAct = i === wkA;
+    const t = wkTitle(i);
+    if(editWkIdx === i){
+      html += `<div class="wtab ${isAct?'on':''}" data-wi="${i}">
+        <input type="text" class="wtab-inp" data-winp="${i}" value="${esc(t)}" maxlength="40" autocomplete="off">
+      </div>`;
+    } else {
+      html += `<button type="button" class="wtab ${isAct?'on':''}" data-wi="${i}" title="Toque no lápis ou dê duplo clique para renomear">
+        <span class="wtab-t">${esc(t)}</span>
+        <span class="wtab-ed" data-wed="${i}" title="Renomear guia">${SVG.edit}</span>
+        ${n > 1 ? `<span class="wtab-x" data-wx="${i}" title="Fechar projeto">×</span>` : ''}
+      </button>`;
+    }
+  }
+  html += `<button type="button" id="wAdd" title="Novo projeto em nova guia (+)">+</button>`;
+  wb.innerHTML = html;
+
+  const inp = wb.querySelector('.wtab-inp');
+  if(inp){
+    const idx = +inp.dataset.winp;
+    inp.onkeydown = e => {
+      if(e.key === 'Enter'){ e.preventDefault(); finishRenameWk(idx, inp.value); }
+      else if(e.key === 'Escape'){ e.preventDefault(); editWkIdx = null; renderWbar(); }
+    };
+    inp.onblur = () => finishRenameWk(idx, inp.value);
+    inp.onclick = e => e.stopPropagation();
+  }
+}
+
+function switchWk(i){
+  if(i === wkA || i < 0 || i >= WKS.length) return;
+  editWkIdx = null;
+  blurTextFocus();
+  stashCurrentWk();
+  wkA = i;
+  const target = WKS[wkA];
+  S = JSON.parse(JSON.stringify(target.s));
+  migrateBg();
+  S.layers.forEach(migrateFade);
+  H = target.h && target.h.length ? [...target.h] : [ser()];
+  hi = Math.min(target.hi || 0, H.length - 1);
+  SELS = target.sels || [];
+  MULTI = !!target.multi;
+  Z = target.z || 1; ZX = target.zx || 0; ZY = target.zy || 0;
+  PC = {}; PGF = 1;
+  updateViewTransform();
+  ui();
+  save();
+}
+
+function addNewWk(){
+  if(WKS.length >= 10){ showToast('Máximo de 10 projetos abertos simultaneamente'); return; }
+  editWkIdx = null;
+  blurTextFocus();
+  stashCurrentWk();
+  fresh();
+  S.tabName = `Projeto ${WKS.length + 1}`;
+  S.fileName = '';
+  H = [ser()]; hi = 0; SELS = []; MULTI = false;
+  Z = 1; ZX = 0; ZY = 0; PC = {}; PGF = 1;
+  wkA = WKS.length;
+  stashCurrentWk();
+  updateViewTransform();
+  ui();
+  save();
+  showToast(`Guia "${S.tabName}" criada`);
+}
+
+let closeWkArm = null, closeWkTimer = 0;
+function closeWk(i){
+  if(WKS.length <= 1){ showToast('Mantenha ao menos 1 guia aberta'); return; }
+  if(closeWkArm !== i){
+    closeWkArm = i;
+    clearTimeout(closeWkTimer);
+    closeWkTimer = setTimeout(()=>{ closeWkArm = null; }, 3000);
+    showToast(`Toque em × novamente para fechar "${wkTitle(i)}"`);
+    return;
+  }
+  clearTimeout(closeWkTimer);
+  closeWkArm = null;
+  editWkIdx = null;
+  blurTextFocus();
+  stashCurrentWk();
+  const closedTitle = wkTitle(i);
+  WKS.splice(i, 1);
+  if(wkA >= WKS.length) wkA = WKS.length - 1;
+  else if(i < wkA) wkA--;
+  const target = WKS[wkA];
+  S = JSON.parse(JSON.stringify(target.s));
+  migrateBg();
+  S.layers.forEach(migrateFade);
+  H = target.h && target.h.length ? [...target.h] : [ser()];
+  hi = Math.min(target.hi || 0, H.length - 1);
+  SELS = target.sels || [];
+  MULTI = !!target.multi;
+  Z = target.z || 1; ZX = target.zx || 0; ZY = target.zy || 0;
+  PC = {}; PGF = 1;
+  updateViewTransform();
+  ui();
+  save();
+  showToast(`Guia "${closedTitle}" fechada`);
+}
+
+$('wbar').onclick = e => {
+  if(e.target.closest('.wtab-inp')) return;
+  const edBtn = e.target.closest('[data-wed]');
+  if(edBtn){
+    e.stopPropagation();
+    startRenameWk(+edBtn.dataset.wed);
+    return;
+  }
+  const xBtn = e.target.closest('[data-wx]');
+  if(xBtn){
+    e.stopPropagation();
+    closeWk(+xBtn.dataset.wx);
+    return;
+  }
+  if(e.target.closest('#wAdd')){
+    addNewWk();
+    return;
+  }
+  const tabBtn = e.target.closest('.wtab');
+  if(tabBtn){
+    const idx = +tabBtn.dataset.wi;
+    if(idx === wkA){
+      // Se já está na guia ativa e clicou novamente após um intervalo curto (duplo toque), abre edição
+      const now = Date.now();
+      if(tabBtn._lt && (now - tabBtn._lt) < 350){
+        startRenameWk(idx);
+        return;
+      }
+      tabBtn._lt = now;
+    } else {
+      switchWk(idx);
+    }
+  }
+};
+
+function save(){
+  clearTimeout(st);
+  st=setTimeout(()=>{
+    try{
+      stashCurrentWk();
+      const allS = WKS.map(w => JSON.stringify(w.s));
+      const joined = allS.join(' ');
+      const im = Object.fromEntries(Object.entries(IM).filter(([k])=>joined.includes(k)).map(([k,c])=>[k,du(c)]));
+      localStorage.setItem('rfsf2_wks', JSON.stringify({ wkA, wks: allS, im }));
+      localStorage.setItem('rfsf2', proj());
+    }catch(e){}
+  },1200);
+}
+function commit(){const s=ser();if(H[hi]===s)return;H=H.slice(0,hi+1);H.push(s);if(H.length>60)H.shift();hi=H.length-1;stashCurrentWk();save()}
+function rest(s){PGF=1;const k=S.sel;S=JSON.parse(s);migrateBg();S.layers.forEach(migrateFade);S.sel=S.layers.some(l=>l.id==k)?k:null;stashCurrentWk();ui();save()}
 async function openP(t){
+  const p=JSON.parse(t);
+  await Promise.all(Object.entries(p.im||{}).map(([id,u])=>new Promise(r=>{
+    const i=new Image();
+    i.onload=()=>{const c=document.createElement('canvas');c.width=i.width;c.height=i.height;c.getContext('2d').drawImage(i,0,0);c._png=u.startsWith('data:image/png');IM[id]=c;r()};
+    i.onerror=r;i.src=u;
+  })));
+  PC={};PGF=1;S=JSON.parse(p.s);migrateBg();S.layers.forEach(migrateFade);S.sel=null;H=[ser()];hi=0;stashCurrentWk();ui();save();
+}
+async function openAllWks(t){
   const p=JSON.parse(t);IM={};PC={};
   await Promise.all(Object.entries(p.im||{}).map(([id,u])=>new Promise(r=>{
     const i=new Image();
     i.onload=()=>{const c=document.createElement('canvas');c.width=i.width;c.height=i.height;c.getContext('2d').drawImage(i,0,0);c._png=u.startsWith('data:image/png');IM[id]=c;r()};
     i.onerror=r;i.src=u;
   })));
-  PGF=1;S=JSON.parse(p.s);migrateBg();S.layers.forEach(migrateFade);S.sel=null;H=[ser()];hi=0;ui();
+  WKS = (p.wks||[]).map(sStr => ({
+    s: JSON.parse(sStr),
+    h: [sStr],
+    hi: 0,
+    sels: [],
+    multi: false,
+    z: 1, zx: 0, zy: 0
+  }));
+  if(!WKS.length){ fresh(); H=[ser()]; hi=0; stashCurrentWk(); }
+  wkA = Math.max(0, Math.min(p.wkA || 0, WKS.length - 1));
+  S = JSON.parse(JSON.stringify(WKS[wkA].s));
+  migrateBg(); S.layers.forEach(migrateFade); S.sel=null;
+  H = [ser()]; hi = 0; PGF = 1;
+  ui();
 }
 function load(f,cb){
   if(!f)return;const u=URL.createObjectURL(f),i=new Image();
@@ -3521,15 +3909,18 @@ const nm=l=>l.k=='t'?(l.text.split('\n')[0]||'(vazio)').slice(0,24):l.k=='gt'?((
 function lays(){
   syncSels();
   $('lay').innerHTML=[...S.layers].reverse().map(l=>{
+    const isPrimary = l.id==S.sel && EDIT_SINGLE;
     const isSel = l.id==S.sel || SELS.includes(l.id);
+    const grpTag = l.gid ? `<span style="font-size:9px;padding:1px 5px;border-radius:4px;background:rgba(6,182,212,0.16);color:var(--ac-light);border:1px solid rgba(6,182,212,0.35);flex-shrink:0" title="Camada agrupada">Grupo</span>` : '';
     return `
-    <div class="it ${isSel?'on':''}" data-id="${l.id}">
+    <div class="it ${isSel?'on':''}" data-id="${l.id}" style="${isPrimary?'box-shadow:inset 0 0 0 1.5px var(--ac-light)':''}">
       <span class="it-drag" title="Segure e arraste para reordenar camada">${SVG.grip}</span>
       <div class="it-main">
         <span class="it-ico">${SVG[l.k]||SVG.t}</span>
         <span class="it-lbl">${esc(nm(l))}</span>
+        ${grpTag}
       </div>
-      <button class="b" data-a="ed" title="Editar">${SVG.t}</button>
+      <button class="b ${isPrimary?'on':''}" data-a="ed" title="Editar esta camada">${SVG.edit}</button>
       <button class="b ${l.hide?'on':''}" data-a="h" title="Mostrar / Ocultar">${l.hide?SVG.eyeOff:SVG.eye}</button>
       <button class="b ${l.lock?'locked-btn':''}" data-a="k" title="Travar / Destravar">${l.lock?SVG.lock:SVG.unlock}</button>
       <button class="b danger" data-a="del" title="Excluir Camada">${SVG.del}</button>
@@ -3606,20 +3997,48 @@ $('lay').onclick=e=>{
     S.layers.splice(i,1);
     SELS=SELS.filter(id=>id!==l.id);
     if(S.sel==l.id)S.sel=SELS[SELS.length-1]||null;
+    EDIT_SINGLE=false;
   }
-  else if(a=='ed'){S.sel=l.id;if(!MULTI)SELS=[l.id];else if(!SELS.includes(l.id))SELS.push(l.id);ui();tab('ed');return}
+  else if(a=='ed'){
+    S.sel=l.id;
+    LAST_LAY_ID=l.id;
+    EDIT_SINGLE=true;
+    if(!MULTI) SELS=grpOf(l.id);
+    else if(!SELS.includes(l.id)) SELS.push(l.id);
+    ui();tab('ed');return;
+  }
   else {
-    if(MULTI){
+    // Shift + Clique na lista de Camadas: seleciona todo o intervalo entre a última camada clicada e esta
+    if(e.shiftKey && LAST_LAY_ID && S.layers.some(x=>x.id===LAST_LAY_ID)){
+      const i1 = S.layers.findIndex(x=>x.id===LAST_LAY_ID);
+      const i2 = i;
+      const [lo, hiIdx] = i1 < i2 ? [i1, i2] : [i2, i1];
+      const rangeIds = S.layers.slice(lo, hiIdx + 1).map(x=>x.id);
+      MULTI = true;
+      EDIT_SINGLE = false;
+      const merged = new Set(e.ctrlKey || e.metaKey ? SELS : []);
+      rangeIds.forEach(rid => grpOf(rid).forEach(gid => merged.add(gid)));
+      SELS = [...merged];
+      S.sel = l.id;
+    }
+    // Ctrl / Cmd + Clique na lista de Camadas: alterna camadas específicas na seleção múltipla
+    else if(e.ctrlKey || e.metaKey || MULTI){
+      MULTI = true;
+      EDIT_SINGLE = false;
+      const gIds = grpOf(l.id);
       if(SELS.includes(l.id)){
-        SELS=SELS.filter(id=>id!==l.id);
-        S.sel=SELS[SELS.length-1]||null;
+        SELS = SELS.filter(id => !gIds.includes(id));
+        S.sel = SELS[SELS.length-1] || null;
       } else {
-        SELS.push(l.id);
-        S.sel=l.id;
+        gIds.forEach(id => { if(!SELS.includes(id)) SELS.push(id); });
+        S.sel = l.id;
       }
+      LAST_LAY_ID = l.id;
     } else {
       S.sel=l.id;
-      SELS=[l.id];
+      LAST_LAY_ID=l.id;
+      SELS=grpOf(l.id);
+      EDIT_SINGLE = !!l.gid;
     }
   }
   commit();ui();
@@ -3709,19 +4128,38 @@ function renderAlignCtrl(label, curVal){
 function ed(){
   const selLayers = getSelectedLayers();
   const E=$('ed');
-  if(selLayers.length > 1){
+  const l=sel();
+  if(selLayers.length > 1 && !(EDIT_SINGLE && l)){
     const anyLock = selLayers.some(x=>x.lock);
+    const grouped = isGrouped(selLayers);
     E.innerHTML=`
       <div class="c">
         <div class="r" style="justify-content:space-between;border-bottom:1px solid var(--bd);padding-bottom:6px">
-          <span style="font-weight:700;color:var(--ac-light)">${selLayers.length} Objetos Selecionados</span>
+          <span style="font-weight:700;color:var(--ac-light)">${selLayers.length} ${grouped?'Camadas Agrupadas':'Objetos Selecionados'}</span>
           <div class="r" style="gap:4px">
             <button type="button" class="b ${anyLock?'locked-btn':''}" id="grpLockBtn">${anyLock?SVG.lock+' <span>Destravar</span>':SVG.unlock+' <span>Travar Todos</span>'}</button>
             <button type="button" class="b danger" id="grpDelBtn" title="Excluir Selecionados">${SVG.del}</button>
           </div>
         </div>
-        <div class="hint">Arraste qualquer item do grupo na arte para movê-los juntos ou use a alça no canto inferior direito do grupo para dimensioná-los proporcionalmente.</div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <div class="l"><span>Toque na canetinha para editar um item individualmente:</span></div>
+          ${selLayers.map(it=>`
+            <div class="it" style="padding:4px 8px">
+              <span class="it-ico">${SVG[it.k]||SVG.t}</span>
+              <span class="it-lbl" style="flex:1">${esc(nm(it))}</span>
+              <button type="button" class="b" data-ed-item="${it.id}" title="Editar esta camada">${SVG.edit}<span>Editar</span></button>
+            </div>
+          `).join('')}
+        </div>
+        <div class="hint">Arraste qualquer item do grupo na arte para movê-los juntos ou clique em Editar acima para ajustar um item específico sem desagrupar.</div>
       </div>`;
+    E.querySelectorAll('[data-ed-item]').forEach(btn => {
+      btn.onclick = () => {
+        S.sel = btn.dataset.edItem;
+        EDIT_SINGLE = true;
+        ui();
+      };
+    });
     $('grpLockBtn').onclick=()=>{
       const targetLock = anyLock ? 0 : 1;
       selLayers.forEach(x=>x.lock=targetLock);
@@ -3730,11 +4168,10 @@ function ed(){
     $('grpDelBtn').onclick=()=>{
       if(anyLock){showToast('Destrave os itens antes de excluir');return}
       S.layers = S.layers.filter(x=>!SELS.includes(x.id));
-      SELS=[]; S.sel=null; commit(); ui(); showToast('Itens excluídos');
+      SELS=[]; S.sel=null; EDIT_SINGLE=false; commit(); ui(); showToast('Itens excluídos');
     };
     return;
   }
-  const l=sel();
   if(!l){E.innerHTML='<div class="hint">Toque em um item da arte ou na lista de camadas para editar suas propriedades.</div>';return}
   const v=x=>Array.isArray(x)?x:[x,x],
   rg=(k,t,a,b,s=1,u='',cmp=false)=>k==='ang'?angDialHtml(l):renderNumCtrl(k,t,a,b,s,u,l[k],cmp),
@@ -3864,8 +4301,15 @@ function ed(){
       sl('bm','Modo de Mesclagem',BLEND)+
       adjPanel(l);
   }
+  const grpMembers = l.gid ? S.layers.filter(x => x.gid === l.gid) : [];
+  const grpBanner = grpMembers.length > 1 ? `
+    <div class="r" style="justify-content:space-between;background:rgba(6,182,212,0.1);border:1px solid rgba(6,182,212,0.3);border-radius:8px;padding:6px 8px">
+      <span style="font-size:11px;color:var(--ac-light);font-weight:600">Editando item do grupo (${grpMembers.length} camadas)</span>
+      <button type="button" class="b" id="btnShowGrpView" style="height:26px;padding:0 8px;font-size:11px">Ver grupo</button>
+    </div>` : '';
   E.innerHTML=`
     <div class="c">
+      ${grpBanner}
       <div class="r" style="justify-content:space-between;border-bottom:1px solid var(--bd);padding-bottom:6px">
         <span style="display:inline-flex;align-items:center;gap:6px;font-weight:600;color:var(--ac-light);overflow:hidden">
           <span class="it-ico">${SVG[l.k]||SVG.t}</span>
@@ -3878,6 +4322,8 @@ function ed(){
       </div>
       <fieldset ${l.lock?'disabled':''}>${h}</fieldset>
     </div>`;
+  const bsgv=$('btnShowGrpView');
+  if(bsgv) bsgv.onclick=()=>{EDIT_SINGLE=false;ui()};
   const adjR=$('adjReset');
   if(adjR) adjR.onclick=()=>{if(l.lock)return;ADJ_KEYS.forEach(k=>{delete l[k]});commit();ui();rq()};
   const elb=$('edLockBtn');
@@ -3890,7 +4336,6 @@ function ed(){
   };
   const bio=$('btnInlineOpen');
   if(bio) bio.onclick=()=>{if(!l.lock) openInlineEditor(l)};
-  // Botões de Alinhamento com 3 ícones (Esquerda, Centro, Direita)
   E.querySelectorAll('[data-align-seg]').forEach(segEl => {
     segEl.onclick = e => {
       const b = e.target.closest('button');
@@ -3903,7 +4348,6 @@ function ed(){
       rq();
     };
   });
-  // Eventos dos botões AA / aa / Aa (Maiúsculo / Minúsculo / Capitalizado) e Seletor de Cores Estilo Photoshop na aba Editar
   E.querySelectorAll('.case-btn').forEach(btn => {
     btn.onclick = () => {
       if(l.lock) return;
@@ -4139,6 +4583,7 @@ function updateResBadge(){
 
 function ui(){
   migrateBg();
+  renderWbar();
   layoutPages();pgUi();
   syncSels();
   lays();ed();tb();
@@ -4164,13 +4609,61 @@ function ui(){
   $('bbNum').value=S.bg.bl;
   $('blk').checked=!!S.bg.lock;$('bgFs').disabled=!!S.bg.lock;
   $('ksafe').checked=!!S.safe;$('ksnap').checked=!!S.snap;$('kmag').checked=S.mag!==0;
-  if(document.activeElement!==$('projName')) $('projName').value=S.name||'';
+  if(document.activeElement!==$('projName')) $('projName').value=S.fileName||'';
+  if($('projName')) $('projName').placeholder=`Em branco = usa o nome da guia (${wkTitle(wkA)})`;
   if($('safeMarginBox')) $('safeMarginBox').style.display=S.safe?'flex':'none';
   if($('vSafeM')) $('vSafeM').textContent=(S.safeM||100)+'px';
   document.querySelectorAll('#sSafeM button').forEach(b=>b.classList.toggle('on',+b.dataset.v===(S.safeM||100)));
   updateResBadge();
   rq();
 }
+
+function duplicateSelectedLayers(offset=30){
+  const selLayers = getSelectedLayers();
+  if(!selLayers.length) return [];
+  const oldGids = {};
+  const newIds = [];
+  const newLayers = [];
+  selLayers.forEach(orig => {
+    const idx = S.layers.indexOf(orig);
+    const c = JSON.parse(JSON.stringify(orig));
+    c.id = nid();
+    delete c.g;
+    if(orig.gid){
+      if(!oldGids[orig.gid]) oldGids[orig.gid] = 'g' + nid();
+      c.gid = oldGids[orig.gid];
+    }
+    if(c.x!=null){ c.x += offset; c.y += offset; }
+    S.layers.splice(idx + 1, 0, c);
+    newIds.push(c.id);
+    newLayers.push(c);
+  });
+  SELS = newIds;
+  S.sel = newIds[newIds.length - 1] || null;
+  if(newIds.length > 1 && !isGrouped(newLayers)) MULTI = true;
+  return newLayers;
+}
+
+function deleteSelectedLayers(){
+  const selLayers = getSelectedLayers();
+  if(!selLayers.length) return;
+  if(selLayers.some(x=>x.lock)){ showToast('Destrave a(s) camada(s) antes de excluir'); return; }
+  if(EDIT_SINGLE && sel() && selLayers.length > 1){
+    const target = sel();
+    const idx = S.layers.indexOf(target);
+    if(idx > -1) S.layers.splice(idx, 1);
+    SELS = SELS.filter(id => id !== target.id);
+    S.sel = SELS[SELS.length - 1] || null;
+    EDIT_SINGLE = false;
+  } else {
+    S.layers = S.layers.filter(x => !SELS.includes(x.id));
+    SELS = []; S.sel = null; EDIT_SINGLE = false;
+  }
+  commit(); ui(); showToast('Camada(s) excluída(s)');
+}
+
+$('kbCloseBtn').onclick=()=>$('kbMo').style.display='none';
+$('kbMo').onclick=e=>{if(e.target.id==='kbMo')$('kbMo').style.display='none'};
 
 $('fbar').onclick=e=>{
   const b=e.target.closest('button');if(!b)return;
@@ -4180,13 +4673,14 @@ $('fbar').onclick=e=>{
   if(a=='re'){if(hi<H.length-1)rest(H[++hi]);return}
   if(a=='grp'){toggleGroup();return}
   if(a=='clr'){openToolbarColor();return}
+  if(a=='kb'){$('kbMo').style.display='flex';return}
   if(a=='multi'){
     MULTI = !MULTI;
     if(MULTI){
       if(S.sel && !SELS.includes(S.sel)) SELS = [S.sel];
       showToast('Múltipla seleção ativada: toque nos objetos para somar');
     } else {
-      SELS = S.sel ? [S.sel] : [];
+      SELS = S.sel ? grpOf(S.sel) : [];
       showToast('Múltipla seleção desativada');
     }
     ui();
@@ -4195,17 +4689,7 @@ $('fbar').onclick=e=>{
   const selLayers = getSelectedLayers();
   if(!selLayers.length) return;
   if(a=='dup'){
-    const newIds = [];
-    selLayers.forEach(orig => {
-      const idx = S.layers.indexOf(orig);
-      const c = JSON.parse(JSON.stringify(orig));
-      c.id = nid(); delete c.g; delete c.gid;
-      if(c.x!=null){c.x+=30;c.y+=30}
-      S.layers.splice(idx+1, 0, c);
-      newIds.push(c.id);
-    });
-    SELS = newIds;
-    S.sel = newIds[newIds.length - 1] || null;
+    duplicateSelectedLayers(30);
   }
   else if(a=='up'){
     for(let i=S.layers.length-2; i>=0; i--){
@@ -4276,7 +4760,7 @@ $('aFt').onclick=()=>{
 };
 $('aO').onclick=()=>{closeAddMenu();layG();commit();ui();showToast('Convidados auto-organizados')};
 
-// ---- fundo, calibração Google Sites e arte
+// ---- fundo e arte
 $('bgSolidSwatches').innerHTML=BG_SOLIDS.map(c=>`<button type="button" class="sw-btn" data-c="${c}" style="background:${c}" title="${c}"></button>`).join('');
 $('bgSolidSwatches').onclick=e=>{
   const b=e.target.closest('.sw-btn');if(!b||S.bg.lock)return;
@@ -4337,14 +4821,12 @@ function syncBgNum(numId, prop){
 syncBgNum('bsNum','sc');
 syncBgNum('bbNum','bl');
 
-// mostrador circular do ângulo do degradê de fundo
 const bgAd=$('bgAngDial');
 const bgAngSet=e=>{ if(S.bg.lock) return; S.bg.ang=psAngFrom(e,bgAd); bgAngPaint(); rq(); };
 bgAd.onpointerdown=e=>{ e.preventDefault(); bgAd.setPointerCapture(e.pointerId); bgAngSet(e); };
 bgAd.onpointermove=e=>{ if(bgAd.hasPointerCapture(e.pointerId)) bgAngSet(e); };
 bgAd.onpointerup=bgAd.onpointercancel=()=>{ if(!S.bg.lock) commit(); };
 
-// ajustes de iluminação e cor da imagem de fundo
 const bgAdjH=$('bgAdjHost');
 bgAdjH.addEventListener('input',e=>{
   const t=e.target; if(!t.dataset.bk||S.bg.lock) return;
@@ -4382,7 +4864,6 @@ $('bgClearImg').onclick=()=>{
 };
 $('blk').onchange=e=>{S.bg.lock=+e.target.checked;commit();ui()};
 
-// Formatos da arte na aba Layout
 $('sf').innerHTML=FMT.map(f=>`<button type="button" data-v="${f[0]}">${f[1]}</button>`).join('');
 $('sf').onclick=e=>{
   const b=e.target.closest('button');if(!b)return;
@@ -4429,7 +4910,7 @@ $('sSafeM').onclick=e=>{
 };
 $('ksnap').onchange=e=>{S.snap=+e.target.checked};
 $('kmag').onchange=e=>{S.mag=+e.target.checked};
-$('projName').oninput=e=>{S.name=e.target.value};
+$('projName').oninput=e=>{S.fileName=e.target.value};
 $('projName').onchange=()=>{commit()};
 
 $('ff').onchange=async e=>{
@@ -4446,11 +4927,17 @@ $('ff').onchange=async e=>{
 $('psv').onclick=()=>{
   const a=document.createElement('a');
   a.href=URL.createObjectURL(new Blob([proj()],{type:'application/json'}));
-  a.download=pjBase('projeto-flyer')+'.json';a.click();
+  a.download=pjBase()+'.json';a.click();
 };
 $('pop').onchange=e=>{
   const f=e.target.files[0];
-  if(f)f.text().then(openP).catch(()=>showToast('Arquivo de projeto inválido.'));
+  if(f){
+    const baseName = f.name.replace(/\.json$/i, '').trim();
+    f.text().then(t => openP(t).then(() => {
+      if(baseName && (!S.tabName || /^Projeto \d+$/.test(S.tabName))) S.tabName = baseName;
+      stashCurrentWk(); ui(); save();
+    })).catch(()=>showToast('Arquivo de projeto inválido.'));
+  }
   e.target.value='';
 };
 let clrArm=0;
@@ -4459,12 +4946,12 @@ $('pnw').onclick=()=>{
   if(!clrArm){
     b.textContent='Toque para confirmar';
     clrArm=setTimeout(()=>{clrArm=0;b.textContent='Limpar tudo'},3500);
-    showToast('Toque de novo para apagar todo o design');
+    showToast('Toque de novo para zerar o projeto desta guia');
     return;
   }
   clearTimeout(clrArm);clrArm=0;b.textContent='Limpar tudo';
-  IM={};PC={};fresh();H=[ser()];hi=0;ui();save();
-  showToast('Design reiniciado');
+  PC={};fresh();H=[ser()];hi=0;stashCurrentWk();ui();save();
+  showToast('Projeto desta guia reiniciado');
 };
 
 // ---- exportar (JPG, PNG, WebP, PDF nativo e SVG)
@@ -4532,26 +5019,6 @@ function pageCanvas(i,sc){
   try{draw(c,true)}finally{if(other){S=sv;delete p.pg}}
   return o;
 }
-const crcT=(()=>{const t=[];for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c>>>0}return t})();
-const crc32=u=>{let c=0xFFFFFFFF;for(let i=0;i<u.length;i++)c=crcT[(c^u[i])&255]^(c>>>8);return(c^0xFFFFFFFF)>>>0};
-function buildZip(files){
-  const enc=new TextEncoder(),parts=[],cd=[];let off=0;
-  files.forEach(f=>{
-    const nm=enc.encode(f.name),crc=crc32(f.data),sz=f.data.length;
-    const h=new DataView(new ArrayBuffer(30));
-    h.setUint32(0,0x04034b50,true);h.setUint16(4,20,true);h.setUint16(6,0x0800,true);h.setUint16(12,0x21,true);
-    h.setUint32(14,crc,true);h.setUint32(18,sz,true);h.setUint32(22,sz,true);h.setUint16(26,nm.length,true);
-    parts.push(new Uint8Array(h.buffer),nm,f.data);
-    const c=new DataView(new ArrayBuffer(46));
-    c.setUint32(0,0x02014b50,true);c.setUint16(4,20,true);c.setUint16(6,20,true);c.setUint16(8,0x0800,true);c.setUint16(14,0x21,true);
-    c.setUint32(16,crc,true);c.setUint32(20,sz,true);c.setUint32(24,sz,true);c.setUint16(28,nm.length,true);c.setUint32(42,off,true);
-    cd.push(new Uint8Array(c.buffer),nm);off+=30+nm.length+sz;
-  });
-  let cds=0;cd.forEach(x=>cds+=x.length);
-  const e=new DataView(new ArrayBuffer(22));
-  e.setUint32(0,0x06054b50,true);e.setUint16(8,files.length,true);e.setUint16(10,files.length,true);e.setUint32(12,cds,true);e.setUint32(16,off,true);
-  return new Blob([...parts,...cd,new Uint8Array(e.buffer)],{type:'application/zip'});
-}
 function buildPdfPages(pg){
   const enc=new TextEncoder(),chunks=[],offs=[];let pos=0;
   const push=x=>{const u=typeof x==='string'?enc.encode(x):x;chunks.push(u);pos+=u.length};
@@ -4573,14 +5040,14 @@ function buildPdfPages(pg){
   return new Blob(chunks,{type:'application/pdf'});
 }
 async function exportMulti(idxs){
-  const sc=expS,items=[],enc=new TextEncoder(),stamp=Date.now();
+  const sc=expS,items=[],enc=new TextEncoder();
   showToast('Gerando '+idxs.length+' páginas...');
   for(const i of idxs){items.push({i,o:pageCanvas(i,sc)});await new Promise(r=>setTimeout(r,0))}
   const prev=items[0].o.toDataURL('image/jpeg',0.9);
   let blob,name;
   if(expM==='application/pdf'){
     const pgs=items.map(({o})=>({jpg:Uint8Array.from(atob(o.toDataURL('image/jpeg',0.94).split(',')[1]),ch=>ch.charCodeAt(0)),w:o.width,h:o.height}));
-    blob=buildPdfPages(pgs);name=`${pjBase(`Flyer-${items.length}paginas-${stamp}`)}.pdf`;
+    blob=buildPdfPages(pgs);name=`${pjBase()}.pdf`;
   } else {
     const ext=expM==='image/png'?'png':expM==='image/webp'?'webp':expM==='image/svg+xml'?'svg':'jpg',files=[];
     for(const{i,o}of items){
@@ -4592,7 +5059,7 @@ async function exportMulti(idxs){
         const b=await new Promise(r=>o.toBlob(r,expM,0.95));
         data=new Uint8Array(await b.arrayBuffer());
       }
-      files.push({name:`${pjBase('Flyer')}-pagina-${String(i+1).padStart(2,'0')}.${ext}`,data});
+      files.push({name:`${pjBase()}-pagina-${String(i+1).padStart(2,'0')}.${ext}`,data});
     }
     const fl=files.map(f=>new File([f.data],f.name,{type:expM})),us=fl.map(f=>URL.createObjectURL(f));
     $('mi').src=prev;$('md').href=us[0];$('md').download=fl[0].name;mo.style.display='flex';
@@ -4623,7 +5090,7 @@ $('exp').onclick=()=>{
 
   if (expM === 'application/pdf') {
     const pdfBlob = buildMinimalPdfFromJpeg(previewUrl, o.width, o.height);
-    const u = URL.createObjectURL(pdfBlob), n = `${pjBase(`Flyer-${o.width}x${o.height}-${Date.now()}`)}.pdf`;
+    const u = URL.createObjectURL(pdfBlob), n = `${pjBase()}.pdf`;
     $('mi').src = previewUrl; $('md').href = u; $('md').download = n; mo.style.display = 'flex';
     $('ms').onclick = () => {
       const f = new File([pdfBlob], n, { type: 'application/pdf' });
@@ -4636,7 +5103,7 @@ $('exp').onclick=()=>{
     const pngDataUrl = o.toDataURL('image/png');
     const svgContent = `<?xml version="1.0" encoding="UTF-8"?>\n<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="${o.width}" height="${o.height}" viewBox="0 0 ${o.width} ${o.height}">\n  <title>RF Studio Flyer</title>\n  <image width="${o.width}" height="${o.height}" xlink:href="${pngDataUrl}" href="${pngDataUrl}"/>\n</svg>`;
     const svgBlob = new Blob([svgContent], { type: 'image/svg+xml;charset=utf-8' });
-    const u = URL.createObjectURL(svgBlob), n = `${pjBase(`Flyer-${o.width}x${o.height}-${Date.now()}`)}.svg`;
+    const u = URL.createObjectURL(svgBlob), n = `${pjBase()}.svg`;
     $('mi').src = pngDataUrl; $('md').href = u; $('md').download = n; mo.style.display = 'flex';
     $('ms').onclick = () => {
       const f = new File([svgBlob], n, { type: 'image/svg+xml' });
@@ -4647,8 +5114,8 @@ $('exp').onclick=()=>{
 
   const ext = expM === 'image/png' ? 'png' : expM === 'image/webp' ? 'webp' : 'jpg';
   o.toBlob(b=>{
-    const u=URL.createObjectURL(b),n=`${pjBase(`Flyer-${o.width}x${o.height}-${Date.now()}`)}.${ext}`;
-    $('mi').src=u;$('md').href=u;$('md').download=n;mo.style.display='flex';
+    const u=URL.createObjectURL(b),n=`${pjBase()}.${ext}`;
+    $('mi').src=u;$('md').href=u;$('md').download=n;mo.style.display = 'flex';
     $('ms').onclick=()=>{
       const f=new File([b],n,{type:b.type});
       navigator.canShare&&navigator.canShare({files:[f]})?navigator.share({files:[f]}).catch(()=>{}):showToast('Use o botão Baixar neste navegador.');
@@ -4706,7 +5173,6 @@ G.onpointerup=()=>{
   gd=null;
 };
 
-// Controles da pílula flutuante de Zoom (#zbar) e roda do mouse no palco
 $('zOut').onclick=e=>{e.stopPropagation();blurTextFocus();stepZoomView(-0.25)};
 $('zIn').onclick=e=>{e.stopPropagation();blurTextFocus();stepZoomView(0.25)};
 $('zReset').onclick=e=>{e.stopPropagation();blurTextFocus();resetZoomView(true)};
@@ -4718,7 +5184,7 @@ $('stage').addEventListener('wheel',e=>{
   stepZoomView(delta, e.clientX, e.clientY);
 },{passive:false});
 
-// ---- toque na arte e no palco: mover, redimensionar, girar, canetinha, cadeado, lixeira e pinça (zoom do palco)
+// ---- toque na arte e no palco
 const PT=new Map();
 const SPT=new Map();
 let D=null, PZ=null;
@@ -4752,7 +5218,6 @@ function hit(p){
   }
 }
 
-// Pinça de 2 dedos em qualquer lugar do #stage faz Zoom + Pan suave de toda a arte, e clicar fora do canvas desseleciona
 const stgEl=$('stage');
 stgEl.addEventListener('pointerdown',e=>{
   if(e.target.closest('#fbar')||e.target.closest('#zbar')||e.target.closest('#addWrap')||e.target.closest('#pbar'))return;
@@ -4776,10 +5241,9 @@ stgEl.addEventListener('pointerdown',e=>{
     };
     return;
   }
-  // Clicar fora da folha de arte (na área pontilhada do #stage) desseleciona os objetos
   if(e.target === stgEl){
     blurTextFocus();
-    if(S.sel || SELS.length){
+    if(S.sel || SELS.length || MULTI){
       clearSelection();
     }
   }
@@ -4817,10 +5281,15 @@ let lastTapTime = 0, lastTapId = null;
 cv.onpointerdown=e=>{
   cv.setPointerCapture(e.pointerId);const p=P(e);PT.set(e.pointerId,p);
   if(PT.size>1 || SPT.size>1){D=null;return;}
+  if(SPACE_DOWN || e.button === 1){
+    blurTextFocus();
+    cv.style.cursor = 'grabbing';
+    D={m:'pan_stage',sx:e.clientX,sy:e.clientY,zx:ZX,zy:ZY,ch:0};
+    return;
+  }
   const ds=getDs(), hitR=24*ds;D=null;
   const selLayers = getSelectedLayers();
 
-  // 1. Interação com Caixa de Grupo quando há Múltipla Seleção (2+ objetos)
   if(selLayers.length > 1){
     const gb = getGroupBounds(cx, selLayers);
     if(gb){
@@ -4977,10 +5446,34 @@ cv.onpointerdown=e=>{
   blurTextFocus();
   if(!D){
     const h=hit(p);
-    const isMultiMode = MULTI || e.shiftKey;
+    const isMultiMode = MULTI || e.shiftKey || e.ctrlKey || e.metaKey;
     if(h){
+      LAST_LAY_ID = h.id;
+      // Alt + Arrastar na arte: duplica imediatamente a camada/grupo e já arrasta a cópia!
+      if(e.altKey && !h.lock){
+        if(!SELS.includes(h.id)){
+          S.sel = h.id;
+          SELS = grpOf(h.id);
+        }
+        const curSel = getSelectedLayers();
+        if(!curSel.some(x=>x.lock)){
+          const cloned = duplicateSelectedLayers(0);
+          lays();ed();tb();
+          if(cloned.length > 1){
+            const gb = getGroupBounds(cx, cloned);
+            D={m:'grp_mv',sx:p.x,sy:p.y,gx:gb?gb.x:S.w/2,gy:gb?gb.y:S.h/2,items:cloned.map(item=>({l:item,x:item.x??S.w/2,y:item.y??S.h/2})),ch:1};
+          } else if(cloned[0]){
+            const cl = cloned[0];
+            D={m:'mv',sx:p.x,sy:p.y,x:cl.x??S.w/2,y:cl.y??S.h/2,ch:1};
+          }
+          showToast('Cópia criada com Alt + Arrastar');
+          rq();
+          return;
+        }
+      }
       if(isMultiMode){
         if(!MULTI) MULTI = true;
+        EDIT_SINGLE = false;
         const alreadyIn = SELS.includes(h.id);
         if(!alreadyIn){
           grpOf(h.id).forEach(id => { if(!SELS.includes(id)) SELS.push(id); });
@@ -4998,6 +5491,9 @@ cv.onpointerdown=e=>{
         }
       } else {
         if(SELS.length > 1 && SELS.includes(h.id)){
+          S.sel = h.id;
+          EDIT_SINGLE = true;
+          lays();ed();tb();
           const activeGroup = getSelectedLayers();
           if(!activeGroup.some(x=>x.lock)){
             const gb = getGroupBounds(cx, activeGroup);
@@ -5009,6 +5505,7 @@ cv.onpointerdown=e=>{
           lastTapId = h.id;
           lastTapTime = now;
           S.sel=h.id; SELS=grpOf(h.id);
+          EDIT_SINGLE = true;
           lays();ed();tb();
           if(isDoubleTap && !h.lock && ['t','gt','ft'].includes(h.k)){
             openInlineEditor(h);
@@ -5024,10 +5521,8 @@ cv.onpointerdown=e=>{
         }
       }
     } else {
-      // Clicar em área vazia dentro da arte também limpa a seleção
-      if(S.sel || SELS.length){clearSelection();}
+      if(S.sel || SELS.length || MULTI){clearSelection();}
       if(IM[S.bg.im]&&!S.bg.lock)D={m:'bg',sx:p.x,sy:p.y,x:S.bg.x,y:S.bg.y};
-      else if(Z > 1.01) D={m:'pan_stage',sx:e.clientX,sy:e.clientY,zx:ZX,zy:ZY};
     }
   }
   if(D)D.ch=0;rq();
@@ -5149,8 +5644,10 @@ cv.onpointermove=e=>{
 cv.onpointerup=cv.onpointercancel=e=>{
   PT.delete(e.pointerId);
   if(!PT.size){
+    if(D && D.m === 'pan_stage'){
+      cv.style.cursor = SPACE_DOWN ? 'grab' : '';
+    }
     if(D){
-      // Se estava em modo Múltipla Seleção e tocou sem arrastar em um objeto já selecionado, remove-o da seleção
       if(!D.ch && D.toggleId && MULTI && SELS.length > 1){
         const gm = grpOf(D.toggleId);
         SELS = SELS.filter(id => !gm.includes(id));
@@ -5164,7 +5661,7 @@ cv.onpointerup=cv.onpointercancel=e=>{
   }
 };
 
-// ---- PÁGINAS (cada página tem seus próprios fundo e camadas; a ativa é a que está em S)
+// ---- PÁGINAS
 let PGF=0,pgTap=null,PGM='h';
 try{if(localStorage.getItem('rfsf_pgm')==='v')PGM='v'}catch(e){}
 const PG_KEYS=['w','h','safe','safeM','snap','bg','layers'];
@@ -5266,13 +5763,248 @@ window.addEventListener('pointerup',e=>{
 });
 document.fonts.ready.then(()=>{PGF=1;layoutPages()});
 
+// ---- ATALHOS DE TECLADO (ESTILO PHOTOSHOP & CANVA) ----
+function isTypingTarget(el){
+  if(!el) return false;
+  const tag = el.tagName;
+  if(tag === 'TEXTAREA' || tag === 'SELECT' || el.isContentEditable) return true;
+  if(tag === 'INPUT'){
+    const tp = (el.type || 'text').toLowerCase();
+    return !['checkbox','radio','button','color','range','file'].includes(tp);
+  }
+  return false;
+}
+
+window.addEventListener('keydown', e => {
+  if(isTypingTarget(document.activeElement)){
+    if(e.key === 'Escape') blurTextFocus();
+    return;
+  }
+  if($('psColorMo').style.display === 'flex'){
+    if(e.key === 'Escape') closePsColorPicker(false);
+    else if(e.key === 'Enter') closePsColorPicker(true);
+    return;
+  }
+  if($('kbMo').style.display === 'flex' && e.key === 'Escape'){
+    $('kbMo').style.display = 'none';
+    return;
+  }
+
+  if(e.code === 'Space' && !SPACE_DOWN){
+    e.preventDefault();
+    SPACE_DOWN = true;
+    cv.style.cursor = 'grab';
+  }
+
+  const mod = e.ctrlKey || e.metaKey;
+  const k = e.key.toLowerCase();
+
+  // Desfazer / Refazer: Ctrl+Z, Ctrl+Shift+Z, Ctrl+Y
+  if(mod && k === 'z'){
+    e.preventDefault();
+    if(e.shiftKey){ if(hi < H.length - 1) rest(H[++hi]); }
+    else { if(hi > 0) rest(H[--hi]); }
+    return;
+  }
+  if(mod && k === 'y'){
+    e.preventDefault();
+    if(hi < H.length - 1) rest(H[++hi]);
+    return;
+  }
+
+  // Duplicar: Ctrl+D ou Ctrl+J (Photoshop)
+  if(mod && (k === 'd' || k === 'j')){
+    e.preventDefault();
+    const cloned = duplicateSelectedLayers(30);
+    if(cloned.length){ commit(); ui(); showToast('Camada(s) duplicada(s)'); }
+    return;
+  }
+
+  // Agrupar / Desagrupar: Ctrl+G / Ctrl+Shift+G
+  if(mod && k === 'g'){
+    e.preventDefault();
+    const ls = getSelectedLayers();
+    if(ls.length > 1){
+      if(e.shiftKey && isGrouped(ls)) toggleGroup();
+      else if(!e.shiftKey && !isGrouped(ls)) toggleGroup();
+      else toggleGroup();
+    }
+    return;
+  }
+
+  // Copiar / Colar: Ctrl+C / Ctrl+V (funciona inclusive entre guias de projetos diferentes)
+  if(mod && k === 'c'){
+    const ls = getSelectedLayers();
+    if(ls.length){
+      e.preventDefault();
+      CLIPBOARD = JSON.parse(JSON.stringify(ls));
+      showToast(`${ls.length} item(ns) copiado(s)`);
+    }
+    return;
+  }
+  if(mod && k === 'v'){
+    if(CLIPBOARD.length){
+      e.preventDefault();
+      const gidMap = {};
+      const newIds = [];
+      CLIPBOARD.forEach(item => {
+        const c = JSON.parse(JSON.stringify(item));
+        c.id = nid();
+        delete c.g;
+        if(item.gid){
+          if(!gidMap[item.gid]) gidMap[item.gid] = 'g' + nid();
+          c.gid = gidMap[item.gid];
+        }
+        if(c.x != null){ c.x = Math.min(S.w - 40, c.x + 30); c.y = Math.min(S.h - 40, c.y + 30); }
+        S.layers.push(c);
+        newIds.push(c.id);
+      });
+      SELS = newIds;
+      S.sel = newIds[newIds.length - 1] || null;
+      MULTI = newIds.length > 1 && !CLIPBOARD[0].gid;
+      commit(); ui();
+      showToast(`${newIds.length} item(ns) colado(s)`);
+    }
+    return;
+  }
+
+  // Selecionar todas as camadas visíveis: Ctrl+A
+  if(mod && k === 'a'){
+    e.preventDefault();
+    const vis = S.layers.filter(l => !l.hide && !l.lock).map(l => l.id);
+    if(vis.length){
+      MULTI = vis.length > 1;
+      SELS = vis;
+      S.sel = vis[vis.length - 1];
+      EDIT_SINGLE = false;
+      ui();
+      showToast(`${vis.length} camadas selecionadas`);
+    }
+    return;
+  }
+
+  // Travar / Destravar camada selecionada: Ctrl+L
+  if(mod && k === 'l'){
+    e.preventDefault();
+    const ls = getSelectedLayers();
+    if(ls.length){
+      const nextLock = ls.some(x => x.lock) ? 0 : 1;
+      ls.forEach(x => x.lock = nextLock);
+      commit(); ui();
+      showToast(nextLock ? 'Camada(s) travada(s)' : 'Camada(s) destravada(s)');
+    }
+    return;
+  }
+
+  // Ordenar Camadas: Ctrl+] (Subir) e Ctrl+[ (Descer) | +Shift envia para o Topo/Base
+  if(mod && (e.key === ']' || e.key === '[')){
+    e.preventDefault();
+    const selLayers = getSelectedLayers();
+    if(!selLayers.length) return;
+    if(e.key === ']'){
+      if(e.shiftKey){
+        const selSet = new Set(SELS);
+        const restL = S.layers.filter(x => !selSet.has(x.id));
+        const picked = S.layers.filter(x => selSet.has(x.id));
+        S.layers = [...restL, ...picked];
+      } else {
+        for(let i = S.layers.length - 2; i >= 0; i--){
+          if(SELS.includes(S.layers[i].id) && !SELS.includes(S.layers[i+1].id)) mv(i, i+1);
+        }
+      }
+    } else {
+      if(e.shiftKey){
+        const selSet = new Set(SELS);
+        const restL = S.layers.filter(x => !selSet.has(x.id));
+        const picked = S.layers.filter(x => selSet.has(x.id));
+        S.layers = [...picked, ...restL];
+      } else {
+        for(let i = 1; i < S.layers.length; i++){
+          if(SELS.includes(S.layers[i].id) && !SELS.includes(S.layers[i-1].id)) mv(i, i-1);
+        }
+      }
+    }
+    commit(); ui();
+    return;
+  }
+
+  // Zoom por teclado: Ctrl + (+ / - / 0)
+  if(mod && (e.key === '=' || e.key === '+' || e.key === '-' || e.key === '0')){
+    e.preventDefault();
+    if(e.key === '0') resetZoomView(true);
+    else stepZoomView(e.key === '-' ? -0.25 : 0.25);
+    return;
+  }
+
+  // Salvar projeto: Ctrl+S
+  if(mod && k === 's'){
+    e.preventDefault();
+    $('psv').click();
+    return;
+  }
+
+  // Excluir camada(s): Delete ou Backspace
+  if(e.key === 'Delete' || e.key === 'Backspace'){
+    e.preventDefault();
+    deleteSelectedLayers();
+    return;
+  }
+
+  // Limpar seleção: Escape
+  if(e.key === 'Escape'){
+    if(addWrap.classList.contains('open')) closeAddMenu();
+    else if(S.sel || SELS.length){ MULTI = false; clearSelection(); }
+    return;
+  }
+
+  // Atalho rápido sem Ctrl: T cria novo texto, ? abre ajuda de atalhos
+  if(!mod && !e.altKey && k === 't'){
+    e.preventDefault();
+    add(TXT({}));
+    return;
+  }
+  if(!mod && (e.key === '?' || (e.shiftKey && e.key === '/'))){
+    e.preventDefault();
+    $('kbMo').style.display = $('kbMo').style.display === 'flex' ? 'none' : 'flex';
+    return;
+  }
+
+  // Setas do teclado: move 1px (ou 10px segurando Shift)
+  if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.key)){
+    const ls = getSelectedLayers().filter(x => !x.lock);
+    if(!ls.length) return;
+    e.preventDefault();
+    const step = e.shiftKey ? 10 : 1;
+    const dx = e.key === 'ArrowLeft' ? -step : e.key === 'ArrowRight' ? step : 0;
+    const dy = e.key === 'ArrowUp' ? -step : e.key === 'ArrowDown' ? step : 0;
+    ls.forEach(item => {
+      if(item.x != null) item.x += dx;
+      if(item.y != null) item.y += dy;
+      clampLayerBounds(cx, item);
+    });
+    commit(); ed(); rq();
+  }
+});
+
+window.addEventListener('keyup', e => {
+  if(e.code === 'Space'){
+    SPACE_DOWN = false;
+    cv.style.cursor = '';
+  }
+});
+
 // ---- início
 function vh(){document.documentElement.style.setProperty('--h',(window.visualViewport?visualViewport.height:innerHeight)+'px')}
 addEventListener('resize',()=>{vh();setLv(lv);updateViewTransform();rq()});
 if(window.visualViewport)window.visualViewport.addEventListener('resize',()=>{vh();setLv(lv);updateViewTransform();rq()});
 vh();
-fresh();H=[ser()];applySafeBottom(safeBottom);setLv(0);ui();
-try{const sv=localStorage.getItem('rfsf2');if(sv)openP(sv).catch(()=>{})}catch(e){}
+fresh();H=[ser()];stashCurrentWk();applySafeBottom(safeBottom);setLv(0);ui();
+try{
+  const svWks=localStorage.getItem('rfsf2_wks');
+  const sv=localStorage.getItem('rfsf2');
+  if(svWks)openAllWks(svWks).catch(()=>{});
+  else if(sv)openP(sv).catch(()=>{});
+}catch(e){}
 Promise.all(FONTS.map(f=>document.fonts.load(`40px "${f}"`))).then(rq).catch(()=>{});document.fonts.ready.then(rq);
 </script>
 </body>
