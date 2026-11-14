@@ -372,6 +372,37 @@ button, input, select, textarea {
 }
 
 /* BARRA FLUTUANTE SUPERIOR FIXA */
+
+/* MENU FLUTUANTE DE AÇÕES DO ELEMENTO (ESTILO CANVA) */
+#fmenu {
+  position: absolute;
+  left: 0; top: 0;
+  z-index: 11;
+  display: none;
+  align-items: center;
+  gap: 2px;
+  background: rgba(24, 24, 27, 0.96);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--bd);
+  border-radius: 999px;
+  padding: 4px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55);
+  touch-action: manipulation;
+  user-select: none;
+}
+#fmenu button {
+  width: 36px; height: 36px; padding: 0;
+  border-radius: 50%;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: transparent; border: 0; color: var(--tx);
+}
+#fmenu button svg { width: 18px; height: 18px; stroke-width: 2; }
+#fmenu button:hover, #fmenu button:active { background: var(--el); color: var(--ac-light); }
+#fmenu button.fm-danger { color: #f87171; }
+#fmenu button.fm-danger:hover, #fmenu button.fm-danger:active { background: rgba(239, 68, 68, 0.18); color: #fecaca; }
+#fmenu button.fm-locked { background: rgba(239, 68, 68, 0.2); color: #fecaca; }
+#fmenu button.fm-on { color: var(--ac-light); background: var(--ac-soft); }
+
 #fbar {
   position: absolute;
   top: 8px;
@@ -1528,6 +1559,7 @@ select option {
 .ang-dial { position: relative; width: 44px; height: 44px; border-radius: 50%; border: 2px solid rgba(255, 255, 255, 0.8); box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5); touch-action: none; cursor: grab; flex: 0 0 auto; }
 .ang-dial b { position: absolute; left: 50%; top: 50%; width: 50%; height: 2px; margin-top: -1px; background: #fff; transform-origin: 0 50%; box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.45); pointer-events: none; }
 .ang-dial b::after { content: ''; position: absolute; right: -2px; top: 50%; width: 9px; height: 9px; margin-top: -4.5px; border-radius: 50%; background: #fff; box-shadow: 0 0 0 1.5px rgba(0, 0, 0, 0.6); }
+.ang-line .num-box { flex: 0 0 auto; }
 .ang-val { font-size: 16px; font-weight: 700; color: var(--tx); font-variant-numeric: tabular-nums; }
 #psAngVal { font-size: 11px; font-weight: 700; color: var(--ac-light); min-width: 30px; font-variant-numeric: tabular-nums; }
 #psGradRow .b { height: 30px; font-size: 11px; padding: 0 10px; }
@@ -1906,9 +1938,6 @@ select option {
       </button>
       <button class="b" data-a="grp" id="btnGrp" title="Agrupar" style="display:none"></button>
       <button class="b" data-a="clr" id="btnClr" title="Cor" style="display:none"><i></i></button>
-      <button class="b" data-a="dup" title="Duplicar Selecionado(s)">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-      </button>
       <button class="b" data-a="up" title="Trazer para Frente (Ctrl+])">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
       </button>
@@ -1916,6 +1945,8 @@ select option {
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
       </button>
     </div>
+
+    <div id="fmenu" style="display:none"></div>
 
     <div id="pages"><div class="pg act" data-i="0"><canvas id="cv"></canvas></div></div>
 
@@ -2115,7 +2146,14 @@ select option {
                 <span class="num-lbl">Ângulo do Degradê</span>
                 <div class="ang-line">
                   <div class="ang-dial" id="bgAngDial" title="Arraste ou toque para girar o degradê"><b></b></div>
-                  <span class="ang-val" id="bgAngVal">135°</span>
+                  <div class="num-box">
+                    <button type="button" class="num-step" data-target="bgAngNum" data-dir="-1">−</button>
+                    <div class="num-val-wrap">
+                      <input type="number" class="num-inp" id="bgAngNum" min="0" max="360" step="1" value="135">
+                      <span class="num-unit">°</span>
+                    </div>
+                    <button type="button" class="num-step" data-target="bgAngNum" data-dir="1">+</button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -2801,8 +2839,9 @@ function angDialHtml(l){
   return `<div class="num-row ang-ctl"><span class="num-lbl">Ângulo</span><div class="ang-line"><div class="ang-dial" data-angdial title="Arraste ou toque para girar o degradê" style="background:${angGrad(l)}"><b style="transform:rotate(${a}deg)"></b></div><span class="ang-val">${Math.round(a)}°</span></div></div>`;
 }
 function psAngFrom(e, el = $('psAng')){
-  const r = el.getBoundingClientRect();
-  let a = Math.atan2(e.clientY - (r.top + r.height / 2), e.clientX - (r.left + r.width / 2)) * 180 / Math.PI;
+  let ctr = el._ctr;
+  if(!ctr){ const r = el.getBoundingClientRect(); ctr = {x: r.left + r.width / 2, y: r.top + r.height / 2}; }
+  let a = Math.atan2(e.clientY - ctr.y, e.clientX - ctr.x) * 180 / Math.PI;
   a = (a + 360) % 360;
   const s = Math.round(a / 15) * 15;
   if(Math.abs(a - s) < 4) a = s;
@@ -2852,6 +2891,7 @@ function updateViewTransform(){
   }
   layoutPages();
   $('pages').style.transform = `translate3d(${ZX.toFixed(1)}px, ${ZY.toFixed(1)}px, 0) scale(${Z.toFixed(4)})`;
+  if(typeof placeFloatMenu==='function') placeFloatMenu();
   if($('zReset')) $('zReset').textContent = Math.round(Z * 100) + '%';
   positionInlineEditor();
   rq();
@@ -3050,7 +3090,7 @@ const TXT=o=>({id:nid(),k:'t',text:'Novo texto',font:'Inter',size:80,color:'#fff
 const GT=o=>({id:nid(),k:'gt',role:'Pregador',text:'Nome do Convidado',rFont:'Montserrat',nFont:'Montserrat',rSize:24,size:42,sc:100,rColor:'#22d3ee',color:'#ffffff',ls:0,lh:115,sh:0,shCol:'#000000',shOp:80,shBl:12,shDist:6,shAng:90,rot:0,al:'center',x:S.w/2,y:S.h*0.32,lock:0,hide:0,...o});
 const FT=o=>({id:nid(),k:'ft',name:'Rodapé',role:'NOME DO LOCAL',text:'ENDEREÇO DO LOCAL',rFont:'Inter',nFont:'Poppins',rSize:36,size:24,sc:100,rColor:'#ffffff',color:'#ffffff',c2:'#06b6d4',grad:0,ang:90,sh:0,shCol:'#000000',shOp:75,shBl:14,shDist:6,shAng:90,st:0,scCol:'#000000',sw:4,ls:0,lh:120,rot:0,al:'center',storyMode:'feed',x:S.w/2,y:1310,lock:0,hide:0,...o});
 const IMG=o=>({id:nid(),k:'i',name:'Imagem',im:null,sc:100,al:100,rot:0,bl:0,sh:0,shCol:'#000000',shOp:75,shBl:18,shDist:8,shAng:90,mk:'none',mi:50,bm:'source-over',x:S.w/2,y:S.h/2,lock:0,hide:0,...o});
-const SHP=o=>({id:nid(),k:'sh',name:'Forma',shape:'rect',w:480,h:280,sc:100,rx:0,color:'#06b6d4',c2:'#0284c7',grad:0,ang:135,sh:0,shCol:'#000000',shOp:75,shBl:18,shDist:8,shAng:90,st:0,scCol:'#ffffff',sw:6,al:100,rot:0,bl:0,mk:'none',mi:50,bm:'source-over',x:S.w/2,y:S.h/2,lock:0,hide:0,...o});
+const SHP=o=>({id:nid(),k:'sh',name:'Forma',shape:'rect',w:480,h:280,sc:100,rx:0,color:'#06b6d4',c2:'#0284c7',grad:0,ang:135,sh:0,shCol:'#000000',shOp:75,shBl:18,shDist:8,shAng:90,st:0,scCol:'#ffffff',sw:6,al:100,so:100,rot:0,bl:0,mk:'none',mi:50,bm:'source-over',x:S.w/2,y:S.h/2,lock:0,hide:0,...o});
 const LOGO=o=>({id:nid(),k:'lg',name:'Logo',im:null,sc:100,al:100,rot:0,bl:0,sh:0,shCol:'#000000',shOp:75,shBl:16,shDist:6,shAng:90,mk:'none',mi:50,bm:'source-over',x:S.w/2,y:S.h/2,lock:0,hide:0,...o});
 const FADE=o=>({id:nid(),k:'f',name:'Degradê / Luz',kind:'linear',c:'#000000',h:60,o:90,sq:22,rot:-35,dir:'b2t',bm:'source-over',x:S.w/2,y:S.h/2,lock:0,hide:0,...o});
 
@@ -3360,7 +3400,9 @@ function procShape(l, m){
   const pad = Math.ceil((l.bl || 0) * 2.4 + (l.st ? (l.sw || 0) : 0) + 8);
   const cw = Math.max(4, Math.ceil(m.w + pad * 2));
   const ch = Math.max(4, Math.ceil(m.h + pad * 2));
-  const key = [l.shape, Math.round(m.w), Math.round(m.h), l.rx||0, l.color, l.c2, l.grad, l.ang, l.st, l.scCol, l.sw, l.bl, l.mk, l.mi].join('|');
+  const fa = Math.max(0, Math.min(100, l.al ?? 100)) / 100;
+  const sa = Math.max(0, Math.min(100, l.so ?? l.al ?? 100)) / 100;
+  const key = [l.shape, Math.round(m.w), Math.round(m.h), l.rx||0, l.color, l.c2, l.grad, l.ang, l.st, l.scCol, l.sw, l.bl, l.mk, l.mi, fa, sa].join('|');
   const pc = PC[l.id];
   if(pc && pc.k === key) return {c: pc.c, cw, ch};
   const c = document.createElement('canvas');
@@ -3380,13 +3422,16 @@ function procShape(l, m){
   } else {
     t.fillStyle = l.color || '#06b6d4';
   }
+  t.globalAlpha = fa;
   t.fill();
   if(l.st && (l.sw || 0) > 0){
+    t.globalAlpha = sa;
     t.lineWidth = (l.sw || 6) * ((l.sc || 100) / 100);
     t.strokeStyle = l.scCol || '#ffffff';
     t.lineJoin = 'round';
     t.stroke();
   }
+  t.globalAlpha = 1;
   t.restore();
   if(l.mk && l.mk !== 'none') maskit(t, cw, ch, l.mk, (l.mi ?? 50) / 100);
   PC[l.id] = {k: key, c};
@@ -3479,7 +3524,7 @@ function dl(c,l){
   if(l.k=='sh'){
     const ps = procShape(l, m);
     if(ps && ps.c){
-      c.globalAlpha = (l.al ?? 100) / 100;
+      c.globalAlpha = 1;
       c.globalCompositeOperation = l.bm || 'source-over';
       applyCanvasShadow(c, l);
       c.drawImage(ps.c, -ps.cw / 2, -ps.ch / 2, ps.cw, ps.ch);
@@ -3692,7 +3737,7 @@ function bgAngPaint(){
   const a = S.bg.ang ?? 135;
   d.style.background = `linear-gradient(${a + 90}deg, ${S.bg.c1 || '#0f172a'}, ${S.bg.c2 || '#083344'})`;
   d.firstChild.style.transform = `rotate(${a}deg)`;
-  $('bgAngVal').textContent = Math.round(a) + '°';
+  const an = $('bgAngNum'); if(an && document.activeElement !== an) an.value = Math.round(a);
 }
 function renderBgAdj(){
   const h = $('bgAdjHost'); if(!h) return;
@@ -3727,7 +3772,7 @@ function magFor(ls, news, allowX, allowY){
   return {dx: dx || 0, dy: dy || 0, gx, gy};
 }
 function grpRotPos(gb, pd, ds){
-  return {x: Math.max(16*ds, Math.min(S.w - 16*ds, gb.x)), y: Math.max(16*ds, gb.minY - pd - 28*ds)};
+  return clampH(gb.x, gb.maxY + pd + 30*ds, ds);
 }
 
 function drawGroupGlyph(c, x, y, ds, strokeCol, grouped){
@@ -3761,6 +3806,59 @@ function drawScaleGlyph(c, x, y, ds, strokeCol){
   c.moveTo(x+1*ds,y+s);c.lineTo(x+s,y+s);c.lineTo(x+s,y+1*ds);
   c.moveTo(x-1*ds,y-s);c.lineTo(x-s,y-s);c.lineTo(x-s,y-1*ds);
   c.stroke();
+  c.restore();
+}
+
+
+// ---- ALÇAS ESTILO CANVA: só círculos de escala nos cantos + pílulas + rotação; ações ficam no menu flutuante
+function clampH(x, y, ds){
+  const m = 16 * ds;
+  return {x: Math.max(m, Math.min(S.w - m, x)), y: Math.max(m, Math.min(S.h - m, y))};
+}
+function lpt(l, a, b){
+  const r = (l.rot || 0) * Math.PI / 180, cs = Math.cos(r), sn = Math.sin(r);
+  return {x: (l.x ?? S.w/2) + a*cs - b*sn, y: (l.y ?? S.h/2) + a*sn + b*cs};
+}
+function selHandles(c, l, ds){
+  const m = met(c, l), pd = 8*ds;
+  const corners = [[-1,-1],[1,-1],[1,1],[-1,1]].map(([sx,sy]) => {
+    const q = lpt(l, sx*(m.w/2+pd), sy*(m.h/2+pd));
+    return clampH(q.x, q.y, ds);
+  });
+  const base = lpt(l, 0, m.h/2 + pd);
+  const q = lpt(l, 0, m.h/2 + pd + 30*ds);
+  const ro = clampH(q.x, q.y, ds);
+  const pills = l.k == 'sh' ? [['t',0,-1,true],['b',0,1,true],['l',-1,0,false],['r',1,0,false]].map(([side,sx,sy,horiz]) => {
+    const w = lpt(l, sx*(m.w/2+pd), sy*(m.h/2+pd));
+    const cp = clampH(w.x, w.y, ds);
+    return {side, horiz, x: cp.x, y: cp.y};
+  }) : [];
+  return {m, pd, corners, base, ro, pills};
+}
+function grpCorners(gb, pd, ds){
+  return [[gb.minX-pd,gb.minY-pd],[gb.maxX+pd,gb.minY-pd],[gb.maxX+pd,gb.maxY+pd],[gb.minX-pd,gb.maxY+pd]].map(([x,y]) => clampH(x, y, ds));
+}
+function drawCornerDot(c, x, y, ds, col){
+  drawHandleCircle(c, x, y, 10*ds, ds, col, '#ffffff');
+}
+function drawRotGlyph(c, x, y, ds, col){
+  drawHandleCircle(c, x, y, 12.5*ds, ds, col, '#ffffff');
+  c.save();
+  c.strokeStyle = '#09090b'; c.lineWidth = 1.8*ds; c.lineCap = 'round';
+  c.beginPath(); c.arc(x, y, 4.8*ds, -0.4, Math.PI*1.35); c.stroke();
+  c.restore();
+}
+function drawSidePill(c, x, y, horiz, rotDeg, ds, col){
+  const pw = (horiz ? 24 : 8) * ds, ph = (horiz ? 8 : 24) * ds, pr = 4*ds;
+  c.save();
+  c.translate(x, y); c.rotate((rotDeg || 0) * Math.PI / 180);
+  c.shadowColor = 'rgba(0,0,0,0.45)'; c.shadowBlur = 5*ds;
+  c.fillStyle = '#ffffff';
+  c.beginPath();
+  if(c.roundRect) c.roundRect(-pw/2, -ph/2, pw, ph, pr); else c.rect(-pw/2, -ph/2, pw, ph);
+  c.fill();
+  c.shadowColor = 'transparent';
+  c.lineWidth = 1.8*ds; c.strokeStyle = col; c.stroke();
   c.restore();
 }
 
@@ -3832,21 +3930,13 @@ function draw(c,ex){
       c.strokeStyle = col;
       c.lineWidth = 2.2*ds;
       c.strokeRect(gb.minX - pd, gb.minY - pd, gb.w + pd*2, gb.h + pd*2);
-
-      drawLockGlyph(c, gb.minX - pd, gb.minY - pd, ds, anyLock, col);
-      if(!anyLock){
-        drawTrashGlyph(c, gb.minX - pd, gb.maxY + pd, ds, '#ef4444');
-        drawScaleGlyph(c, gb.maxX + pd, gb.maxY + pd, ds, col);
-      }
       if(!anyLock){
         const rp = grpRotPos(gb, pd, ds);
         c.strokeStyle = col; c.lineWidth = 1.8*ds;
-        c.beginPath(); c.moveTo(gb.x, gb.minY - pd); c.lineTo(rp.x, rp.y); c.stroke();
-        drawHandleCircle(c, rp.x, rp.y, 12.5*ds, ds, col, '#ffffff');
-        c.strokeStyle = '#09090b'; c.lineWidth = 1.8*ds;
-        c.beginPath(); c.arc(rp.x, rp.y, 4.8*ds, -0.4, Math.PI*1.35); c.stroke();
+        c.beginPath(); c.moveTo(gb.x, gb.maxY + pd); c.lineTo(rp.x, rp.y); c.stroke();
+        grpCorners(gb, pd, ds).forEach(q => drawCornerDot(c, q.x, q.y, ds, col));
+        drawRotGlyph(c, rp.x, rp.y, ds, col);
       }
-      if(!pageLocked) drawGroupGlyph(c, gb.maxX + pd, gb.minY - pd, ds, col, isGrouped(selLayers));
       c.restore();
     }
     c.restore();
@@ -3880,20 +3970,7 @@ function draw(c,ex){
     c.moveTo(lx, ly+4.5*ds); c.lineTo(lx+6.5*ds, ly);
     c.stroke();
 
-    const off = 36 * ds;
-    const lkX = Math.max(18*ds, Math.min(w-18*ds, lx - off));
-    const lkY = Math.max(18*ds, Math.min(h-18*ds, ly - off));
-    drawLockGlyph(c, lkX, lkY, ds, isLocked, col);
-
     if(!isLocked){
-      const edX = Math.max(18*ds, Math.min(w-18*ds, lx + off));
-      const edY = Math.max(18*ds, Math.min(h-18*ds, ly - off));
-      drawEditGlyph(c, edX, edY, ds, col);
-
-      const dlX = Math.max(18*ds, Math.min(w-18*ds, lx - off));
-      const dlY = Math.max(18*ds, Math.min(h-18*ds, ly + off));
-      drawTrashGlyph(c, dlX, dlY, ds, '#ef4444');
-
       const hPos = getRadialHandle(l, rad, ds);
       drawScaleGlyph(c, hPos.x, hPos.y, ds, col);
 
@@ -3911,58 +3988,115 @@ function draw(c,ex){
     c.restore();
   } else if(l&&l.k!='f'&&!l.hide){
     const isLocked = pageLocked || !!l.lock;
-    const mt=met(c,l),pd=8*ds,col=isLocked?'#ef4444':'#06b6d4';
+    const col=isLocked?'#ef4444':'#06b6d4';
+    const H = selHandles(c, l, ds), mt = H.m, pd = H.pd;
+    c.save();
     c.translate(l.x,l.y);c.rotate((l.rot||0)*Math.PI/180);
     c.strokeStyle=col;c.lineWidth=2*ds;
     c.strokeRect(-mt.w/2-pd,-mt.h/2-pd,mt.w+2*pd,mt.h+2*pd);
-
-    const lkX = -mt.w/2 - pd, lkY = -mt.h/2 - pd;
-    drawLockGlyph(c, lkX, lkY, ds, isLocked, col);
-
+    c.restore();
     if(!isLocked){
-      if(l.k=='sh'){
-        const drawPill = (px, py, horiz) => {
-          const pw = (horiz ? 22 : 7.5) * ds;
-          const ph = (horiz ? 7.5 : 22) * ds;
-          const pr = 3.8 * ds;
-          c.save();
-          c.shadowColor='rgba(0,0,0,0.45)';c.shadowBlur=5*ds;
-          c.fillStyle='#ffffff';
-          c.beginPath();
-          if(c.roundRect) c.roundRect(px - pw/2, py - ph/2, pw, ph, pr);
-          else c.rect(px - pw/2, py - ph/2, pw, ph);
-          c.fill();
-          c.shadowColor='transparent';
-          c.lineWidth=1.8*ds;c.strokeStyle=col;
-          c.stroke();
-          c.restore();
-        };
-        drawPill(0, -mt.h/2-pd, true);
-        drawPill(0, mt.h/2+pd, true);
-        drawPill(-mt.w/2-pd, 0, false);
-        drawPill(mt.w/2+pd, 0, false);
-      }
-
-      const rx=0, ry=-mt.h/2-pd-28*ds;
-      c.beginPath();c.moveTo(0,-mt.h/2-pd);c.lineTo(rx,ry);c.stroke();
-      drawHandleCircle(c, rx, ry, hRad, ds, col, '#ffffff');
-      c.strokeStyle='#09090b';c.lineWidth=1.8*ds;
-      c.beginPath();c.arc(rx,ry,4.8*ds,-0.4,Math.PI*1.35);c.stroke();
-
-      const ex=mt.w/2+pd, ey=-mt.h/2-pd;
-      drawEditGlyph(c, ex, ey, ds, col);
-
-      const dx=-mt.w/2-pd, dy=mt.h/2+pd;
-      drawTrashGlyph(c, dx, dy, ds, '#ef4444');
-
-      const sx=mt.w/2+pd, sy=mt.h/2+pd;
-      drawScaleGlyph(c, sx, sy, ds, col);
+      c.strokeStyle=col;c.lineWidth=1.8*ds;
+      c.beginPath();c.moveTo(H.base.x,H.base.y);c.lineTo(H.ro.x,H.ro.y);c.stroke();
+      H.pills.forEach(pl => drawSidePill(c, pl.x, pl.y, pl.horiz, l.rot, ds, col));
+      H.corners.forEach(q => drawCornerDot(c, q.x, q.y, ds, col));
+      drawRotGlyph(c, H.ro.x, H.ro.y, ds, col);
     }
   }
   c.restore();
 }
 
-function render(){if(cv.width!=S.w||cv.height!=S.h){cv.width=S.w;cv.height=S.h}draw(cx,false)}
+function render(){if(cv.width!=S.w||cv.height!=S.h){cv.width=S.w;cv.height=S.h}draw(cx,false);placeFloatMenu()}
+
+// ---- MENU FLUTUANTE DE AÇÕES (travar, editar, agrupar, duplicar, excluir) — fica sempre dentro da área da página
+const FM_ICON = {
+  dup:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>',
+  grp:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="11" height="11" rx="2"/><rect x="10" y="10" width="11" height="11" rx="2"/></svg>',
+  ungrp:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/><path d="M4 20L20 4"/></svg>'
+};
+function fmItems(ls){
+  const anyLock = ls.some(x => x.lock);
+  const it = [{a:'lock', svg: anyLock ? SVG.lock : SVG.unlock, title: anyLock ? 'Destravar' : 'Travar', cls: anyLock ? 'fm-locked' : ''}];
+  if(!anyLock){
+    if(ls.length === 1) it.push({a:'edit', svg: SVG.edit, title: 'Editar'});
+    if(ls.length > 1){ const gr = isGrouped(ls); it.push({a:'grp', svg: gr ? FM_ICON.ungrp : FM_ICON.grp, title: gr ? 'Desagrupar' : 'Agrupar', cls: gr ? 'fm-on' : ''}); }
+    it.push({a:'dup', svg: FM_ICON.dup, title: 'Duplicar'});
+    it.push({a:'del', svg: SVG.del, title: 'Excluir', cls: 'fm-danger'});
+  }
+  return it;
+}
+function placeFloatMenu(){ try{ placeFloatMenu0(); }catch(err){ const f=document.getElementById('fmenu'); if(f) f.style.display='none'; } }
+function placeFloatMenu0(){
+  const fm = document.getElementById('fmenu'); if(!fm) return;
+  const hide = () => { if(fm.style.display !== 'none') fm.style.display = 'none'; };
+  if(!S || S.pgLock || (typeof D !== 'undefined' && D && D.ch) || inlineLayerId) return hide();
+  const ls = getSelectedLayers().filter(x => !x.hide);
+  if(!ls.length) return hide();
+  const ds = getDs();
+  let box = null, lowGap = 44;
+  if(ls.length > 1){
+    const gb = getGroupBounds(cx, ls); if(!gb) return hide();
+    const pd = 10*ds; box = {minX: gb.minX-pd, maxX: gb.maxX+pd, minY: gb.minY-pd, maxY: gb.maxY+pd};
+  } else {
+    const l = ls[0];
+    if(l.k == 'f'){
+      if(!(l.kind == 'radial' || l.kind == 'beam')) return hide();
+      const lx = l.x ?? S.w/2, ly = l.y ?? S.h/2, r = 26*ds;
+      box = {minX: lx-r, maxX: lx+r, minY: ly-r, maxY: ly+r}; lowGap = 8;
+    } else {
+      const b = getLayerAABB(cx, l); if(!b) return hide();
+      const pd = 8*ds; box = {minX: b.minX-pd, maxX: b.maxX+pd, minY: b.minY-pd, maxY: b.maxY+pd};
+    }
+  }
+  const sig = ls.map(x => x.id + ':' + (x.lock?1:0)).join(',') + '|' + (isGrouped(ls)?1:0);
+  if(fm._sig !== sig){
+    fm._sig = sig;
+    fm.innerHTML = fmItems(ls).map(i => `<button type="button" data-fm="${i.a}" title="${i.title}" class="${i.cls||''}">${i.svg}</button>`).join('');
+  }
+  fm.style.display = 'flex';
+  const r = cv.getBoundingClientRect(), st = $('stage').getBoundingClientRect();
+  if(!r.width) return hide();
+  const kx = r.width / S.w, ky = r.height / S.h;
+  const fb = $('fbar').getBoundingClientRect();
+  const L = Math.max(r.left, st.left) + 6, R = Math.min(r.right, st.right) - 6;
+  const T = Math.max(r.top, st.top, fb.bottom + 4), B = Math.min(r.bottom, st.bottom) - 6;
+  const w = fm.offsetWidth, h = fm.offsetHeight;
+  const cxs = r.left + ((box.minX + box.maxX) / 2) * kx;
+  const topS = r.top + box.minY * ky, botS = r.top + box.maxY * ky;
+  let y = topS - 12 - h;
+  if(y < T) y = botS + lowGap + 12;
+  const x = Math.max(L, Math.min(R - w, cxs - w/2));
+  y = Math.max(T, Math.min(B - h, y));
+  fm.style.left = (x - st.left) + 'px';
+  fm.style.top = (y - st.top) + 'px';
+}
+(function(){
+  const fm = document.getElementById('fmenu'); if(!fm) return;
+  fm.addEventListener('pointerdown', e => { e.preventDefault(); e.stopPropagation(); });
+  fm.addEventListener('click', e => {
+    const b = e.target.closest('button[data-fm]'); if(!b) return;
+    e.stopPropagation(); blurTextFocus();
+    if(checkPgLock()) return;
+    const ls = getSelectedLayers(); if(!ls.length) return;
+    const a = b.dataset.fm;
+    if(a === 'lock'){
+      const nl = ls.some(x => x.lock) ? 0 : 1;
+      ls.forEach(x => x.lock = nl);
+      commit(); ui(); showToast(nl ? 'Bloqueado' : 'Desbloqueado');
+      return;
+    }
+    if(ls.some(x => x.lock)){ showToast('Destrave antes de editar'); return; }
+    if(a === 'edit'){
+      const l = ls[0];
+      if(['t','gt','ft'].includes(l.k)) openInlineEditor(l);
+      else { tab('ed',0); lays(); ed(); tb(); }
+    } else if(a === 'grp'){ toggleGroup(); }
+    else if(a === 'dup'){ duplicateSelectedLayers(30); commit(); ui(); }
+    else if(a === 'del'){ deleteSelectedLayers(); }
+    placeFloatMenu();
+  });
+  window.addEventListener('resize', () => placeFloatMenu());
+})();
 const rq=()=>{if(q)return;q=requestAnimationFrame(()=>{q=0;render()})};
 
 // ---- histórico, autosave e projeto
@@ -4628,6 +4762,7 @@ function ed(){
     if(l.rx===undefined) l.rx=0;
     if(!l.scCol) l.scCol='#ffffff';
     if(l.sw===undefined) l.sw=6;
+    if(l.so===undefined) l.so=(l.al??100);
     const canRound = l.shape==='rect' || l.shape==='square';
     h=`<div>
          <div class="l"><span>Tipo de Forma Geométrica</span></div>
@@ -4638,11 +4773,11 @@ function ed(){
       `<div class="g">${co('color','Cor Principal')}<div style="display:flex;align-items:flex-end">${ck('grad','Ativar Degradê')}</div></div>`+
       (l.grad?`<div class="g">${co('c2','Cor 2 do Degradê')}${rg('ang','Ângulo',0,360,1,'°',true)}</div>`:'')+
       `<div class="g">${rg('w','Largura',20,1600,1,'px',true)}${rg('h','Altura',20,1920,1,'px',true)}</div>`+
-      `<div class="g">${rg('sc','Escala Geral',10,300,1,'%',true)}${canRound ? rg('rx','Cantos',0,300,1,'px',true) : rg('al','Opacidade',0,100,1,'%',true)}</div>`+
-      `<div class="g">${canRound ? rg('al','Opacidade',0,100,1,'%',true) : ''}${rg('rot','Rotação',-180,180,1,'°',true)}</div>`+
+      `<div class="g">${rg('sc','Escala Geral',10,300,1,'%',true)}${canRound ? rg('rx','Cantos',0,300,1,'px',true) : rg('al','Opacidade da Forma',0,100,1,'%',true)}</div>`+
+      `<div class="g">${canRound ? rg('al','Opacidade da Forma',0,100,1,'%',true) : ''}${rg('rot','Rotação',-180,180,1,'°',true)}</div>`+
       `<div class="r">${ck('sh','Sombra')}${ck('st','Borda / Contorno')}</div>`+
       renderShadowControls(l)+
-      (l.st?`<div class="g">${co('scCol','Cor da Borda')}${rg('sw','Espessura',1,40,1,'px',true)}</div>`:'')+
+      (l.st?`<div class="g">${co('scCol','Cor da Borda')}${rg('sw','Espessura',1,40,1,'px',true)}</div><div class="g">${rg('so','Opacidade da Borda',0,100,1,'%',true)}</div>`:'')+
       rg('bl','Desfoque (Blur)',0,40,1,'px')+
       `<div class="g">${sl('mk','Esfumaçar / Máscara',MASK)}${rg('mi','Suavidade',0,100,1,'%',true)}</div>`+
       sl('bm','Modo de Mesclagem',BLEND);
@@ -5245,9 +5380,12 @@ syncBgNum('bbNum','bl');
 
 const bgAd=$('bgAngDial');
 const bgAngSet=e=>{ if(S.bg.lock||S.pgLock) return; S.bg.ang=psAngFrom(e,bgAd); bgAngPaint(); rq(); };
-bgAd.onpointerdown=e=>{ if(checkPgLock()) return; e.preventDefault(); bgAd.setPointerCapture(e.pointerId); bgAngSet(e); };
+bgAd.onpointerdown=e=>{ if(checkPgLock()) return; e.preventDefault(); const r=bgAd.getBoundingClientRect(); bgAd._ctr={x:r.left+r.width/2,y:r.top+r.height/2}; bgAd.setPointerCapture(e.pointerId); bgAngSet(e); };
 bgAd.onpointermove=e=>{ if(bgAd.hasPointerCapture(e.pointerId)) bgAngSet(e); };
-bgAd.onpointerup=bgAd.onpointercancel=()=>{ if(!S.bg.lock&&!S.pgLock) commit(); };
+bgAd.onpointerup=bgAd.onpointercancel=()=>{ bgAd._ctr=null; if(!S.bg.lock&&!S.pgLock) commit(); };
+const bgAn=$('bgAngNum');
+bgAn.oninput=e=>{ if(S.bg.lock||S.pgLock) return; const v=Math.max(0,Math.min(360,Number(e.target.value)||0)); S.bg.ang=v; const d=$('bgAngDial'); d.style.background=`linear-gradient(${v+90}deg, ${S.bg.c1||'#0f172a'}, ${S.bg.c2||'#083344'})`; d.firstChild.style.transform=`rotate(${v}deg)`; rq(); };
+bgAn.onchange=e=>{ if(S.bg.lock||S.pgLock) return; const v=Math.max(0,Math.min(360,Number(e.target.value)||0)); e.target.value=v; commit(); };
 
 const bgAdjH=$('bgAdjHost');
 bgAdjH.addEventListener('input',e=>{
@@ -5644,7 +5782,7 @@ $('stage').addEventListener('wheel',e=>{
 // ---- toque na arte e no palco
 const PT=new Map();
 const SPT=new Map();
-let D=null, PZ=null;
+var D=null, PZ=null;
 const P=e=>{const r=cv.getBoundingClientRect();return{x:(e.clientX-r.left)*S.w/r.width,y:(e.clientY-r.top)*S.h/r.height}};
 const val=l=>l.k=='t'?l.size:l.k=='f'?l.h:l.sc;
 const setv=(l,v)=>{
@@ -5752,16 +5890,7 @@ cv.onpointerdown=e=>{
     const gb = getGroupBounds(cx, selLayers);
     if(gb){
       const pd = 10*ds;
-      const lkPos = {x: gb.minX - pd, y: gb.minY - pd};
-      const dlPos = {x: gb.minX - pd, y: gb.maxY + pd};
-      const rsPos = {x: gb.maxX + pd, y: gb.maxY + pd};
       const anyLock = selLayers.some(x=>x.lock);
-      const grPos = {x: gb.maxX + pd, y: gb.minY - pd};
-      if(Math.hypot(p.x - grPos.x, p.y - grPos.y) < hitR){
-        blurTextFocus();
-        toggleGroup();
-        return;
-      }
       if(!anyLock){
         const rpp = grpRotPos(gb, pd, ds);
         if(Math.hypot(p.x - rpp.x, p.y - rpp.y) < hitR){
@@ -5773,34 +5902,18 @@ cv.onpointerdown=e=>{
           D.ch = 0; rq();
           return;
         }
-      }
-
-      if(Math.hypot(p.x - lkPos.x, p.y - lkPos.y) < hitR){
-        blurTextFocus();
-        const nextLock = anyLock ? 0 : 1;
-        selLayers.forEach(x=>x.lock = nextLock);
-        commit(); ui();
-        showToast(nextLock ? 'Grupo bloqueado' : 'Grupo desbloqueado');
-        return;
-      }
-      if(!anyLock && Math.hypot(p.x - dlPos.x, p.y - dlPos.y) < hitR){
-        blurTextFocus();
-        S.layers = S.layers.filter(x=>!SELS.includes(x.id));
-        SELS=[]; S.sel=null; commit(); ui();
-        showToast('Grupo excluído');
-        return;
-      }
-      if(!anyLock && Math.hypot(p.x - rsPos.x, p.y - rsPos.y) < hitR){
-        blurTextFocus();
-        D = {
-          m: 'grp_rs',
-          cx: gb.x,
-          cy: gb.y,
-          d: Math.hypot(p.x - gb.x, p.y - gb.y) || 1,
-          items: selLayers.map(item => ({ l: item, x: item.x??S.w/2, y: item.y??S.h/2, v: val(item) }))
-        };
-        D.ch = 0; rq();
-        return;
+        if(grpCorners(gb, pd, ds).some(q => Math.hypot(p.x - q.x, p.y - q.y) < hitR)){
+          blurTextFocus();
+          D = {
+            m: 'grp_rs',
+            cx: gb.x,
+            cy: gb.y,
+            d: Math.hypot(p.x - gb.x, p.y - gb.y) || 1,
+            items: selLayers.map(item => ({ l: item, x: item.x??S.w/2, y: item.y??S.h/2, v: val(item) }))
+          };
+          D.ch = 0; rq();
+          return;
+        }
       }
     }
   }
@@ -5810,35 +5923,7 @@ cv.onpointerdown=e=>{
   if(l&&l.k=='f'&&(l.kind=='radial'||l.kind=='beam')&&!l.hide&&!pageLocked){
     const lx=Math.max(0,Math.min(S.w,l.x??S.w/2)), ly=Math.max(0,Math.min(S.h,l.y??S.h/2));
     const rad=Math.max(20, Math.max(S.w, S.h) * ((l.h || 55) / 100));
-    const off = 36 * ds;
-    const lkX = Math.max(18*ds, Math.min(S.w-18*ds, lx - off));
-    const lkY = Math.max(18*ds, Math.min(S.h-18*ds, ly - off));
-
-    if(Math.hypot(p.x-lkX, p.y-lkY) < hitR){
-      blurTextFocus();
-      l.lock = l.lock ? 0 : 1;
-      commit(); ui();
-      showToast(l.lock ? 'Camada bloqueada' : 'Camada desbloqueada');
-      return;
-    }
-
     if(!l.lock){
-      const edX = Math.max(18*ds, Math.min(S.w-18*ds, lx + off));
-      const edY = Math.max(18*ds, Math.min(S.h-18*ds, ly - off));
-      const dlX = Math.max(18*ds, Math.min(S.w-18*ds, lx - off));
-      const dlY = Math.max(18*ds, Math.min(S.h-18*ds, ly + off));
-
-      if(Math.hypot(p.x-edX, p.y-edY) < hitR){
-        tab('ed',0);lays();ed();tb();
-        return;
-      }
-      if(Math.hypot(p.x-dlX, p.y-dlY) < hitR){
-        blurTextFocus();
-        const idx = S.layers.indexOf(l);
-        if(idx > -1){ S.layers.splice(idx, 1); SELS=SELS.filter(id=>id!==l.id); S.sel = null; commit(); ui(); showToast('Camada excluída'); }
-        return;
-      }
-
       const hPos=getRadialHandle(l, rad, ds);
       let hitRo = false;
       if(l.kind=='beam'){
@@ -5858,46 +5943,14 @@ cv.onpointerdown=e=>{
       }
     }
   } else if(l&&l.k!='f'&&!l.hide&&!pageLocked){
-    const m=met(cx,l),pd=8*ds;
-    const lkH=tr(l,-m.w/2-pd,-m.h/2-pd);
-    const edH=tr(l,m.w/2+pd,-m.h/2-pd);
-    const dlH=tr(l,-m.w/2-pd,m.h/2+pd);
-    const rs=tr(l,m.w/2+pd,m.h/2+pd);
-    const ro=tr(l,0,-m.h/2-pd-28*ds);
-
-    if(Math.hypot(p.x-lkH.x,p.y-lkH.y)<hitR){
-      blurTextFocus();
-      l.lock = l.lock ? 0 : 1;
-      commit(); ui();
-      showToast(l.lock ? 'Elemento bloqueado' : 'Elemento desbloqueado');
-      return;
-    }
-
     if(!l.lock){
-      if(Math.hypot(p.x-edH.x,p.y-edH.y)<hitR){
-        if(['t','gt','ft'].includes(l.k)){
-          openInlineEditor(l);
-        } else {
-          tab('ed',0);lays();ed();tb();
-        }
-        return;
-      }
-      if(Math.hypot(p.x-dlH.x,p.y-dlH.y)<hitR){
-        blurTextFocus();
-        const idx = S.layers.indexOf(l);
-        if(idx > -1){ S.layers.splice(idx, 1); SELS=SELS.filter(id=>id!==l.id); S.sel = null; commit(); ui(); showToast('Elemento excluído'); }
-        return;
-      }
-      if(Math.hypot(p.x-rs.x,p.y-rs.y)<hitR)D={m:'rs',d:Math.hypot(p.x-l.x,p.y-l.y)||1,v:val(l)};
-      else if(Math.hypot(p.x-ro.x,p.y-ro.y)<hitR)D={m:'ro',a:Math.atan2(p.y-l.y,p.x-l.x),r:l.rot||0};
-      else if(l.k=='sh'){
-        const topH=tr(l,0,-m.h/2-pd), botH=tr(l,0,m.h/2+pd);
-        const leftH=tr(l,-m.w/2-pd,0), rightH=tr(l,m.w/2+pd,0);
+      const H = selHandles(cx, l, ds);
+      if(Math.hypot(p.x-H.ro.x,p.y-H.ro.y)<hitR) D={m:'ro',a:Math.atan2(p.y-l.y,p.x-l.x),r:l.rot||0};
+      else if(H.corners.some(q => Math.hypot(p.x-q.x,p.y-q.y)<hitR)) D={m:'rs',d:Math.hypot(p.x-l.x,p.y-l.y)||1,v:val(l)};
+      else if(H.pills.length){
         const sc=(l.sc||100)/100;
-        if(Math.hypot(p.x-rightH.x,p.y-rightH.y)<hitR) D={m:'sh_e',side:'r',x:l.x,y:l.y,w:l.w||480,h:l.h||(l.w||480),sc};
-        else if(Math.hypot(p.x-leftH.x,p.y-leftH.y)<hitR) D={m:'sh_e',side:'l',x:l.x,y:l.y,w:l.w||480,h:l.h||(l.w||480),sc};
-        else if(Math.hypot(p.x-botH.x,p.y-botH.y)<hitR) D={m:'sh_e',side:'b',x:l.x,y:l.y,w:l.w||480,h:l.h||(l.w||480),sc};
-        else if(Math.hypot(p.x-topH.x,p.y-topH.y)<hitR) D={m:'sh_e',side:'t',x:l.x,y:l.y,w:l.w||480,h:l.h||(l.w||480),sc};
+        const pl = H.pills.find(q => Math.hypot(p.x-q.x,p.y-q.y)<hitR);
+        if(pl) D={m:'sh_e',side:pl.side,x:l.x,y:l.y,w:l.w||480,h:l.h||(l.w||480),sc};
       }
     }
   }
@@ -6123,7 +6176,7 @@ cv.onpointerup=cv.onpointercancel=e=>{
         commit();ed();
       }
     }
-    D=null;GX=GY=null;MGX=[];MGY=[];rq();
+    D=null;GX=GY=null;MGX=[];MGY=[];rq();placeFloatMenu();
   }
 };
 
