@@ -1448,8 +1448,63 @@ select option {
 }
 
 #pbar .pb-del { color: var(--dg); }
-#pbar .pb-b:hover, #pbar .pb-b:active, #pbar .pb-ind:hover, #pbar .pb-ind:active { background: var(--ac-soft); }
+#pbar .pb-b:hover, #pbar .pb-b:active, #pbar .pb-ind:hover, #pbar .pb-ind:active, #pbar .pb-fmt:hover, #pbar .pb-fmt:active, #pbar .pb-fmt.on { background: var(--ac-soft); color: var(--ac-light); }
 #pbar .pb-del:hover, #pbar .pb-del:active { background: var(--dg-soft); }
+
+#pbar .pb-fmt {
+  height: 28px;
+  padding: 0 8px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--tx);
+  cursor: pointer;
+  user-select: none;
+}
+
+#pbar .pb-fmt svg {
+  width: 14px;
+  height: 14px;
+}
+
+#fmtMenu {
+  position: absolute;
+  left: 0;
+  bottom: calc(100% + 8px);
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  background: rgba(24, 24, 27, 0.96);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--bd);
+  border-radius: 12px;
+  padding: 6px;
+  min-width: 158px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.68);
+  z-index: 25;
+  transform-origin: bottom left;
+  animation: popInBottom 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes popInBottom {
+  from { opacity: 0; transform: scale(0.92) translateY(6px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+#fmtMenu.open {
+  display: flex;
+}
+
+#fmtMenu .b {
+  justify-content: space-between;
+  height: 32px;
+  padding: 0 10px;
+  font-size: 11px;
+  width: 100%;
+}
 
 /* ILUMINAÇÃO E COR (CAMERA RAW) */
 .adj-box {
@@ -1590,30 +1645,35 @@ select option {
   border: 1px solid var(--bd);
 }
 
-/* TOAST DISCRETO */
+/* TOAST DISCRETO (CANTO SUPERIOR ESQUERDO - SURGE DA ESQUERDA PARA A DIREITA) */
 #toast {
   position: fixed;
-  bottom: calc(74px + var(--safe-b, 0px));
-  left: 50%;
-  transform: translateX(-50%) translateY(14px);
-  background: var(--el);
+  top: 46px;
+  left: 12px;
+  transform: translateX(-32px);
+  background: rgba(24, 24, 27, 0.96);
+  backdrop-filter: blur(10px);
   color: var(--tx);
   border: 1px solid var(--ac);
+  border-left: 3.5px solid var(--ac-light);
   padding: 8px 14px;
-  border-radius: 999px;
+  border-radius: 10px;
   font-size: 12px;
-  font-weight: 500;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55);
+  font-weight: 600;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.65);
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.2s, transform 0.2s;
-  z-index: 60;
+  transition: opacity 0.22s ease, transform 0.26s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 95;
   white-space: nowrap;
+  max-width: calc(100vw - 24px);
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 #toast.show {
   opacity: 1;
-  transform: translateX(-50%) translateY(0);
+  transform: translateX(0);
 }
 
 /* DESKTOP */
@@ -1701,13 +1761,18 @@ select option {
 
     <div id="pages"><div class="pg act" data-i="0"><canvas id="cv"></canvas></div></div>
 
-    <!-- PÁGINAS: indicador, adicionar, excluir e modo de visualização -->
+    <!-- PÁGINAS: indicador, adicionar, excluir, modo de visualização e formato rápido -->
     <div id="pbar">
       <button type="button" id="pgInd" class="pb-ind" title="Próxima página">1/1</button>
       <button type="button" id="pgAdd" class="pb-b" title="Adicionar página"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
       <button type="button" id="pgDup" class="pb-b" title="Duplicar página atual"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>
       <button type="button" id="pgDel" class="pb-b pb-del" title="Excluir página atual"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg></button>
       <button type="button" id="pgMode" class="pb-b" title="Modo de visualização"></button>
+      <button type="button" id="pgFmt" class="pb-fmt" title="Mudar formato da arte">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 7h8M8 17h8"/></svg>
+        <span id="pgFmtLbl">3:4</span>
+      </button>
+      <div id="fmtMenu"></div>
     </div>
 
     <!-- MENU FLUTUANTE DE ADIÇÃO DE ELEMENTOS (CANTO SUPERIOR DIREITO) -->
@@ -2764,6 +2829,9 @@ const FADE=o=>({id:nid(),k:'f',name:'Degradê / Luz',kind:'linear',c:'#000000',h
 
 function showToast(msg){
   const t=$('toast');
+  if(!t)return;
+  t.classList.remove('show');
+  void t.offsetWidth;
   t.textContent=msg;
   t.classList.add('show');
   clearTimeout(toastTimer);
@@ -2782,8 +2850,10 @@ function applySafeBottom(val) {
   rq();
 }
 
-function fresh(){
-  S={w:1080,h:1440,sel:null,safe:0,safeM:100,snap:1,bg:{im:null,x:540,y:720,sc:100,bl:0,lock:0,mode:'solid',c1:'#0f172a',c2:'#083344',ang:135},layers:[],pg:{a:0,l:[null]}};
+function fresh(blank=false){
+  const bgCol = blank ? '#ffffff' : '#0f172a';
+  S={w:1080,h:1440,sel:null,safe:0,safeM:100,snap:1,bg:{im:null,x:540,y:720,sc:100,bl:0,lock:0,mode:'solid',c1:bgCol,c2:'#083344',ang:135},layers:[],pg:{a:0,l:[null]}};
+  if(blank) return;
   const ftLayer = FT({role:'NOME DO LOCAL',text:'ENDEREÇO DO LOCAL'});
   S.layers.push(
     TXT({text:'CULTO',font:'Anton',size:300,color:'#ffffff',y:595}),
@@ -3761,7 +3831,7 @@ function addNewWk(){
   editWkIdx = null;
   blurTextFocus();
   stashCurrentWk();
-  fresh();
+  fresh(true);
   S.tabName = `Projeto ${WKS.length + 1}`;
   S.fileName = '';
   H = [ser()]; hi = 0; SELS = []; MULTI = false;
@@ -3771,7 +3841,7 @@ function addNewWk(){
   updateViewTransform();
   ui();
   save();
-  showToast(`Guia "${S.tabName}" criada`);
+  showToast(`Guia "${S.tabName}" criada em branco`);
 }
 
 let closeWkArm = null, closeWkTimer = 0;
@@ -4587,7 +4657,14 @@ function ui(){
   layoutPages();pgUi();
   syncSels();
   lays();ed();tb();
-  document.querySelectorAll('#sf button').forEach(b=>b.classList.toggle('on',b.dataset.v==S.w+'x'+S.h));
+  const curFmt = S.w+'x'+S.h;
+  document.querySelectorAll('#sf button').forEach(b=>b.classList.toggle('on',b.dataset.v==curFmt));
+  document.querySelectorAll('#fmtMenu button').forEach(b=>b.classList.toggle('on',b.dataset.v==curFmt));
+  if($('pgFmtLbl')){
+    const fObj = FMT.find(f=>f[0]===curFmt);
+    const ratioMatch = fObj && fObj[1].match(/\(([^)]+)\)/);
+    $('pgFmtLbl').textContent = ratioMatch ? ratioMatch[1] : `${S.w}×${S.h}`;
+  }
   document.querySelectorAll('#bgModeSeg button').forEach(b=>b.classList.toggle('on',b.dataset.v===S.bg.mode));
   $('bgSolidBox').style.display=S.bg.mode==='solid'?'flex':'none';
   $('bgGradBox').style.display=S.bg.mode==='grad'?'flex':'none';
@@ -4864,10 +4941,8 @@ $('bgClearImg').onclick=()=>{
 };
 $('blk').onchange=e=>{S.bg.lock=+e.target.checked;commit();ui()};
 
-$('sf').innerHTML=FMT.map(f=>`<button type="button" data-v="${f[0]}">${f[1]}</button>`).join('');
-$('sf').onclick=e=>{
-  const b=e.target.closest('button');if(!b)return;
-  const v=b.dataset.v;if(!v)return;
+function applyArtFormat(v){
+  if(!v) return;
   const[w,h]=v.split('x').map(Number);
   if(w===S.w && h===S.h) return;
   const oldW=S.w, oldH=S.h;
@@ -4893,8 +4968,44 @@ $('sf').onclick=e=>{
     S.bg.x=Math.round(S.bg.x*fx);
     S.bg.y=Math.round(S.bg.y*fy);
   }
-  enforceAllBounds();commit();ui();
+  enforceAllBounds();
+  PGF=1;
+  commit();
+  ui();
+  const fObj = FMT.find(f=>f[0]===v);
+  if(fObj) showToast('Formato: ' + fObj[1]);
+}
+
+$('sf').innerHTML=FMT.map(f=>`<button type="button" data-v="${f[0]}">${f[1]}</button>`).join('');
+$('sf').onclick=e=>{
+  const b=e.target.closest('button');if(!b)return;
+  applyArtFormat(b.dataset.v);
 };
+
+$('fmtMenu').innerHTML=FMT.map(f=>{
+  const [name, ratio] = f[1].split(' (');
+  return `<button type="button" class="b" data-v="${f[0]}"><span>${name}</span><span style="opacity:0.75;font-size:10px">${ratio ? '('+ratio : ''}</span></button>`;
+}).join('');
+$('pgFmt').onclick=e=>{
+  e.stopPropagation();
+  blurTextFocus();
+  const m=$('fmtMenu');
+  const isOpen=m.classList.toggle('open');
+  $('pgFmt').classList.toggle('on', isOpen);
+};
+$('fmtMenu').onclick=e=>{
+  e.stopPropagation();
+  const b=e.target.closest('button');if(!b)return;
+  $('fmtMenu').classList.remove('open');
+  $('pgFmt').classList.remove('on');
+  applyArtFormat(b.dataset.v);
+};
+document.addEventListener('pointerdown',e=>{
+  if($('fmtMenu') && $('fmtMenu').classList.contains('open') && !e.target.closest('#pgFmt') && !e.target.closest('#fmtMenu')){
+    $('fmtMenu').classList.remove('open');
+    $('pgFmt').classList.remove('on');
+  }
+});
 
 $('ksafe').onchange=e=>{
   S.safe=+e.target.checked;
@@ -5953,6 +6064,7 @@ window.addEventListener('keydown', e => {
   // Limpar seleção: Escape
   if(e.key === 'Escape'){
     if(addWrap.classList.contains('open')) closeAddMenu();
+    else if($('fmtMenu') && $('fmtMenu').classList.contains('open')){ $('fmtMenu').classList.remove('open'); $('pgFmt').classList.remove('on'); }
     else if(S.sel || SELS.length){ MULTI = false; clearSelection(); }
     return;
   }
