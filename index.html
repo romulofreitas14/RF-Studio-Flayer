@@ -143,7 +143,7 @@ button, input, select, textarea {
   background: var(--ac-soft);
 }
 
-/* MENU FLUTUANTE DE ADIÇÃO COMPACTO (APENAS SINAL DE +) */
+/* MENU FLUTUANTE DE ADIÇÃO (CANTO SUPERIOR DIREITO, PRÓXIMO AOS CONTROLES) */
 #addWrap {
   position: absolute;
   right: 12px;
@@ -190,26 +190,28 @@ button, input, select, textarea {
 
 #addBtn {
   order: 1;
-  width: 38px;
-  height: 38px;
+  width: 40px;
+  height: 40px;
   padding: 0;
-  border-radius: 11px;
+  border-radius: 12px;
   background: linear-gradient(135deg, var(--ac), var(--ac-dark));
   color: #fff;
+  font-size: 12px;
+  font-weight: 600;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 6px;
   box-shadow: 0 6px 20px rgba(6, 182, 212, 0.35);
   border: 1px solid rgba(255, 255, 255, 0.18);
-  cursor: pointer;
   user-select: none;
   transition: transform 0.15s, background 0.15s;
 }
 
 #addBtn svg {
-  width: 18px;
-  height: 18px;
-  stroke-width: 2.6;
+  width: 16px;
+  height: 16px;
+  stroke-width: 2.4;
   transition: transform 0.2s ease;
 }
 
@@ -224,7 +226,7 @@ button, input, select, textarea {
   transform: rotate(45deg);
 }
 
-/* BARRA FLUTUANTE SUPERIOR CENTRALIZADA */
+/* BARRA FLUTUANTE SUPERIOR FIXA */
 #fbar {
   position: absolute;
   top: 8px;
@@ -239,7 +241,7 @@ button, input, select, textarea {
   border-radius: 12px;
   padding: 4px;
   z-index: 12;
-  max-width: calc(100% - 116px);
+  max-width: calc(100% - 120px);
   overflow-x: auto;
   scrollbar-width: none;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
@@ -1221,6 +1223,109 @@ select option {
   line-height: 1.4;
 }
 
+/* ILUMINAÇÃO E COR (CAMERA RAW) */
+.adj-box {
+  border: 1px solid var(--bd);
+  border-radius: 10px;
+  background: var(--in);
+  padding: 0 10px 10px;
+}
+
+.adj-box > summary {
+  list-style: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 9px 0;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ac-light);
+}
+
+.adj-box > summary::-webkit-details-marker { display: none; }
+
+.adj-box > summary svg {
+  width: 15px;
+  height: 15px;
+  margin-right: 6px;
+  vertical-align: -3px;
+}
+
+.adj-box > summary::after {
+  content: '▾';
+  color: var(--mu);
+  margin-left: auto;
+  transition: transform 0.15s;
+}
+
+.adj-box[open] > summary::after { transform: rotate(180deg); }
+
+.adj-tag {
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--mu);
+  border: 1px solid var(--bd);
+  border-radius: 999px;
+  padding: 1px 6px;
+  margin-left: auto;
+}
+
+.adj-grp {
+  margin: 10px 0 6px;
+  padding-bottom: 3px;
+  border-bottom: 1px solid var(--bd);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--mu);
+}
+
+.adj-row { margin-bottom: 8px; }
+
+.adj-rng {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 24px;
+  margin: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.adj-rng::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: 999px;
+  background: var(--bd);
+}
+
+.adj-rng::-moz-range-track {
+  height: 4px;
+  border-radius: 999px;
+  background: var(--bd);
+}
+
+.adj-rng::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  margin-top: -7px;
+  border-radius: 50%;
+  background: var(--ac-light);
+  border: 2px solid var(--bg);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+}
+
+.adj-rng::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--ac-light);
+  border: 2px solid var(--bg);
+}
+
 /* MODAL DE EXPORTAÇÃO */
 #mo {
   position: fixed;
@@ -1331,7 +1436,7 @@ select option {
 <body>
 <div id="app">
   <div id="stage">
-    <!-- BARRA FLUTUANTE SUPERIOR CENTRALIZADA (DESFAZER, REFAZER, MÚLTIPLA SELEÇÃO, DUPLICAR, SUBIR E DESCER) -->
+    <!-- BARRA FLUTUANTE SUPERIOR FIXA (DESFAZER, REFAZER, MÚLTIPLA SELEÇÃO, DUPLICAR, SUBIR E DESCER) -->
     <div id="fbar">
       <button class="b" data-a="un" title="Desfazer">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7v6h6"/><path d="M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13"/></svg>
@@ -1357,9 +1462,9 @@ select option {
 
     <canvas id="cv"></canvas>
 
-    <!-- MENU FLUTUANTE DE ADIÇÃO DE ELEMENTOS (CANTO SUPERIOR DIREITO, APENAS SINAL DE +) -->
+    <!-- MENU FLUTUANTE DE ADIÇÃO DE ELEMENTOS (CANTO SUPERIOR DIREITO) -->
     <div id="addWrap">
-      <button type="button" id="addBtn" title="Adicionar elementos à arte" aria-label="Adicionar elementos à arte">
+      <button type="button" id="addBtn" title="Adicionar elementos à arte">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
       </button>
       <div id="addMenu">
@@ -1463,7 +1568,7 @@ select option {
         <input type="file" id="fi" accept="image/*" hidden>
         <input type="file" id="fl" accept="image/*" hidden>
         <div id="lay" style="display:flex;flex-direction:column;gap:6px"></div>
-        <div class="hint">Segure nos 6 pontinhos (⋮⋮) para reordenar camadas. Use o botão "+" no canto superior direito para inserir novos itens.</div>
+        <div class="hint">Segure nos 6 pontinhos (⋮⋮) para reordenar camadas. Use o botão "+ Adicionar" no canto inferior esquerdo para inserir novos itens.</div>
       </div>
 
       <!-- ABA EDITAR -->
@@ -1608,21 +1713,6 @@ select option {
               <button type="button" data-v="100" class="on">Margem 100px</button>
             </div>
           </div>
-        </div>
-
-        <div class="c">
-          <div class="num-row">
-            <span class="num-lbl">Margem Inferior (Google Sites / Android)</span>
-            <div class="num-box">
-              <button type="button" class="num-step" data-target="sbNum" data-dir="-1">−</button>
-              <div class="num-val-wrap">
-                <input type="number" class="num-inp" id="sbNum" min="0" max="90" step="1" value="0">
-                <span class="num-unit">px</span>
-              </div>
-              <button type="button" class="num-step" data-target="sbNum" data-dir="1">+</button>
-            </div>
-          </div>
-          <div class="hint">Ajusta a altura da barra inferior para não ficar coberta pelos botões do celular dentro do Google Sites.</div>
         </div>
 
         <div class="c">
@@ -2203,19 +2293,12 @@ function showToast(msg){
 
 // Adaptação automática para Google Sites no Android
 let safeBottom = 0;
-try {
-  const savedSb = localStorage.getItem('rfsf_safeb');
-  if (savedSb !== null) safeBottom = Math.max(0, Math.min(90, parseInt(savedSb) || 0));
-  else if (window.self !== window.top && window.innerWidth < 900) safeBottom = 48;
-} catch(e) {
-  if (window.innerWidth < 900) safeBottom = 48;
-}
+try { localStorage.removeItem('rfsf_safeb'); } catch(e) {}
 
 function applySafeBottom(val) {
   safeBottom = Math.max(0, Math.min(90, parseInt(val) || 0));
   document.documentElement.style.setProperty('--safe-b', safeBottom + 'px');
   if ($('sbNum')) $('sbNum').value = safeBottom;
-  try { localStorage.setItem('rfsf_safeb', safeBottom); } catch(e) {}
   setLv(lv);
   rq();
 }
@@ -2366,14 +2449,117 @@ function maskit(t,w,h,m,i){
   t.globalCompositeOperation='destination-in';t.fillStyle=g;t.fillRect(0,0,w,h);
 }
 
+// ---- ILUMINAÇÃO E COR (estilo Camera Raw) para camadas de imagem
+const ADJ_KEYS=['ae','ac','ahl','asd','awh','abk','atp','atn','avb','asa','acl','ash','avg'];
+const ADJ_GROUPS=[
+  ['Luz',[['ae','Exposição',-100,100],['ac','Contraste',-100,100],['ahl','Realces',-100,100],['asd','Sombras',-100,100],['awh','Brancos',-100,100],['abk','Pretos',-100,100]]],
+  ['Cor',[['atp','Temperatura',-100,100],['atn','Matiz',-100,100],['avb','Vibração',-100,100],['asa','Saturação',-100,100]]],
+  ['Detalhes e Efeitos',[['acl','Clareza',-100,100],['ash','Nitidez',0,100],['avg','Vinheta',-100,100]]]
+];
+let ADJ_OPEN=false;
+const adjKey=l=>ADJ_KEYS.map(k=>+l[k]||0).join(',');
+const hasAdj=l=>ADJ_KEYS.some(k=>+l[k]);
+const clamp255=v=>v<0?0:v>255?255:v;
+
+function adjRow(l,k,t,a,b){
+  const v=+l[k]||0;
+  return `<div class="adj-row"><div class="l"><span>${t}</span><b data-av="${k}">${v>0&&a<0?'+':''}${v}</b></div><input type="range" class="adj-rng" data-k="${k}" min="${a}" max="${b}" step="1" value="${v}"></div>`;
+}
+
+function adjPanel(l){
+  const sun='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>';
+  return `<details class="adj-box" ${ADJ_OPEN?'open':''}>
+    <summary><span>${sun}Iluminação e Cor</span><span class="adj-tag">Camera Raw</span></summary>
+    ${ADJ_GROUPS.map(([g,items])=>`<div class="adj-grp">${g}</div>`+items.map(([k,t,a,b])=>adjRow(l,k,t,a,b)).join('')).join('')}
+    <div class="hint" style="margin-bottom:6px">Toque duas vezes no nome de um controle para zerá-lo.</div>
+    <button type="button" class="b" id="adjReset" style="width:100%">Redefinir ajustes</button>
+  </details>`;
+}
+
+function adjLut(l){
+  const ex=(+l.ae||0)/100,ct=(+l.ac||0)/100,hl=(+l.ahl||0)/100,sd=(+l.asd||0)/100,wh=(+l.awh||0)/100,bk=(+l.abk||0)/100;
+  const lut=new Uint8ClampedArray(256),gain=Math.pow(2,ex*2),c01=v=>v<0?0:v>1?1:v;
+  for(let i=0;i<256;i++){
+    let x=i/255;
+    if(ex)x=c01(Math.pow(Math.pow(x,2.2)*gain,1/2.2));
+    x=c01(x+bk*0.22*Math.pow(1-x,4));
+    x=c01(x+sd*0.32*Math.exp(-Math.pow((x-0.25)/0.2,2)));
+    x=c01(x+hl*0.32*Math.exp(-Math.pow((x-0.75)/0.2,2)));
+    x=c01(x+wh*0.22*Math.pow(x,4));
+    if(ct>0){const s=x*x*(3-2*x);x+=(s-x)*ct}
+    else if(ct<0){x+=(0.5-x)*(-ct)*0.6}
+    lut[i]=Math.round(c01(x)*255);
+  }
+  return lut;
+}
+
+function adjBlur(src,W,H,r){
+  const c=document.createElement('canvas');c.width=W;c.height=H;const t=c.getContext('2d');
+  if(!('filter' in t))return null;
+  t.filter=`blur(${r}px)`;t.drawImage(src,0,0);t.filter='none';
+  return t.getImageData(0,0,W,H).data;
+}
+
+function applyAdj(m,W,H,l){
+  const c=document.createElement('canvas');c.width=W;c.height=H;const t=c.getContext('2d');
+  t.drawImage(m,0,0,W,H);
+  const id=t.getImageData(0,0,W,H),d=id.data,n=d.length,mx=Math.max(W,H);
+  const cl=(+l.acl||0)/100,sh=(+l.ash||0)/100;
+  const bC=cl?adjBlur(c,W,H,Math.max(2,mx*0.012)):null;
+  const bS=sh?adjBlur(c,W,H,Math.max(0.6,mx*0.0012)):null;
+  const lut=adjLut(l);
+  const tp=(+l.atp||0)/100,tn=(+l.atn||0)/100,vb=(+l.avb||0)/100,sa=(+l.asa||0)/100,vg=(+l.avg||0)/100;
+  const rM=1+tp*0.22+tn*0.06,gM=1-tn*0.18,bM=1-tp*0.22+tn*0.06;
+  const doWB=tp||tn,doSat=sa||vb,cx0=W/2,cy0=H/2;
+  for(let i=0,p=0;i<n;i+=4,p++){
+    if(!d[i+3])continue;
+    let r=d[i],g=d[i+1],b=d[i+2];
+    if(bC||bS){
+      const y=0.299*r+0.587*g+0.114*b;let add=0;
+      if(bC){
+        const dy=y-(0.299*bC[i]+0.587*bC[i+1]+0.114*bC[i+2]);
+        const w=Math.max(0.2,1-Math.abs(y/255-0.5)*1.6);
+        add+=dy*cl*1.3*w;
+      }
+      if(bS){
+        const dy=y-(0.299*bS[i]+0.587*bS[i+1]+0.114*bS[i+2]);
+        add+=dy*sh*1.6;
+      }
+      r+=add;g+=add;b+=add;
+    }
+    r=lut[clamp255(r)|0];g=lut[clamp255(g)|0];b=lut[clamp255(b)|0];
+    if(doWB){r*=rM;g*=gM;b*=bM}
+    if(doSat){
+      const gy=0.299*r+0.587*g+0.114*b,mxc=Math.max(r,g,b),mnc=Math.min(r,g,b),s=mxc?(mxc-mnc)/mxc:0;
+      const f=Math.max(0,1+sa+vb*(1-s));
+      r=gy+(r-gy)*f;g=gy+(g-gy)*f;b=gy+(b-gy)*f;
+    }
+    if(vg){
+      const dx=((p%W)-cx0)/cx0,dy=(((p/W)|0)-cy0)/cy0;
+      let tt=(Math.sqrt(dx*dx+dy*dy)/1.414-0.3)/0.7;tt=tt<0?0:tt>1?1:tt;
+      const w=tt*tt*(3-2*tt);
+      if(vg<0){const mu=1+vg*w*0.9;r*=mu;g*=mu;b*=mu}
+      else{r+=(255-r)*vg*w;g+=(255-g)*vg*w;b+=(255-b)*vg*w}
+    }
+    d[i]=clamp255(r);d[i+1]=clamp255(g);d[i+2]=clamp255(b);
+  }
+  t.putImageData(id,0,0);
+  return c;
+}
+
 function proc(l){
   const m=IM[l.im];if(!m)return null;
-  const key=l.im+'|'+l.bl+'|'+l.mk+'|'+l.mi,pc=PC[l.id];
+  const adj=hasAdj(l);
+  const key=l.im+'|'+l.bl+'|'+l.mk+'|'+l.mi+'|'+adjKey(l),pc=PC[l.id];
   if(pc&&pc.k==key)return pc.c;
-  const c=document.createElement('canvas');c.width=m.width;c.height=m.height;const t=c.getContext('2d');
-  if(l.bl&&'filter' in t)t.filter=`blur(${l.bl*m.width/1080*1.1}px)`;
-  t.drawImage(m,0,0);t.filter='none';
-  if(l.mk&&l.mk!='none')maskit(t,m.width,m.height,l.mk,l.mi/100);
+  const kk=adj?Math.min(1,2200/Math.max(m.width,m.height)):1;
+  const W=Math.max(1,Math.round(m.width*kk)),Hh=Math.max(1,Math.round(m.height*kk));
+  let src=m;
+  if(adj){try{src=applyAdj(m,W,Hh,l)}catch(e){src=m}}
+  const c=document.createElement('canvas');c.width=W;c.height=Hh;const t=c.getContext('2d');
+  if(l.bl&&'filter' in t)t.filter=`blur(${l.bl*m.width/1080*1.1*kk}px)`;
+  t.drawImage(src,0,0,W,Hh);t.filter='none';
+  if(l.mk&&l.mk!='none')maskit(t,W,Hh,l.mk,l.mi/100);
   PC[l.id]={k:key,c};return c;
 }
 
@@ -3276,7 +3462,8 @@ function ed(){
       rg('rot','Rotação',-180,180,1,'°')+
       rg('bl','Desfoque (Blur)',0,40,1,'px')+
       `<div class="g">${sl('mk','Máscara de Borda',MASK)}${rg('mi','Suavidade',0,100,1,'%',true)}</div>`+
-      sl('bm','Modo de Mesclagem',BLEND);
+      sl('bm','Modo de Mesclagem',BLEND)+
+      adjPanel(l);
   }
   E.innerHTML=`
     <div class="c">
@@ -3292,6 +3479,8 @@ function ed(){
       </div>
       <fieldset ${l.lock?'disabled':''}>${h}</fieldset>
     </div>`;
+  const adjR=$('adjReset');
+  if(adjR) adjR.onclick=()=>{if(l.lock)return;ADJ_KEYS.forEach(k=>{delete l[k]});commit();ui();rq()};
   const elb=$('edLockBtn');
   if(elb) elb.onclick=()=>{l.lock=l.lock?0:1;commit();ui()};
   const edb=$('edDelBtn');
@@ -3488,7 +3677,11 @@ window.addEventListener('pointercancel', () => stopStepHold(true));
 $('ed').addEventListener('input',e=>{
   const l=sel(),t=e.target,k=t.dataset.k;if(!l||!k||l.lock)return;
   if(t.type==='checkbox') l[k]=+t.checked;
-  else if(t.type==='number'){
+  else if(t.type==='range'){
+    const val=Number(t.value)||0;l[k]=val;
+    const o=$('ed').querySelector(`[data-av="${k}"]`);
+    if(o)o.textContent=(val>0&&+t.min<0?'+':'')+val;
+  } else if(t.type==='number'){
     const min=+t.min, max=+t.max;
     const val = Math.max(min, Math.min(max, Number(t.value)||0));
     if(k==='posXPct') l.x = Math.round((val / 100) * S.w);
@@ -3516,6 +3709,16 @@ $('ed').addEventListener('change',e=>{
   commit();
   if(t.type=='checkbox'||t.tagName=='SELECT') ed();
   lays();tb();
+});
+
+document.addEventListener('toggle',e=>{if(e.target&&e.target.classList&&e.target.classList.contains('adj-box'))ADJ_OPEN=e.target.open},true);
+$('ed').addEventListener('dblclick',e=>{
+  const row=e.target.closest('.adj-row');if(!row)return;
+  const l=sel();if(!l||l.lock)return;
+  const inp=row.querySelector('input[type=range]');if(!inp)return;
+  delete l[inp.dataset.k];inp.value=0;
+  const o=row.querySelector('[data-av]');if(o)o.textContent='0';
+  commit();rq();
 });
 
 function updateResBadge(){
@@ -3780,7 +3983,6 @@ $('sSafeM').onclick=e=>{
   enforceAllBounds();commit();ui();
 };
 $('ksnap').onchange=e=>{S.snap=+e.target.checked};
-$('sbNum').oninput=e=>applySafeBottom(e.target.value);
 
 $('ff').onchange=async e=>{
   const f=e.target.files[0];if(!f)return;
