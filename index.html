@@ -1,26 +1,27 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <title>RF Studio Flyers</title>
-<link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Alex+Brush&family=Alfa+Slab+One&family=Allura&family=Anton&family=Archivo+Black&family=Barlow+Condensed:wght@600;700;800&family=Bebas+Neue&family=Bodoni+Moda:wght@600;800&family=Caveat:wght@400..700&family=Cinzel:wght@600;800&family=Cormorant+Garamond:wght@600;700&family=Courgette&family=Dancing+Script:wght@400..700&family=Fjalla+One&family=Great+Vibes&family=Inter:wght@300;400;500;600;700;800&family=Kaushan+Script&family=Lilita+One&family=Montserrat:wght@400..900&family=Oswald:wght@400..700&family=Pacifico&family=Permanent+Marker&family=Playfair+Display:wght@400..900&family=Plus+Jakarta+Sans:wght@500;700;800&family=Poppins:wght@300..900&family=Prata&family=Raleway:wght@500;700;800&family=Righteous&family=Sacramento&family=Saira+Condensed:wght@600;700;800&family=Satisfy&family=Six+Caps&family=Syne:wght@700;800&family=Teko:wght@400..700&family=Titan+One&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Alex+Brush&family=Alfa+Slab+One&family=Allura&family=Anton&family=Archivo+Black&family=Barlow+Condensed:wght@600;700&family=Bebas+Neue&family=Bodoni+Moda:wght@600;700&family=Caveat:wght@700&family=Cinzel:wght@600;700&family=Cormorant+Garamond:wght@600;700&family=Courgette&family=Dancing+Script:wght@700&family=Fjalla+One&family=Great+Vibes&family=Inter:wght@400;600;800&family=Kaushan+Script&family=Lilita+One&family=Montserrat:wght@500;700;800&family=Oswald:wght@500;700&family=Pacifico&family=Permanent+Marker&family=Playfair+Display:ital,wght@0,700;1,400&family=Plus+Jakarta+Sans:wght@500;700;800&family=Poppins:wght@400;600;700&family=Prata&family=Raleway:wght@500;700;800&family=Righteous&family=Sacramento&family=Saira+Condensed:wght@600;700&family=Satisfy&family=Six+Caps&family=Syne:wght@700;800&family=Teko:wght@600;700&family=Titan+One&display=swap" rel="stylesheet">
 <style>
 :root {
   --bg: #09090b;
   --sf: #18181b;
-  --el: #232329;
+  --el: #27272a;
   --in: #121215;
-  --bd: #2e2e36;
+  --bd: #3f3f46;
+  --tx: #f4f4f5;
+  --mu: #a1a1aa;
   --ac: #06b6d4;
   --ac-light: #22d3ee;
   --ac-dark: #0284c7;
-  --ac-soft: rgba(6, 182, 212, 0.15);
-  --tx: #f4f4f5;
-  --mu: #a1a1aa;
+  --ac-soft: rgba(6, 182, 212, 0.14);
   --dg: #ef4444;
-  --dg-soft: rgba(239, 68, 68, 0.15);
-  --safe-b: 0px;
+  --dg-soft: rgba(239, 68, 68, 0.14);
 }
 
 * {
@@ -31,132 +32,126 @@
 html, body {
   margin: 0;
   padding: 0;
-  width: 100%;
-  height: 100%;
   position: fixed;
   inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
   background: var(--bg);
   color: var(--tx);
-  font: 13px 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  overflow: hidden;
-  overscroll-behavior: none;
+  font: 13px/1.35 Inter, system-ui, -apple-system, sans-serif;
+  user-select: none;
 }
 
-button, select, input, textarea {
+button, input, select, textarea {
   font: inherit;
   color: inherit;
-}
-
-button {
-  border: 0;
   background: none;
-  cursor: pointer;
+  border: 0;
 }
 
 #app {
-  width: 100%;
-  height: 100%;
   display: flex;
   flex-direction: column;
+  width: 100%;
+  height: 100%;
   padding-bottom: var(--safe-b, 0px);
   overflow: hidden;
 }
 
-/* PALCO CENTRAL */
+/* ÁREA DO CANVAS */
 #stage {
   flex: 1 1 0%;
-  min-height: 0;
+  min-height: 120px;
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 54px 12px 10px;
-  position: relative;
+  padding: 52px 10px 10px;
+  overflow: hidden;
   background-color: var(--bg);
-  background-image: radial-gradient(#232329 1px, transparent 1px);
+  background-image: radial-gradient(#27272a 1px, transparent 1px);
   background-size: 18px 18px;
   touch-action: none;
-  overflow: hidden;
 }
 
-canvas {
+#cv {
   max-width: 100%;
   max-height: 100%;
   width: auto;
   height: auto;
-  object-fit: contain;
   border-radius: 6px;
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.68), 0 0 0 1px rgba(255, 255, 255, 0.08);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.07);
   touch-action: none;
-  cursor: grab;
+  transform-origin: center center;
+  will-change: transform;
 }
 
-canvas:active {
-  cursor: grabbing;
-}
-
-/* PÍLULA FLUTUANTE DE ZOOM DO PALCO (ESTILO CANVA / STUDIO) */
+/* PÍLULA FLUTUANTE DE ZOOM (PINCH-TO-ZOOM + RESET) */
 #zbar {
   position: absolute;
   right: 12px;
-  bottom: 12px;
+  bottom: 10px;
   display: inline-flex;
   align-items: center;
-  background: rgba(24, 24, 27, 0.94);
+  gap: 2px;
+  background: rgba(24, 24, 27, 0.92);
   backdrop-filter: blur(8px);
   border: 1px solid var(--bd);
   border-radius: 999px;
   padding: 3px 5px;
-  gap: 2px;
-  z-index: 10;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.55);
-  user-select: none;
-}
-
-#zbar button {
-  height: 28px;
-  border-radius: 999px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--tx);
-  font-size: 14px;
-  font-weight: 600;
-  transition: background 0.15s, color 0.15s, transform 0.1s;
+  z-index: 12;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
 }
 
 #zbar .zb-step {
   width: 28px;
-  color: var(--mu);
+  height: 28px;
+  border-radius: 999px;
+  color: var(--tx);
+  font-size: 16px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  user-select: none;
 }
 
 #zbar .zb-step:hover, #zbar .zb-step:active {
-  background: var(--el);
+  background: var(--ac-soft);
   color: var(--ac-light);
 }
 
-#zbar #zReset {
+#zReset {
   min-width: 52px;
-  padding: 0 8px;
+  height: 28px;
+  padding: 0 6px;
+  border-radius: 999px;
+  color: var(--ac-light);
   font-size: 12px;
   font-weight: 700;
-  color: var(--ac-light);
   font-variant-numeric: tabular-nums;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  user-select: none;
 }
 
-#zbar #zReset:hover, #zbar #zReset:active {
+#zReset:hover, #zReset:active {
   background: var(--ac-soft);
-  transform: scale(0.96);
 }
 
-/* MENU FLUTUANTE RETRÁTIL DE ADIÇÃO (CANTO INFERIOR ESQUERDO) */
+/* MENU FLUTUANTE DE ADIÇÃO (CANTO SUPERIOR DIREITO, PRÓXIMO AOS CONTROLES) */
 #addWrap {
   position: absolute;
-  left: 12px;
-  bottom: 12px;
-  z-index: 12;
+  right: 12px;
+  top: 8px;
+  z-index: 14;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: flex-end;
   gap: 8px;
 }
 
@@ -170,13 +165,14 @@ canvas:active {
   border-radius: 14px;
   padding: 8px;
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.68);
-  width: 252px;
-  transform-origin: bottom left;
-  animation: popIn 0.16s cubic-bezier(0.16, 1, 0.3, 1);
+  width: 256px;
+  transform-origin: top right;
+  animation: popInTop 0.16s cubic-bezier(0.16, 1, 0.3, 1);
+  order: 2;
 }
 
-@keyframes popIn {
-  from { opacity: 0; transform: scale(0.92) translateY(6px); }
+@keyframes popInTop {
+  from { opacity: 0; transform: scale(0.92) translateY(-6px); }
   to { opacity: 1; transform: scale(1) translateY(0); }
 }
 
@@ -193,9 +189,10 @@ canvas:active {
 }
 
 #addBtn {
-  height: 36px;
+  order: 1;
+  height: 42px;
   padding: 0 13px;
-  border-radius: 999px;
+  border-radius: 12px;
   background: linear-gradient(135deg, var(--ac), var(--ac-dark));
   color: #fff;
   font-size: 12px;
@@ -204,8 +201,8 @@ canvas:active {
   align-items: center;
   justify-content: center;
   gap: 6px;
-  box-shadow: 0 6px 20px rgba(6, 182, 212, 0.38);
-  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow: 0 6px 20px rgba(6, 182, 212, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.18);
   user-select: none;
   transition: transform 0.15s, background 0.15s;
 }
@@ -228,12 +225,11 @@ canvas:active {
   transform: rotate(45deg);
 }
 
-/* BARRA FLUTUANTE SUPERIOR */
+/* BARRA FLUTUANTE SUPERIOR FIXA */
 #fbar {
   position: absolute;
   top: 8px;
-  left: 50%;
-  transform: translateX(-50%);
+  left: 12px;
   display: flex;
   align-items: center;
   gap: 4px;
@@ -242,8 +238,8 @@ canvas:active {
   border: 1px solid var(--bd);
   border-radius: 12px;
   padding: 4px;
-  z-index: 10;
-  max-width: calc(100% - 16px);
+  z-index: 12;
+  max-width: calc(100% - 148px);
   overflow-x: auto;
   scrollbar-width: none;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
@@ -253,8 +249,255 @@ canvas:active {
   display: none;
 }
 
-#fbar.collapsed .fb-item {
+.multi-badge {
+  font-size: 10px;
+  font-weight: 700;
+  background: var(--ac);
+  color: #09090b;
+  border-radius: 999px;
+  padding: 1px 5px;
+  line-height: 1.2;
+}
+
+/* BOTÕES DE MAIÚSCULO / MINÚSCULO EM QUALQUER ENTRADA DE TEXTO */
+.case-bar {
+  display: inline-flex;
+  gap: 3px;
+}
+
+.case-btn {
+  padding: 2px 6px;
+  height: 20px;
+  border-radius: 5px;
+  background: var(--in);
+  border: 1px solid var(--bd);
+  color: var(--mu);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.12s;
+}
+
+.case-btn:hover, .case-btn:active {
+  color: var(--ac-light);
+  border-color: var(--ac);
+  background: var(--ac-soft);
+}
+
+/* BOTÃO DE COR ESTILO PHOTOSHOP */
+.ps-color-btn {
+  width: 100%;
+  height: 34px;
+  border: 1px solid var(--bd);
+  border-radius: 8px;
+  background: var(--in);
+  padding: 4px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+
+.ps-color-btn:hover, .ps-color-btn:active {
+  border-color: var(--ac);
+}
+
+.ps-color-chip {
+  width: 22px;
+  height: 22px;
+  border-radius: 5px;
+  border: 1px solid rgba(255,255,255,0.28);
+  flex-shrink: 0;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.35);
+}
+
+.ps-color-hex {
+  font-size: 11px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--tx);
+  text-transform: uppercase;
+  flex: 1;
+  text-align: left;
+}
+
+/* MODAL SELETOR DE CORES ESTILO PHOTOSHOP */
+#psColorMo {
+  position: fixed;
+  inset: 0;
+  background: rgba(9, 9, 11, 0.72);
+  backdrop-filter: blur(6px);
   display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  z-index: 80;
+}
+
+.ps-card {
+  background: var(--sf);
+  border: 1px solid var(--bd);
+  border-radius: 16px;
+  padding: 14px;
+  width: 100%;
+  max-width: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+  box-shadow: 0 24px 60px rgba(0,0,0,0.78);
+}
+
+.ps-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ac-light);
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+
+.ps-body {
+  display: flex;
+  gap: 10px;
+  height: 190px;
+  user-select: none;
+}
+
+#psSV {
+  flex: 1;
+  height: 100%;
+  border-radius: 10px;
+  position: relative;
+  border: 1px solid var(--bd);
+  overflow: hidden;
+  touch-action: none;
+  cursor: crosshair;
+  background: #ff0000;
+}
+
+#psSV::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, #ffffff, rgba(255,255,255,0));
+}
+
+#psSV::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(0,0,0,0), #000000);
+}
+
+#psSVCur {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid #ffffff;
+  box-shadow: 0 0 0 1.5px #000000, 0 2px 6px rgba(0,0,0,0.6);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+#psHue {
+  width: 26px;
+  height: 100%;
+  border-radius: 10px;
+  position: relative;
+  border: 1px solid var(--bd);
+  touch-action: none;
+  cursor: ns-resize;
+  background: linear-gradient(to bottom, #ff0000 0%, #ffff00 17%, #00ff00 33%, #00ffff 50%, #0000ff 67%, #ff00ff 83%, #ff0000 100%);
+}
+
+#psHueCur {
+  position: absolute;
+  left: -2px;
+  right: -2px;
+  height: 7px;
+  border-radius: 4px;
+  border: 2px solid #ffffff;
+  box-shadow: 0 0 0 1px #000000;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.ps-info-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ps-compare {
+  display: flex;
+  width: 56px;
+  height: 34px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--bd);
+  flex-shrink: 0;
+}
+
+.ps-compare > div {
+  flex: 1;
+  height: 100%;
+}
+
+.ps-hex-wrap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  background: var(--in);
+  border: 1px solid var(--bd);
+  border-radius: 8px;
+  padding: 0 8px;
+  height: 34px;
+}
+
+.ps-hex-wrap span {
+  color: var(--mu);
+  font-weight: 700;
+  font-size: 12px;
+  margin-right: 3px;
+}
+
+#psHexInp {
+  border: 0 !important;
+  background: transparent !important;
+  padding: 0 !important;
+  font-weight: 700;
+  font-size: 12px;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+  width: 100%;
+}
+
+.ps-swatches {
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  gap: 5px;
+}
+
+.ps-sw {
+  aspect-ratio: 1;
+  border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.2);
+  cursor: pointer;
+  transition: transform 0.12s;
+}
+
+.ps-sw:hover, .ps-sw:active {
+  transform: scale(1.12);
+  border-color: #fff;
 }
 
 .b {
@@ -991,32 +1234,38 @@ select option {
 <body>
 <div id="app">
   <div id="stage">
-    <!-- BARRA FLUTUANTE SUPERIOR ENXUTA (DESFAZER, REFAZER, DUPLICAR, SUBIR E DESCER CAMADA) -->
+    <!-- BARRA FLUTUANTE SUPERIOR FIXA (DESFAZER, REFAZER, MÚLTIPLA SELEÇÃO, DUPLICAR, SUBIR E DESCER) -->
     <div id="fbar">
-      <button class="b fb-item" data-a="un" title="Desfazer">
+      <button class="b" data-a="un" title="Desfazer">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7v6h6"/><path d="M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13"/></svg>
       </button>
-      <button class="b fb-item" data-a="re" title="Refazer">
+      <button class="b" data-a="re" title="Refazer">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M21 7v6h-6"/><path d="M3 17a9 9 0 0 1 9-9 9 9 0 0 1 6 2.3L21 13"/></svg>
       </button>
-      <button class="b fb-item" data-a="dup" title="Duplicar Camada">
+      <button class="b" data-a="multi" id="btnMulti" title="Ativar / Desativar Múltipla Seleção">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="11" height="11" rx="2"/><path d="M17 7h2a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2v-2"/><polyline points="6 8.5 8 10.5 11.5 6.5"/></svg>
+        <span>Múltipla</span>
+        <span id="multiBadge" class="multi-badge" style="display:none">0</span>
+      </button>
+      <button class="b" data-a="dup" title="Duplicar Selecionado(s)">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
       </button>
-      <button class="b fb-item" data-a="up" title="Trazer Camada para Frente">
+      <button class="b" data-a="up" title="Trazer para Frente">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
       </button>
-      <button class="b fb-item" data-a="dn" title="Enviar Camada para Trás">
+      <button class="b" data-a="dn" title="Enviar para Trás">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
-      </button>
-      <button class="b" id="toggleFbar" title="Recolher / Expandir Barra Superior">
-        <svg id="fbarArrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
       </button>
     </div>
 
     <canvas id="cv"></canvas>
 
-    <!-- MENU FLUTUANTE RETRÁTIL DE ADIÇÃO DE ELEMENTOS (CANTO INFERIOR ESQUERDO) -->
+    <!-- MENU FLUTUANTE DE ADIÇÃO DE ELEMENTOS (CANTO SUPERIOR DIREITO) -->
     <div id="addWrap">
+      <button type="button" id="addBtn" title="Adicionar elementos à arte">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        <span>Adicionar</span>
+      </button>
       <div id="addMenu">
         <button class="b" id="aT">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>
@@ -1051,10 +1300,6 @@ select option {
           Auto-org.
         </button>
       </div>
-      <button type="button" id="addBtn" title="Adicionar elementos à arte">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        <span>Adicionar</span>
-      </button>
     </div>
 
     <!-- CONTROLE FLUTUANTE DE ZOOM DA ARTE -->
@@ -1138,7 +1383,10 @@ select option {
               <div class="g">
                 <div>
                   <div class="l"><span>Cor de Fundo</span></div>
-                  <input type="color" id="bgC1" value="#0f172a">
+                  <button type="button" class="ps-color-btn" id="bgC1Btn">
+                    <span class="ps-color-chip" id="bgC1Chip" style="background:#0f172a"></span>
+                    <span class="ps-color-hex" id="bgC1Hex">#0F172A</span>
+                  </button>
                 </div>
                 <div>
                   <div class="l"><span>Cores Rápidas</span></div>
@@ -1156,11 +1404,17 @@ select option {
               <div class="g">
                 <div>
                   <div class="l"><span>Cor Inicial</span></div>
-                  <input type="color" id="bgGC1" value="#0f172a">
+                  <button type="button" class="ps-color-btn" id="bgGC1Btn">
+                    <span class="ps-color-chip" id="bgGC1Chip" style="background:#0f172a"></span>
+                    <span class="ps-color-hex" id="bgGC1Hex">#0F172A</span>
+                  </button>
                 </div>
                 <div>
                   <div class="l"><span>Cor Final</span></div>
-                  <input type="color" id="bgGC2" value="#083344">
+                  <button type="button" class="ps-color-btn" id="bgGC2Btn">
+                    <span class="ps-color-chip" id="bgGC2Chip" style="background:#083344"></span>
+                    <span class="ps-color-hex" id="bgGC2Hex">#083344</span>
+                  </button>
                 </div>
               </div>
               <div class="num-row">
@@ -1319,6 +1573,36 @@ select option {
   </div>
 </div>
 
+<!-- MODAL SELETOR DE CORES ESTILO PHOTOSHOP -->
+<div id="psColorMo">
+  <div class="ps-card">
+    <div class="ps-head">
+      <span id="psTitle">Seletor de Cores</span>
+      <button type="button" class="b" id="psCloseBtn" style="min-width:28px;height:28px;padding:0">✕</button>
+    </div>
+    <div class="ps-body">
+      <div id="psSV">
+        <div id="psSVCur"></div>
+      </div>
+      <div id="psHue">
+        <div id="psHueCur"></div>
+      </div>
+    </div>
+    <div class="ps-info-row">
+      <div class="ps-compare" title="Nova cor / Cor anterior">
+        <div id="psNewBox"></div>
+        <div id="psOldBox" style="cursor:pointer" title="Clique para restaurar a cor anterior"></div>
+      </div>
+      <div class="ps-hex-wrap">
+        <span>#</span>
+        <input type="text" id="psHexInp" maxlength="6" value="FFFFFF">
+      </div>
+      <button type="button" class="p" id="psOkBtn" style="width:auto;padding:8px 16px;border-radius:8px">OK</button>
+    </div>
+    <div class="ps-swatches" id="psSwatches"></div>
+  </div>
+</div>
+
 <div id="toast"></div>
 
 <script>
@@ -1399,12 +1683,198 @@ const SVG={
 };
 
 let S,IM={},PC={},H=[],hi=0,uid=0,lv=0,expM='image/jpeg',expS=1,q=0,st,toastTimer;
+// Estado de Múltipla Seleção
+let MULTI=false, SELS=[];
 // Estado de Zoom e Pan do palco (#stage)
 let Z=1, ZX=0, ZY=0;
 const nid=()=>'l'+Date.now().toString(36)+uid++;
 const wt=f=>/Anton|Bebas|Six Caps|Archivo Black|Alfa Slab|Titan One|Lilita One|Righteous|Abril|Permanent|Pacifico|Great Vibes|Satisfy|Kaushan|Sacramento|Allura|Alex Brush|Courgette|Prata/.test(f)?400:f=='Inter'?800:700;
 const hexA=(h,a)=>`rgba(${parseInt(h.slice(1,3),16)},${parseInt(h.slice(3,5),16)},${parseInt(h.slice(5,7),16)},${a})`;
 const sel=()=>S.layers.find(l=>l.id==S.sel),esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+function syncSels(){
+  if(!S || !S.layers){ SELS=[]; return; }
+  const validIds = new Set(S.layers.map(l=>l.id));
+  SELS = SELS.filter(id => validIds.has(id));
+  if(S.sel && !validIds.has(S.sel)) S.sel = null;
+  if(!MULTI){
+    SELS = S.sel ? [S.sel] : [];
+  } else {
+    if(S.sel && !SELS.includes(S.sel)) SELS.push(S.sel);
+    if(!S.sel && SELS.length) S.sel = SELS[SELS.length - 1];
+  }
+}
+
+function getSelectedLayers(){
+  syncSels();
+  return S.layers.filter(l => SELS.includes(l.id) && !l.hide);
+}
+
+function getLayerAABB(c, l){
+  if(l.k=='f'){
+    if(l.kind=='radial'||l.kind=='beam'){
+      const lx=l.x??S.w/2, ly=l.y??S.h/2;
+      const rad=Math.max(20, Math.max(S.w, S.h)*((l.h||55)/100));
+      return {minX:lx-rad, maxX:lx+rad, minY:ly-rad, maxY:ly+rad, cx:lx, cy:ly, w:rad*2, h:rad*2};
+    }
+    return null;
+  }
+  const m = met(c, l);
+  const rad = ((l.rot||0)*Math.PI)/180;
+  const cos = Math.abs(Math.cos(rad)), sin = Math.abs(Math.sin(rad));
+  const bw = m.w*cos + m.h*sin;
+  const bh = m.w*sin + m.h*cos;
+  const lx = l.x??S.w/2, ly = l.y??S.h/2;
+  return {minX:lx-bw/2, maxX:lx+bw/2, minY:ly-bh/2, maxY:ly+bh/2, cx:lx, cy:ly, w:bw, h:bh};
+}
+
+function getGroupBounds(c, layers){
+  const boxes = layers.map(l=>getLayerAABB(c, l)).filter(Boolean);
+  if(!boxes.length) return null;
+  const minX = Math.min(...boxes.map(b=>b.minX));
+  const maxX = Math.max(...boxes.map(b=>b.maxX));
+  const minY = Math.min(...boxes.map(b=>b.minY));
+  const maxY = Math.max(...boxes.map(b=>b.maxY));
+  return {minX, maxX, minY, maxY, x:(minX+maxX)/2, y:(minY+maxY)/2, w:Math.max(20, maxX-minX), h:Math.max(20, maxY-minY)};
+}
+
+function clearSelection(){
+  S.sel = null;
+  SELS = [];
+  lays(); ed(); tb(); rq();
+}
+
+// ---- SELETOR DE CORES ESTILO PHOTOSHOP (HSV / HSB) ----
+const PS_SWATCHES=['#FFFFFF','#000000','#22D3EE','#06B6D4','#0284C7','#3B82F6','#1D4ED8','#8B5CF6','#EC4899','#EF4444','#F97316','#F59E0B','#EAB308','#22C55E','#10B981','#0F172A','#18181B','#94A3B8'];
+let psState = { h: 190, s: 80, v: 90, oldHex: '#ffffff', curHex: '#ffffff', onChange: null, onCommit: null };
+
+function hexToRgb(hex){
+  let h = String(hex || '#ffffff').replace(/[^0-9a-fA-F]/g,'');
+  if(h.length===3) h = h[0]+h[0]+h[1]+h[1]+h[2]+h[2];
+  if(h.length!==6) h = 'ffffff';
+  const n = parseInt(h, 16);
+  return { r: (n>>16)&255, g: (n>>8)&255, b: n&255 };
+}
+
+function rgbToHex(r, g, b){
+  const toH = n => Math.max(0, Math.min(255, Math.round(n))).toString(16).padStart(2, '0');
+  return '#' + toH(r) + toH(g) + toH(b);
+}
+
+function rgbToHsv(r, g, b){
+  r/=255; g/=255; b/=255;
+  const max=Math.max(r,g,b), min=Math.min(r,g,b), d=max-min;
+  let h=0, s=max===0?0:d/max, v=max;
+  if(max!==min){
+    switch(max){
+      case r: h=(g-b)/d+(g<b?6:0); break;
+      case g: h=(b-r)/d+2; break;
+      case b: h=(r-g)/d+4; break;
+    }
+    h/=6;
+  }
+  return { h: h*360, s: s*100, v: v*100 };
+}
+
+function hsvToRgb(h, s, v){
+  h = ((h%360)+360)%360;
+  s = Math.max(0, Math.min(100, s))/100;
+  v = Math.max(0, Math.min(100, v))/100;
+  const c = v * s;
+  const x = c * (1 - Math.abs(((h / 60) % 2) - 1));
+  const m = v - c;
+  let r=0, g=0, b=0;
+  if(h<60){r=c;g=x;b=0}
+  else if(h<120){r=x;g=c;b=0}
+  else if(h<180){r=0;g=c;b=x}
+  else if(h<240){r=0;g=x;b=c}
+  else if(h<300){r=x;g=0;b=c}
+  else {r=c;g=0;b=x}
+  return { r: (r+m)*255, g: (g+m)*255, b: (b+m)*255 };
+}
+
+function updatePsUI(skipHexInput=false){
+  const rgb = hsvToRgb(psState.h, psState.s, psState.v);
+  const hex = rgbToHex(rgb.r, rgb.g, rgb.b);
+  psState.curHex = hex;
+  const hueRgb = hsvToRgb(psState.h, 100, 100);
+  $('psSV').style.background = rgbToHex(hueRgb.r, hueRgb.g, hueRgb.b);
+  $('psSVCur').style.left = psState.s + '%';
+  $('psSVCur').style.top = (100 - psState.v) + '%';
+  $('psHueCur').style.top = (psState.h / 360 * 100) + '%';
+  $('psNewBox').style.background = hex;
+  $('psOldBox').style.background = psState.oldHex;
+  if(!skipHexInput) $('psHexInp').value = hex.slice(1).toUpperCase();
+  if(psState.onChange) psState.onChange(hex);
+}
+
+function openPsColorPicker(title, initialHex, onChange, onCommit){
+  blurTextFocus();
+  const cleanHex = /^#[0-9a-fA-F]{6}$/.test(initialHex||'') ? initialHex : '#ffffff';
+  const rgb = hexToRgb(cleanHex);
+  const hsv = rgbToHsv(rgb.r, rgb.g, rgb.b);
+  psState = { h: hsv.h, s: hsv.s, v: hsv.v, oldHex: cleanHex, curHex: cleanHex, onChange, onCommit };
+  $('psTitle').textContent = title || 'Seletor de Cores';
+  $('psColorMo').style.display = 'flex';
+  updatePsUI();
+}
+
+function closePsColorPicker(commitNow=true){
+  if($('psColorMo').style.display === 'none') return;
+  $('psColorMo').style.display = 'none';
+  if(commitNow && psState.onCommit) psState.onCommit(psState.curHex);
+}
+
+$('psSwatches').innerHTML = PS_SWATCHES.map(c=>`<button type="button" class="ps-sw" data-c="${c}" style="background:${c}" title="${c}"></button>`).join('');
+$('psSwatches').onclick = e => {
+  const b = e.target.closest('.ps-sw');
+  if(!b) return;
+  const rgb = hexToRgb(b.dataset.c);
+  const hsv = rgbToHsv(rgb.r, rgb.g, rgb.b);
+  psState.h = hsv.h; psState.s = hsv.s; psState.v = hsv.v;
+  updatePsUI();
+};
+
+$('psOldBox').onclick = () => {
+  const rgb = hexToRgb(psState.oldHex);
+  const hsv = rgbToHsv(rgb.r, rgb.g, rgb.b);
+  psState.h = hsv.h; psState.s = hsv.s; psState.v = hsv.v;
+  updatePsUI();
+};
+
+$('psHexInp').oninput = e => {
+  const v = e.target.value.replace(/[^0-9a-fA-F]/g,'');
+  if(v.length === 6){
+    const rgb = hexToRgb('#' + v);
+    const hsv = rgbToHsv(rgb.r, rgb.g, rgb.b);
+    psState.h = hsv.h; psState.s = hsv.s; psState.v = hsv.v;
+    updatePsUI(true);
+  }
+};
+
+$('psOkBtn').onclick = () => closePsColorPicker(true);
+$('psCloseBtn').onclick = () => {
+  if(psState.onChange) psState.onChange(psState.oldHex);
+  closePsColorPicker(false);
+};
+$('psColorMo').onclick = e => {
+  if(e.target.id === 'psColorMo') closePsColorPicker(true);
+};
+
+function bindPsDrag(el, cb){
+  let active = false;
+  const move = e => {
+    const r = el.getBoundingClientRect();
+    const x = Math.max(0, Math.min(1, (e.clientX - r.left) / (r.width || 1)));
+    const y = Math.max(0, Math.min(1, (e.clientY - r.top) / (r.height || 1)));
+    cb(x, y);
+  };
+  el.onpointerdown = e => { active = true; el.setPointerCapture(e.pointerId); move(e); };
+  el.onpointermove = e => { if(active) move(e); };
+  el.onpointerup = el.onpointercancel = () => { active = false; };
+}
+bindPsDrag($('psSV'), (x, y) => { psState.s = x * 100; psState.v = (1 - y) * 100; updatePsUI(); });
+bindPsDrag($('psHue'), (x, y) => { psState.h = y * 360; updatePsUI(); });
 
 function updateViewTransform(){
   Z = Math.max(0.5, Math.min(4, Z));
@@ -2026,8 +2496,45 @@ function draw(c,ex){
   c.setLineDash([8*ds,6*ds]);c.strokeStyle='#22d3ee';c.lineWidth=2*ds;
   if(GX!==null){const gx=Math.max(2*ds,Math.min(w-2*ds,GX));c.beginPath();c.moveTo(gx,0);c.lineTo(gx,h);c.stroke()}
   if(GY!==null){const gy=Math.max(2*ds,Math.min(h-2*ds,GY));c.beginPath();c.moveTo(0,gy);c.lineTo(w,gy);c.stroke()}
-  c.setLineDash([]);const l=sel();
+  c.setLineDash([]);
+  const selLayers = getSelectedLayers();
   const hRad = 12.5 * ds;
+
+  // MÚLTIPLA SELEÇÃO COM 2 OU MAIS OBJETOS: Desenha contorno individual + Caixa de Grupo com Cadeado, Lixeira e Escala conjunta
+  if(selLayers.length > 1){
+    const gb = getGroupBounds(c, selLayers);
+    if(gb){
+      const anyLock = selLayers.some(x=>x.lock);
+      const col = anyLock ? '#ef4444' : '#22d3ee';
+      c.save();
+      c.lineWidth = 1.4*ds;
+      c.setLineDash([5*ds, 4*ds]);
+      c.strokeStyle = 'rgba(34, 211, 238, 0.55)';
+      selLayers.forEach(item => {
+        const b = getLayerAABB(c, item);
+        if(b) c.strokeRect(b.minX, b.minY, b.w, b.h);
+      });
+      c.setLineDash([]);
+      const pd = 10*ds;
+      c.strokeStyle = col;
+      c.lineWidth = 2.2*ds;
+      c.strokeRect(gb.minX - pd, gb.minY - pd, gb.w + pd*2, gb.h + pd*2);
+
+      // Canto Superior Esquerdo do Grupo: Cadeado
+      drawLockGlyph(c, gb.minX - pd, gb.minY - pd, ds, anyLock, col);
+      if(!anyLock){
+        // Canto Inferior Esquerdo do Grupo: Lixeira
+        drawTrashGlyph(c, gb.minX - pd, gb.maxY + pd, ds, '#ef4444');
+        // Canto Inferior Direito do Grupo: Escala proporcional conjunta
+        drawScaleGlyph(c, gb.maxX + pd, gb.maxY + pd, ds, col);
+      }
+      c.restore();
+    }
+    c.restore();
+    return;
+  }
+
+  const l=sel();
   if(l&&l.k=='f'&&(l.kind=='radial'||l.kind=='beam')&&!l.hide){
     const lx=Math.max(0,Math.min(w,l.x??w/2)), ly=Math.max(0,Math.min(h,l.y??h/2));
     const rad=Math.max(20, Math.max(w, h) * ((l.h || 55) / 100));
@@ -2178,8 +2685,11 @@ const SHAPE_LBL={rect:'Retângulo',square:'Quadrado',circle:'Círculo',triangle:
 const nm=l=>l.k=='t'?(l.text.split('\n')[0]||'(vazio)').slice(0,24):l.k=='gt'?((l.role?l.role+': ':'')+(l.text.split('\n')[0]||'Convidado')).slice(0,26):l.k=='ft'?('Rodapé: '+(l.role||l.text||'Local')).slice(0,26):l.k=='sh'?(l.name&&l.name!='Forma'?l.name:'Forma: '+(SHAPE_LBL[l.shape]||'Retângulo')):l.name;
 
 function lays(){
-  $('lay').innerHTML=[...S.layers].reverse().map(l=>`
-    <div class="it ${l.id==S.sel?'on':''}" data-id="${l.id}">
+  syncSels();
+  $('lay').innerHTML=[...S.layers].reverse().map(l=>{
+    const isSel = l.id==S.sel || (MULTI && SELS.includes(l.id));
+    return `
+    <div class="it ${isSel?'on':''}" data-id="${l.id}">
       <span class="it-drag" title="Segure e arraste para reordenar camada">${SVG.grip}</span>
       <div class="it-main">
         <span class="it-ico">${SVG[l.k]||SVG.t}</span>
@@ -2189,7 +2699,8 @@ function lays(){
       <button class="b ${l.hide?'on':''}" data-a="h" title="Mostrar / Ocultar">${l.hide?SVG.eyeOff:SVG.eye}</button>
       <button class="b ${l.lock?'locked-btn':''}" data-a="k" title="Travar / Destravar">${l.lock?SVG.lock:SVG.unlock}</button>
       <button class="b danger" data-a="del" title="Excluir Camada">${SVG.del}</button>
-    </div>`).join('');
+    </div>`;
+  }).join('');
 }
 
 let layDrag = null;
@@ -2258,15 +2769,59 @@ $('lay').onclick=e=>{
   else if(a=='k')l.lock=l.lock?0:1;
   else if(a=='del'){
     if(l.lock){showToast('Destrave a camada antes de excluir');return}
-    S.layers.splice(i,1);if(S.sel==l.id)S.sel=null;
+    S.layers.splice(i,1);
+    SELS=SELS.filter(id=>id!==l.id);
+    if(S.sel==l.id)S.sel=SELS[SELS.length-1]||null;
   }
-  else if(a=='ed'){S.sel=l.id;ui();tab('ed');return}
-  else S.sel=l.id;
+  else if(a=='ed'){S.sel=l.id;if(!MULTI)SELS=[l.id];else if(!SELS.includes(l.id))SELS.push(l.id);ui();tab('ed');return}
+  else {
+    if(MULTI){
+      if(SELS.includes(l.id)){
+        SELS=SELS.filter(id=>id!==l.id);
+        S.sel=SELS[SELS.length-1]||null;
+      } else {
+        SELS.push(l.id);
+        S.sel=l.id;
+      }
+    } else {
+      S.sel=l.id;
+      SELS=[l.id];
+    }
+  }
   commit();ui();
 };
 
 function tb(){
-  // Barra superior agora contém apenas histórico, duplicar e ordenação
+  syncSels();
+  const bm = $('btnMulti'), mb = $('multiBadge');
+  if(bm) bm.classList.toggle('on', MULTI);
+  if(mb){
+    mb.style.display = (MULTI && SELS.length > 0) ? 'inline-block' : 'none';
+    mb.textContent = SELS.length;
+  }
+}
+
+function renderCaseBtns(k){
+  return `<span class="case-bar" title="Transformar Maiúsculas / Minúsculas">
+    <button type="button" class="case-btn" data-case="upper" data-ck="${k}" title="TUDO MAIÚSCULO">AA</button>
+    <button type="button" class="case-btn" data-case="lower" data-ck="${k}" title="tudo minúsculo">aa</button>
+    <button type="button" class="case-btn" data-case="title" data-ck="${k}" title="Primeiras Letras Maiúsculas">Aa</button>
+  </span>`;
+}
+
+function toTitleCasePt(str){
+  return String(str||'').toLowerCase().replace(/(?:^|\s|\n|-|\/)\S/g, m => m.toUpperCase());
+}
+
+function renderPsColorField(k, label, val){
+  const hex = (val || '#ffffff').toUpperCase();
+  return `<div>
+    <div class="l"><span>${label}</span></div>
+    <button type="button" class="ps-color-btn" data-psk="${k}" data-pstitle="${esc(label)}">
+      <span class="ps-color-chip" style="background:${hex}"></span>
+      <span class="ps-color-hex">${hex}</span>
+    </button>
+  </div>`;
 }
 
 function renderNumCtrl(k, label, min, max, step, unit, val, compact=false){
@@ -2295,12 +2850,39 @@ function renderFontSelect(k, label, currentFont){
 }
 
 function ed(){
-  const l=sel(),E=$('ed');
+  const selLayers = getSelectedLayers();
+  const E=$('ed');
+  if(selLayers.length > 1){
+    const anyLock = selLayers.some(x=>x.lock);
+    E.innerHTML=`
+      <div class="c">
+        <div class="r" style="justify-content:space-between;border-bottom:1px solid var(--bd);padding-bottom:6px">
+          <span style="font-weight:700;color:var(--ac-light)">${selLayers.length} Objetos Selecionados</span>
+          <div class="r" style="gap:4px">
+            <button type="button" class="b ${anyLock?'locked-btn':''}" id="grpLockBtn">${anyLock?SVG.lock+' <span>Destravar</span>':SVG.unlock+' <span>Travar Todos</span>'}</button>
+            <button type="button" class="b danger" id="grpDelBtn" title="Excluir Selecionados">${SVG.del}</button>
+          </div>
+        </div>
+        <div class="hint">Arraste qualquer item do grupo na arte para movê-los juntos ou use a alça no canto inferior direito do grupo para dimensioná-los proporcionalmente.</div>
+      </div>`;
+    $('grpLockBtn').onclick=()=>{
+      const targetLock = anyLock ? 0 : 1;
+      selLayers.forEach(x=>x.lock=targetLock);
+      commit();ui();
+    };
+    $('grpDelBtn').onclick=()=>{
+      if(anyLock){showToast('Destrave os itens antes de excluir');return}
+      S.layers = S.layers.filter(x=>!SELS.includes(x.id));
+      SELS=[]; S.sel=null; commit(); ui(); showToast('Itens excluídos');
+    };
+    return;
+  }
+  const l=sel();
   if(!l){E.innerHTML='<div class="hint">Toque em um item da arte ou na lista de camadas para editar suas propriedades.</div>';return}
   const v=x=>Array.isArray(x)?x:[x,x],
   rg=(k,t,a,b,s=1,u='',cmp=false)=>renderNumCtrl(k,t,a,b,s,u,l[k],cmp),
   ck=(k,t)=>`<label class="chk-row"><input type="checkbox" data-k="${k}" ${l[k]?'checked':''}><span>${t}</span></label>`,
-  co=(k,t)=>`<div><div class="l"><span>${t}</span></div><input type="color" data-k="${k}" value="${l[k]}"></div>`,
+  co=(k,t)=>renderPsColorField(k,t,l[k]),
   sl=(k,t,o)=>`<div><div class="l"><span>${t}</span></div><select data-k="${k}">${o.map(x=>{x=v(x);return`<option value="${x[0]}" ${x[0]==l[k]?'selected':''}>${x[1]}</option>`}).join('')}</select></div>`;
   let h='';
   if(l.k=='f'){
@@ -2310,7 +2892,7 @@ function ed(){
     const isPos = isRad || isBeam;
     const posXPct = Math.round(((l.x ?? S.w / 2) / S.w) * 100);
     const posYPct = Math.round(((l.y ?? S.h / 2) / S.h) * 100);
-    h = `<input type="text" data-k="name" value="${esc(l.name)}" placeholder="Nome da camada de degradê / luz">` +
+    h = `<div><div class="l"><span>Nome da Camada</span>${renderCaseBtns('name')}</div><input type="text" data-k="name" value="${esc(l.name)}" placeholder="Nome da camada de degradê / luz"></div>` +
         `<div>
           <div class="l"><span>Tipo de Degradê / Luz</span></div>
           <div class="seg" id="fadeKindSeg">
@@ -2335,10 +2917,10 @@ function ed(){
     if(l.lh===undefined) l.lh=115;
     if(l.ls===undefined) l.ls=0;
     h=`<div class="g">
-         <div><div class="l"><span>Atribuição / Cargo</span></div><input type="text" data-k="role" value="${esc(l.role)}" placeholder="Ex: Pregador, Cantora..."></div>
+         <div><div class="l"><span>Cargo</span>${renderCaseBtns('role')}</div><input type="text" data-k="role" value="${esc(l.role)}" placeholder="Ex: Pregador, Cantora..."></div>
          ${sl('al','Alinhamento',[['left','Esquerda'],['center','Centro'],['right','Direita']])}
        </div>`+
-       `<div><div class="l"><span>Nome do Convidado (Enter p/ quebrar linha)</span></div><textarea id="edMainTxt" data-k="text" rows="2">${esc(l.text)}</textarea></div>`+
+       `<div><div class="l"><span>Nome do Convidado</span>${renderCaseBtns('text')}</div><textarea id="edMainTxt" data-k="text" rows="2">${esc(l.text)}</textarea></div>`+
        rg('sc','Escala Geral (Cargo + Nome)',30,260,1,'%')+
        `<div class="g">${renderFontSelect('rFont','Fonte do Cargo',l.rFont)}${renderFontSelect('nFont','Fonte do Nome',l.nFont)}</div>`+
        `<div class="g">${rg('rSize','Tam. Cargo',12,120,1,'px',true)}${rg('size','Tam. Nome',18,180,1,'px',true)}</div>`+
@@ -2351,10 +2933,10 @@ function ed(){
     if(l.ls===undefined) l.ls=0;
     if(!l.storyMode) l.storyMode='feed';
     h=`<div class="g">
-         <div><div class="l"><span>Nome do Local / Estabelecimento</span></div><input type="text" data-k="role" value="${esc(l.role)}" placeholder="Ex: NOME DO LOCAL"></div>
+         <div><div class="l"><span>Local</span>${renderCaseBtns('role')}</div><input type="text" data-k="role" value="${esc(l.role)}" placeholder="Ex: NOME DO LOCAL"></div>
          ${sl('al','Alinhamento Conjunto',[['left','Esquerda'],['center','Centro'],['right','Direita']])}
        </div>`+
-       `<div><div class="l"><span>Endereço (Quebra automática ou Enter)</span></div><textarea id="edMainTxt" data-k="text" rows="2">${esc(l.text)}</textarea></div>`+
+       `<div><div class="l"><span>Endereço (Quebra auto ou Enter)</span>${renderCaseBtns('text')}</div><textarea id="edMainTxt" data-k="text" rows="2">${esc(l.text)}</textarea></div>`+
        `<div>
           <div class="l"><span>Posição Vertical no Story (9:16)</span></div>
           <div class="seg" id="ftStorySeg">
@@ -2373,7 +2955,7 @@ function ed(){
        rg('rot','Rotação',-180,180,1,'°');
   } else if(l.k=='t'){
     if(l.lh===undefined) l.lh=115;
-    h=`<textarea id="edMainTxt" data-k="text" rows="2">${esc(l.text)}</textarea>`+
+    h=`<div><div class="l"><span>Conteúdo do Texto</span>${renderCaseBtns('text')}</div><textarea id="edMainTxt" data-k="text" rows="2">${esc(l.text)}</textarea></div>`+
       renderFontSelect('font','Tipografia (Por Categoria)',l.font)+
       rg('size','Tamanho da Fonte',20,600,1,'px')+
       `<div class="g">${co('color','Cor Principal')}<div style="display:flex;align-items:flex-end">${ck('grad','Ativar Degradê')}</div></div>`+
@@ -2444,8 +3026,42 @@ function ed(){
   if(edb) edb.onclick=()=>{
     if(l.lock){showToast('Destrave a camada antes de excluir');return}
     const idx=S.layers.indexOf(l);
-    if(idx>-1){S.layers.splice(idx,1);S.sel=null;commit();ui();showToast('Camada excluída')}
+    if(idx>-1){S.layers.splice(idx,1);SELS=SELS.filter(id=>id!==l.id);S.sel=SELS[SELS.length-1]||null;commit();ui();showToast('Camada excluída')}
   };
+  // Eventos dos botões AA / aa / Aa (Maiúsculo / Minúsculo / Capitalizado) e Seletor de Cores Estilo Photoshop na aba Editar
+  E.querySelectorAll('.case-btn').forEach(btn => {
+    btn.onclick = () => {
+      if(l.lock) return;
+      const ck = btn.dataset.ck;
+      const mode = btn.dataset.case;
+      const cur = String(l[ck] || '');
+      l[ck] = mode === 'upper' ? cur.toUpperCase() : mode === 'lower' ? cur.toLowerCase() : toTitleCasePt(cur);
+      const field = E.querySelector(`[data-k="${ck}"]`);
+      if(field) field.value = l[ck];
+      clampLayerBounds(cx, l);
+      commit();
+      lays();
+      rq();
+    };
+  });
+  E.querySelectorAll('.ps-color-btn[data-psk]').forEach(btn => {
+    btn.onclick = () => {
+      if(l.lock) return;
+      const k = btn.dataset.psk;
+      const title = btn.dataset.pstitle || 'Cor';
+      openPsColorPicker(title, l[k] || '#ffffff', hex => {
+        l[k] = hex;
+        const chip = btn.querySelector('.ps-color-chip');
+        const hexLbl = btn.querySelector('.ps-color-hex');
+        if(chip) chip.style.background = hex;
+        if(hexLbl) hexLbl.textContent = hex.toUpperCase();
+        rq();
+      }, () => {
+        commit();
+        ui();
+      });
+    };
+  });
   const fks = $('fadeKindSeg');
   if(fks) fks.onclick = e => {
     const b = e.target.closest('button');
@@ -2613,14 +3229,19 @@ function updateResBadge(){
 
 function ui(){
   migrateBg();
+  syncSels();
   lays();ed();tb();
   document.querySelectorAll('#sf button').forEach(b=>b.classList.toggle('on',b.dataset.v==S.w+'x'+S.h));
   document.querySelectorAll('#bgModeSeg button').forEach(b=>b.classList.toggle('on',b.dataset.v===S.bg.mode));
   $('bgSolidBox').style.display=S.bg.mode==='solid'?'flex':'none';
   $('bgGradBox').style.display=S.bg.mode==='grad'?'flex':'none';
-  $('bgC1').value=S.bg.c1||'#0f172a';
-  $('bgGC1').value=S.bg.c1||'#0f172a';
-  $('bgGC2').value=S.bg.c2||'#083344';
+  const c1=(S.bg.c1||'#0f172a').toUpperCase(), c2=(S.bg.c2||'#083344').toUpperCase();
+  if($('bgC1Chip')) $('bgC1Chip').style.background=c1;
+  if($('bgC1Hex')) $('bgC1Hex').textContent=c1;
+  if($('bgGC1Chip')) $('bgGC1Chip').style.background=c1;
+  if($('bgGC1Hex')) $('bgGC1Hex').textContent=c1;
+  if($('bgGC2Chip')) $('bgGC2Chip').style.background=c2;
+  if($('bgGC2Hex')) $('bgGC2Hex').textContent=c2;
   $('bgAngNum').value=S.bg.ang??135;
   document.querySelectorAll('#bgSolidSwatches .sw-btn').forEach(b=>b.classList.toggle('on',b.dataset.c===(S.bg.c1||'').toLowerCase()));
   const hasBgIm=!!IM[S.bg.im];
@@ -2638,35 +3259,57 @@ function ui(){
   rq();
 }
 
-// Botão de recolher/expandir barra flutuante superior
-$('toggleFbar').onclick=e=>{
-  e.stopPropagation();
-  const fb=$('fbar');
-  fb.classList.toggle('collapsed');
-  const col=fb.classList.contains('collapsed');
-  $('fbarArrow').innerHTML=col
-    ?`<polyline points="9 18 15 12 9 6"/>`
-    :`<polyline points="15 18 9 12 15 6"/>`;
-};
-
 $('fbar').onclick=e=>{
-  const b=e.target.closest('button');if(!b||b.id=='toggleFbar')return;
+  const b=e.target.closest('button');if(!b)return;
   blurTextFocus();
-  const a=b.dataset.a,l=sel(),i=S.layers.indexOf(l);
+  const a=b.dataset.a;
   if(a=='un'){if(hi>0)rest(H[--hi]);return}
   if(a=='re'){if(hi<H.length-1)rest(H[++hi]);return}
-  if(!l)return;
-  if(a=='dup'){
-    const c=JSON.parse(JSON.stringify(l));c.id=nid();delete c.g;
-    if(c.x!=null){c.x+=30;c.y+=30}
-    S.layers.splice(i+1,0,c);S.sel=c.id;
+  if(a=='multi'){
+    MULTI = !MULTI;
+    if(MULTI){
+      if(S.sel && !SELS.includes(S.sel)) SELS = [S.sel];
+      showToast('Múltipla seleção ativada: toque nos objetos para somar');
+    } else {
+      SELS = S.sel ? [S.sel] : [];
+      showToast('Múltipla seleção desativada');
+    }
+    ui();
+    return;
   }
-  else if(a=='up')mv(i,i+1);
-  else if(a=='dn')mv(i,i-1);
+  const selLayers = getSelectedLayers();
+  if(!selLayers.length) return;
+  if(a=='dup'){
+    const newIds = [];
+    selLayers.forEach(orig => {
+      const idx = S.layers.indexOf(orig);
+      const c = JSON.parse(JSON.stringify(orig));
+      c.id = nid(); delete c.g;
+      if(c.x!=null){c.x+=30;c.y+=30}
+      S.layers.splice(idx+1, 0, c);
+      newIds.push(c.id);
+    });
+    SELS = newIds;
+    S.sel = newIds[newIds.length - 1] || null;
+  }
+  else if(a=='up'){
+    for(let i=S.layers.length-2; i>=0; i--){
+      if(SELS.includes(S.layers[i].id) && !SELS.includes(S.layers[i+1].id)){
+        mv(i, i+1);
+      }
+    }
+  }
+  else if(a=='dn'){
+    for(let i=1; i<S.layers.length; i++){
+      if(SELS.includes(S.layers[i].id) && !SELS.includes(S.layers[i-1].id)){
+        mv(i, i-1);
+      }
+    }
+  }
   commit();ui();
 };
 
-// Menu Flutuante Retrátil de Adição no Canto Inferior Esquerdo
+// Menu Flutuante de Adição no Canto Superior Direito
 const addWrap = $('addWrap');
 const closeAddMenu = () => addWrap.classList.remove('open');
 $('addBtn').onclick = e => {
@@ -2681,7 +3324,7 @@ document.addEventListener('pointerdown', e => {
 });
 
 // ---- adicionar camadas
-const add=l=>{closeAddMenu();S.layers.push(l);S.sel=l.id;commit();ui();tab('ed')};
+const add=l=>{closeAddMenu();S.layers.push(l);S.sel=l.id;SELS=[l.id];commit();ui();tab('ed')};
 $('aT').onclick=()=>add(TXT({}));
 $('aI').onclick=()=>{closeAddMenu();$('fi').click()};
 $('aS').onclick=()=>add(SHP({}));
@@ -2737,10 +3380,33 @@ $('bgModeSeg').onclick=e=>{
   S.bg.mode=b.dataset.v;commit();ui();
 };
 
-$('bgC1').oninput=e=>{if(S.bg.lock)return;S.bg.c1=e.target.value;$('bgGC1').value=e.target.value;rq()};
-$('bgGC1').oninput=e=>{if(S.bg.lock)return;S.bg.c1=e.target.value;$('bgC1').value=e.target.value;rq()};
-$('bgGC2').oninput=e=>{if(S.bg.lock)return;S.bg.c2=e.target.value;rq()};
-$('bgC1').onchange=$('bgGC1').onchange=$('bgGC2').onchange=commit;
+$('bgC1Btn').onclick=()=>{
+  if(S.bg.lock)return;
+  openPsColorPicker('Cor de Fundo', S.bg.c1||'#0f172a', hex=>{
+    S.bg.c1=hex;
+    $('bgC1Chip').style.background=hex;
+    $('bgC1Hex').textContent=hex.toUpperCase();
+    rq();
+  }, ()=>{commit();ui()});
+};
+$('bgGC1Btn').onclick=()=>{
+  if(S.bg.lock)return;
+  openPsColorPicker('Cor Inicial do Fundo', S.bg.c1||'#0f172a', hex=>{
+    S.bg.c1=hex;
+    $('bgGC1Chip').style.background=hex;
+    $('bgGC1Hex').textContent=hex.toUpperCase();
+    rq();
+  }, ()=>{commit();ui()});
+};
+$('bgGC2Btn').onclick=()=>{
+  if(S.bg.lock)return;
+  openPsColorPicker('Cor Final do Fundo', S.bg.c2||'#083344', hex=>{
+    S.bg.c2=hex;
+    $('bgGC2Chip').style.background=hex;
+    $('bgGC2Hex').textContent=hex.toUpperCase();
+    rq();
+  }, ()=>{commit();ui()});
+};
 
 function syncBgNum(numId, prop){
   const n=$(numId);
@@ -3019,11 +3685,11 @@ function hit(p){
       continue;
     }
     const m=met(cx,l),u=un(l,p);
-    if(Math.abs(u.x)<=m.w/2+10&&Math.abs(u.y)<=m.h/2+10)return l;
+    if(Math.abs(u.x)<=m.w/2+14&&Math.abs(u.y)<=m.h/2+14)return l;
   }
 }
 
-// Pinça de 2 dedos em qualquer lugar do #stage faz Zoom + Pan suave de toda a arte
+// Pinça de 2 dedos em qualquer lugar do #stage faz Zoom + Pan suave de toda a arte, e clicar fora do canvas desseleciona
 const stgEl=$('stage');
 stgEl.addEventListener('pointerdown',e=>{
   if(e.target.closest('#fbar')||e.target.closest('#zbar')||e.target.closest('#addWrap'))return;
@@ -3045,6 +3711,14 @@ stgEl.addEventListener('pointerdown',e=>{
       cx0:sr.left+sr.width/2,
       cy0:sr.top+sr.height/2
     };
+    return;
+  }
+  // Clicar fora da folha de arte (na área pontilhada do #stage) desseleciona os objetos
+  if(e.target === stgEl){
+    blurTextFocus();
+    if(S.sel || SELS.length){
+      clearSelection();
+    }
   }
 });
 
@@ -3076,9 +3750,52 @@ stgEl.addEventListener('pointerup',endStagePinch);
 stgEl.addEventListener('pointercancel',endStagePinch);
 
 cv.onpointerdown=e=>{
-  cv.setPointerCapture(e.pointerId);const p=P(e);PT.set(e.pointerId,p);const l=sel();
+  cv.setPointerCapture(e.pointerId);const p=P(e);PT.set(e.pointerId,p);
   if(PT.size>1 || SPT.size>1){D=null;return;}
   const ds=getDs(), hitR=24*ds;D=null;
+  const selLayers = getSelectedLayers();
+
+  // 1. Interação com Caixa de Grupo quando há Múltipla Seleção (2+ objetos)
+  if(selLayers.length > 1){
+    const gb = getGroupBounds(cx, selLayers);
+    if(gb){
+      const pd = 10*ds;
+      const lkPos = {x: gb.minX - pd, y: gb.minY - pd};
+      const dlPos = {x: gb.minX - pd, y: gb.maxY + pd};
+      const rsPos = {x: gb.maxX + pd, y: gb.maxY + pd};
+      const anyLock = selLayers.some(x=>x.lock);
+
+      if(Math.hypot(p.x - lkPos.x, p.y - lkPos.y) < hitR){
+        blurTextFocus();
+        const nextLock = anyLock ? 0 : 1;
+        selLayers.forEach(x=>x.lock = nextLock);
+        commit(); ui();
+        showToast(nextLock ? 'Grupo bloqueado' : 'Grupo desbloqueado');
+        return;
+      }
+      if(!anyLock && Math.hypot(p.x - dlPos.x, p.y - dlPos.y) < hitR){
+        blurTextFocus();
+        S.layers = S.layers.filter(x=>!SELS.includes(x.id));
+        SELS=[]; S.sel=null; commit(); ui();
+        showToast('Grupo excluído');
+        return;
+      }
+      if(!anyLock && Math.hypot(p.x - rsPos.x, p.y - rsPos.y) < hitR){
+        blurTextFocus();
+        D = {
+          m: 'grp_rs',
+          cx: gb.x,
+          cy: gb.y,
+          d: Math.hypot(p.x - gb.x, p.y - gb.y) || 1,
+          items: selLayers.map(item => ({ l: item, x: item.x??S.w/2, y: item.y??S.h/2, v: val(item) }))
+        };
+        D.ch = 0; rq();
+        return;
+      }
+    }
+  }
+
+  const l = selLayers.length === 1 ? selLayers[0] : null;
 
   if(l&&l.k=='f'&&(l.kind=='radial'||l.kind=='beam')&&!l.hide){
     const lx=Math.max(0,Math.min(S.w,l.x??S.w/2)), ly=Math.max(0,Math.min(S.h,l.y??S.h/2));
@@ -3087,7 +3804,6 @@ cv.onpointerdown=e=>{
     const lkX = Math.max(18*ds, Math.min(S.w-18*ds, lx - off));
     const lkY = Math.max(18*ds, Math.min(S.h-18*ds, ly - off));
 
-    // Toque no Cadeado (canto superior esquerdo do ponto de luz)
     if(Math.hypot(p.x-lkX, p.y-lkY) < hitR){
       blurTextFocus();
       l.lock = l.lock ? 0 : 1;
@@ -3102,16 +3818,14 @@ cv.onpointerdown=e=>{
       const dlX = Math.max(18*ds, Math.min(S.w-18*ds, lx - off));
       const dlY = Math.max(18*ds, Math.min(S.h-18*ds, ly + off));
 
-      // Toque no Lápis (canto superior direito)
       if(Math.hypot(p.x-edX, p.y-edY) < hitR){
         tab('ed',0);lays();ed();tb();
         return;
       }
-      // Toque na Lixeira (canto inferior esquerdo)
       if(Math.hypot(p.x-dlX, p.y-dlY) < hitR){
         blurTextFocus();
         const idx = S.layers.indexOf(l);
-        if(idx > -1){ S.layers.splice(idx, 1); S.sel = null; commit(); ui(); showToast('Camada excluída'); }
+        if(idx > -1){ S.layers.splice(idx, 1); SELS=SELS.filter(id=>id!==l.id); S.sel = null; commit(); ui(); showToast('Camada excluída'); }
         return;
       }
 
@@ -3129,19 +3843,18 @@ cv.onpointerdown=e=>{
         }
       }
       if(!hitRo){
-        if(Math.hypot(p.x-hPos.x,p.y-hPos.y)<hitR) D={m:'rs',d:Math.hypot(p.x-lx,p.y-ly)||1,v:val(l)};
+        if(Math.hypot(p.x-hPos.x,p.y-hPos.y)<hitR) D={m:'rs',d:Math.hypot(p.x-lx,p.y-l.y)||1,v:val(l)};
         else if(Math.hypot(p.x-lx,p.y-ly)<=Math.max(120, rad)) D={m:'mv',sx:p.x,sy:p.y,x:lx,y:ly};
       }
     }
   } else if(l&&l.k!='f'&&!l.hide){
     const m=met(cx,l),pd=8*ds;
-    const lkH=tr(l,-m.w/2-pd,-m.h/2-pd); // Canto Superior Esquerdo: Cadeado
-    const edH=tr(l,m.w/2+pd,-m.h/2-pd);  // Canto Superior Direito: Lápis
-    const dlH=tr(l,-m.w/2-pd,m.h/2+pd);  // Canto Inferior Esquerdo: Lixeira
-    const rs=tr(l,m.w/2+pd,m.h/2+pd);    // Canto Inferior Direito: Escala
-    const ro=tr(l,0,-m.h/2-pd-28*ds);    // Topo: Rotação
+    const lkH=tr(l,-m.w/2-pd,-m.h/2-pd);
+    const edH=tr(l,m.w/2+pd,-m.h/2-pd);
+    const dlH=tr(l,-m.w/2-pd,m.h/2+pd);
+    const rs=tr(l,m.w/2+pd,m.h/2+pd);
+    const ro=tr(l,0,-m.h/2-pd-28*ds);
 
-    // 1. Verifica toque no CADEADO (funciona tanto travado quanto destravado!)
     if(Math.hypot(p.x-lkH.x,p.y-lkH.y)<hitR){
       blurTextFocus();
       l.lock = l.lock ? 0 : 1;
@@ -3150,7 +3863,6 @@ cv.onpointerdown=e=>{
       return;
     }
 
-    // 2. Se estiver destravado, verifica os demais controles da caixa de seleção
     if(!l.lock){
       if(Math.hypot(p.x-edH.x,p.y-edH.y)<hitR){
         tab('ed',0);lays();ed();tb();
@@ -3161,13 +3873,12 @@ cv.onpointerdown=e=>{
       if(Math.hypot(p.x-dlH.x,p.y-dlH.y)<hitR){
         blurTextFocus();
         const idx = S.layers.indexOf(l);
-        if(idx > -1){ S.layers.splice(idx, 1); S.sel = null; commit(); ui(); showToast('Elemento excluído'); }
+        if(idx > -1){ S.layers.splice(idx, 1); SELS=SELS.filter(id=>id!==l.id); S.sel = null; commit(); ui(); showToast('Elemento excluído'); }
         return;
       }
       if(Math.hypot(p.x-rs.x,p.y-rs.y)<hitR)D={m:'rs',d:Math.hypot(p.x-l.x,p.y-l.y)||1,v:val(l)};
       else if(Math.hypot(p.x-ro.x,p.y-ro.y)<hitR)D={m:'ro',a:Math.atan2(p.y-l.y,p.x-l.x),r:l.rot||0};
       else if(l.k=='sh'){
-        // Pílulas nas 4 bordas para esticar largura e altura das Formas
         const topH=tr(l,0,-m.h/2-pd), botH=tr(l,0,m.h/2+pd);
         const leftH=tr(l,-m.w/2-pd,0), rightH=tr(l,m.w/2+pd,0);
         const sc=(l.sc||100)/100;
@@ -3181,11 +3892,41 @@ cv.onpointerdown=e=>{
   blurTextFocus();
   if(!D){
     const h=hit(p);
+    const isMultiMode = MULTI || e.shiftKey;
     if(h){
-      if(h.id!=S.sel){S.sel=h.id;lays();ed();tb()}
-      if(!h.lock) D={m:'mv',sx:p.x,sy:p.y,x:h.x??S.w/2,y:h.y??S.h/2};
+      if(isMultiMode){
+        if(!MULTI) MULTI = true;
+        const alreadyIn = SELS.includes(h.id);
+        if(!alreadyIn){
+          SELS.push(h.id);
+          S.sel = h.id;
+        } else {
+          S.sel = h.id;
+        }
+        lays();ed();tb();
+        const activeGroup = getSelectedLayers();
+        if(activeGroup.length > 1 && !activeGroup.some(x=>x.lock)){
+          const gb = getGroupBounds(cx, activeGroup);
+          D={m:'grp_mv',sx:p.x,sy:p.y,gx:gb?gb.x:S.w/2,gy:gb?gb.y:S.h/2,toggleId:alreadyIn?h.id:null,items:activeGroup.map(item=>({l:item,x:item.x??S.w/2,y:item.y??S.h/2}))};
+        } else if(!h.lock){
+          D={m:'mv',sx:p.x,sy:p.y,x:h.x??S.w/2,y:h.y??S.h/2,toggleId:alreadyIn?h.id:null};
+        }
+      } else {
+        if(SELS.length > 1 && SELS.includes(h.id)){
+          const activeGroup = getSelectedLayers();
+          if(!activeGroup.some(x=>x.lock)){
+            const gb = getGroupBounds(cx, activeGroup);
+            D={m:'grp_mv',sx:p.x,sy:p.y,gx:gb?gb.x:S.w/2,gy:gb?gb.y:S.h/2,items:activeGroup.map(item=>({l:item,x:item.x??S.w/2,y:item.y??S.h/2}))};
+          }
+        } else {
+          S.sel=h.id; SELS=[h.id];
+          lays();ed();tb();
+          if(!h.lock) D={m:'mv',sx:p.x,sy:p.y,x:h.x??S.w/2,y:h.y??S.h/2};
+        }
+      }
     } else {
-      if(S.sel){S.sel=null;lays();ed();tb()}
+      // Clicar em área vazia dentro da arte também limpa a seleção
+      if(S.sel || SELS.length){clearSelection();}
       if(IM[S.bg.im]&&!S.bg.lock)D={m:'bg',sx:p.x,sy:p.y,x:S.bg.x,y:S.bg.y};
       else if(Z > 1.01) D={m:'pan_stage',sx:e.clientX,sy:e.clientY,zx:ZX,zy:ZY};
     }
@@ -3202,7 +3943,38 @@ cv.onpointermove=e=>{
     updateViewTransform();
     return;
   }
-  const p=P(e);PT.set(e.pointerId,p);if(!D)return;const l=sel();D.ch=1;GX=GY=null;
+  const p=P(e);PT.set(e.pointerId,p);if(!D)return;
+  if(Math.hypot(p.x - (D.sx ?? p.x), p.y - (D.sy ?? p.y)) > 3) D.ch=1;
+  else if(D.m==='rs' || D.m==='ro' || D.m==='sh_e' || D.m==='grp_rs') D.ch=1;
+  GX=GY=null;
+
+  if(D.m==='grp_mv'){
+    let dx = p.x - D.sx, dy = p.y - D.sy;
+    if(S.snap){
+      if(Math.abs((D.gx + dx) - S.w/2) < 14){ dx = S.w/2 - D.gx; GX = S.w/2; }
+      if(Math.abs((D.gy + dy) - S.h/2) < 14){ dy = S.h/2 - D.gy; GY = S.h/2; }
+    }
+    D.items.forEach(it => {
+      it.l.x = it.x + dx;
+      it.l.y = it.y + dy;
+      clampLayerBounds(cx, it.l);
+    });
+    rq();
+    return;
+  }
+  if(D.m==='grp_rs'){
+    const ratio = Math.max(0.15, Math.min(4, Math.hypot(p.x - D.cx, p.y - D.cy) / D.d));
+    D.items.forEach(it => {
+      it.l.x = D.cx + (it.x - D.cx) * ratio;
+      it.l.y = D.cy + (it.y - D.cy) * ratio;
+      setv(it.l, it.v * ratio);
+      clampLayerBounds(cx, it.l);
+    });
+    rq();
+    return;
+  }
+
+  const l=sel();
   if(D.m=='rs')setv(l,D.v*Math.hypot(p.x-(l.x??S.w/2),p.y-(l.y??S.h/2))/D.d);
   else if(D.m=='sh_e'){
     if(!l||l.lock)return;
@@ -3255,7 +4027,19 @@ cv.onpointermove=e=>{
 
 cv.onpointerup=cv.onpointercancel=e=>{
   PT.delete(e.pointerId);
-  if(!PT.size){if(D&&D.ch){commit();ed()}D=null;GX=GY=null;rq()}
+  if(!PT.size){
+    if(D){
+      // Se estava em modo Múltipla Seleção e tocou sem arrastar em um objeto já selecionado, remove-o da seleção
+      if(!D.ch && D.toggleId && MULTI && SELS.length > 1){
+        SELS = SELS.filter(id => id !== D.toggleId);
+        S.sel = SELS[SELS.length - 1] || null;
+        ui();
+      } else if(D.ch){
+        commit();ed();
+      }
+    }
+    D=null;GX=GY=null;rq();
+  }
 };
 
 // ---- início
